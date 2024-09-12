@@ -1,0 +1,64 @@
+@import "./media";
+@import "./colors";
+@import "./ui";
+@import "./animation";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
+
+
+@font-face {
+  font-family: 'DUERRA';
+  src: url('assets/fonts/Duera-NormBold-PERSONAL.ttf');
+}
+
+* {
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
+  -webkit-touch-callout: unset;
+  user-select: none;
+  -webkit-user-select: none;
+}
+p {
+  margin: 0;
+}
+.one {
+  font-size: 80px;
+  z-index: 0;
+  color: white;
+  animation: flyOut 2s linear;
+  touch-action: manipulation;
+
+  &:hover {
+    cursor: pointer;
+  }
+  @include mobile-xs {
+    font-size: 50px;
+    font-weight: bold;
+  }
+}
+
+.badge {
+  position: absolute;
+  border-radius: 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  opacity: 0;
+  transition: 0.5s;
+  @include mobile-all {
+    padding: 0 15px !important;
+    height: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2vh !important;
+
+  }
+}
+
+.show {
+  opacity: 1;
+}
+
+
+.router-link-active {
+  border-bottom-color: $brand_yellow !important;
+}

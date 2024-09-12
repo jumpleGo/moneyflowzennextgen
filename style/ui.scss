@@ -1,0 +1,24 @@
+.button__main {
+  border-radius: 20px;
+}
+
+.logo {
+  border-radius: 50%;
+}
+
+.yellow {
+  color: $brand_yellow
+}
+
+.wrapper {
+  user-select: none;
+  touch-action: manipulation;
+  cursor: default;
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  @include mobile {
+    padding-top: unset;
+  }
+}
