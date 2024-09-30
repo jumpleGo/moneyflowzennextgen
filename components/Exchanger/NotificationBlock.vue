@@ -13,7 +13,7 @@ const props = defineProps<{
   notifyType: 'bugs'
 }>()
 
-console.log(props.notifyType)
+
 
 const text = computed(() => data[props.notifyType])
 

@@ -13,7 +13,7 @@ const showHeader = computed(() => {
   return !restricted.includes(route.path);
 })
 const showFooter = computed(() => {
-  const restricted = ['/guideStartTrading', '/exchanger']
+  const restricted = ['/guideStartToTrading', '/exchanger']
   return !restricted.includes(route.path);
 })
 

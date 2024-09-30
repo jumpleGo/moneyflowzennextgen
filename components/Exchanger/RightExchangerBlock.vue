@@ -228,14 +228,13 @@ const sendForm = async () => {
   currentTime.setMinutes(currentTime.getMinutes() + 15)
 
   await Setter.pushToDb('transactions', payload).then((data) => {
-    console.log(data)
+
     window.localStorage.setItem('transaction', JSON.stringify({ ...payload, key: data.key }))
     window.localStorage.setItem('expTime', currentTime.toString())
 
     time.value = currentTime
     activeTransaction.value = { ...payload, key: data.key }
   }).catch((err) => {
-    console.log(err)
     console.log('err')
   })
 }

@@ -16,7 +16,7 @@
 <!--    <img class="mfz-main__union bounce" src="../assets/union.svg">-->
     <p class="mfz-main__left_text">твое место изобилия</p>
     <p class="mfz-main__right_text">гармонии и силы</p>
-    <router-link to="/guideStartTrading" class="mfz-main__floating_button bounce">
+    <router-link to="/guideStartToTrading" class="mfz-main__floating_button bounce">
       <img class="mfz-main__floating_button__img" src="~/assets/QuestionCoin.png" />
       <span class="mfz-main__floating_button__text">гайд старт в трейдинг</span>
     </router-link>

@@ -38,7 +38,7 @@ const downloadPDF = () => {
   xhr.open('GET', url, true);
   xhr.responseType = 'blob';
   xhr.onload = function() {
-    console.log(xhr)
+
     if (xhr.status === 200) {
       var blob = xhr.response;
       var link = document.createElement('a');

@@ -17,7 +17,6 @@ const components: Record<string, any> = {
   'GiftPopup': GiftPopup,
   'GiftResultPopup': GiftResultPopup
 }
-console.log(showModalType.value)
 const component = computed(() => showModalType.value && components[showModalType.value])
 
 </script>
