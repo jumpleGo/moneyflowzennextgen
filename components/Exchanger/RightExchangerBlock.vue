@@ -26,7 +26,7 @@
             id="mail"
             placeholder="@user"
             label="Телеграм ник" >
-            <template v-if="v$.telegram.$error" #error>{{ v$.telegram.$error && translates.email }}</template>
+            <template v-if="v$.telegram.$error" #error>{{ v$.telegram.$error && translates.telegram }}</template>
           </AppInput>
           <AppInput
             v-model="v$.address.$model"

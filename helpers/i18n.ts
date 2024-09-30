@@ -1,6 +1,6 @@
 export const translates = {
   required: 'Поле обязательно для заполения',
-  email: 'Введите корректный email',
+  telegram: 'Введите корректный username',
   address: 'Введите корректный адрес',
   phone: 'Введите корректный телефон',
   memo: 'Введите корректный memo',

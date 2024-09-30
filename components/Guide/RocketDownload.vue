@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link :to="guideUrl" target="_blank">
+  <nuxt-link :to="guideUrl" target="_blank" @click="rocketClicked = true">
     <img
       v-if="showRocket"
       src="/assets/rocket.png"
