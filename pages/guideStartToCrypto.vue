@@ -16,6 +16,7 @@
     <RocketDownload
       :rocketClicked="rocketClicked"
       :show-rocket="counter === MAX_CLICK_COUNT"
+      @opened="rocketClicked = true"
       guide-url="https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/start_to_crypto_guide.pdf?alt=media&token=311ce11b-f66b-4bae-b61b-66785bc2a3db" />
   </div>
 </template>

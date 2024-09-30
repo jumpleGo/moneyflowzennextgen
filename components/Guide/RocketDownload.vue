@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link :to="guideUrl" target="_blank" @click="rocketClicked = true">
+  <nuxt-link :to="guideUrl" target="_blank" @click="open">
     <img
       v-if="showRocket"
       src="/assets/rocket.png"
@@ -8,15 +8,20 @@
 </template>
 <script lang="ts" setup>
 import useResponsive from '~/composables/useResponsive'
-
+const emit = defineEmits<{
+  (e: 'opened'): void
+}>()
 const props = defineProps<{
   showRocket: boolean,
   rocketClicked: boolean,
   guideUrl: string
 }>()
-
+const rocketClicked = shallowRef(false)
 const {isMobile} = useResponsive()
-
+const open = () => {
+  rocketClicked.value = true
+  emit('opened')
+}
 const download = () => {
   downloadPDF()
 }
