@@ -2,11 +2,11 @@
   <div class="detail-information-page">
     <div class="detail-information-page__light" />
     <div class="detail-information-page__header">
-      <h1 v-if="currentProduct && currentProduct?.title" class="detail-information-page__title">
+      <h1 v-if="currentProduct?.title" class="detail-information-page__title">
         <span v-html="currentProduct.title"></span>
         <img class="detail-information-page__image" :src="currentProduct.image" />
       </h1>
-      <h1 v-else class="detail-information-page__title--sceleton" />
+      <h1 v-if="!currentProduct?.title" class="detail-information-page__title--sceleton" />
       <div class="detail-information-page__moln-wrapper">
         <img class="detail-information-page__moln" src="../assets/molnBig.svg">
         <img class="detail-information-page__coins" src="../assets/coins.png">
@@ -15,7 +15,7 @@
     <div v-if="currentProduct?.description" class="detail-information-page__content">
       <div class="detail-information-page__text" v-html="currentProduct.description" />
     </div>
-    <div v-else class="detail-information-page__content--sceleton" />
+    <div v-if="!currentProduct?.description" class="detail-information-page__content--sceleton" />
     <div v-if="currentTariff.length" class="detail-information-page__tariffs">
       <div v-for="(item, index) in currentTariff" :key="`item--${index}`" class="detail-information__tariff">
         <p class="detail-information__tariff__price">{{ formatPrice(item.price) }} ₽</p>
@@ -46,17 +46,7 @@ import {useDetailInfoStore} from "@/stores/detail";
 import AppButton from "@/components/Buttons/AppButton.vue";
 import {storeToRefs} from "pinia";
 import { formatPrice } from '@/helpers/formatPrice'
-import { Getter } from '~/helpers/getter'
-const {products, tariffs} = storeToRefs(useDetailInfoStore())
-const { $databaseRef } = useNuxtApp()
-
 const {currentProduct, currentTariff} = storeToRefs(useDetailInfoStore())
-
-useAsyncData(async () => {
-  products.value = await Getter.getFromDB($databaseRef, 'products/')
-  tariffs.value = await Getter.getFromDB($databaseRef, 'tariffs/')
-})
-
 </script>
 <style lang="scss">
 li {
@@ -288,6 +278,7 @@ li {
   margin: 25px auto;
   padding: 0 20px;
   flex-wrap: wrap;
+  justify-content: center;
 
   @include tablet {
     justify-content: space-between;
