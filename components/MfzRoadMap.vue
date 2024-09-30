@@ -52,7 +52,7 @@
     </div>
     <h4 class="roadmap__finish">Поздравляю, теперь ты крутой начинающий трейдер с мощнейшей базой. Продолжай погружаться в тему, изучай рынок глубже и достаточно времени удели риск-менеджменту. <br><b>Тебе не будет равных!</b></h4>
    <div class="roadmap__button-wrapper">
-     <AppButton to="https://t.me/rrotatew" title="Стать гуру" class="roadmap__button" />
+     <AppButton to="https://t.me/mfz_owner" title="Стать гуру" class="roadmap__button" />
    </div>
   </div>
 </template>

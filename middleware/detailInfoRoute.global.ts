@@ -1,7 +1,6 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-  console.log(process.server, to)
-  const {currentProductName} = storeToRefs(useDetailInfoStore())
   if (process.server) return
+  const {currentProductName} = storeToRefs(useDetailInfoStore())
   if (['/crypto', '/cryptodeep', '/introday', '/start_to_trading', '/practicum', '/baza'].includes(to.path)) {
     currentProductName.value = to.path.replace('/','')
     return navigateTo(`/description?page=${currentProductName.value}`)
@@ -10,5 +9,5 @@ export default defineNuxtRouteMiddleware((to, from) => {
     currentProductName.value = to.query.page as string
   }
 
-  return
+   navigateTo(to.path)
 })

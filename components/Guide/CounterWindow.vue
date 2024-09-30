@@ -39,6 +39,7 @@ const clickHandler = (event) => {
 
   const one = document.createElement('span')
   one.classList.add('one')
+  one.classList.add('fly-up')
   one.appendChild(document.createTextNode('1'))
   one.style.cssText = `position:absolute;left:${clientX}px;top:${clientY}px`
 

@@ -1,12 +1,22 @@
 <template>
-  <AppHeader />
+  <AppHeader v-if="showHeader" />
   <NuxtLayout name="default">
     <NuxtPage/>
   </NuxtLayout>
-  <AppFooter v-if="route.path !== '/guideStartTrading'" />
+  <AppFooter v-if="showFooter" />
 </template>
 <script lang="ts" setup>
+
 const route = useRoute()
+const showHeader = computed(() => {
+  const restricted = ['/exchanger']
+  return !restricted.includes(route.path);
+})
+const showFooter = computed(() => {
+  const restricted = ['/guideStartTrading', '/exchanger']
+  return !restricted.includes(route.path);
+
+})
 </script>
 <style lang="scss">
 body {

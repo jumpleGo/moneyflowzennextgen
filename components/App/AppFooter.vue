@@ -26,7 +26,7 @@
        </a>
      </div>
       <p class="mfz__footer__info">
-        для связи с автором <a href="https://t.me/rrotatew">@rrotatew</a>
+        для связи с автором <a href="https://t.me/mfz_owner">@mfz_owner</a>
       </p>
     </div>
   </div>

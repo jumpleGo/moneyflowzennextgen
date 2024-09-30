@@ -1,0 +1,196 @@
+<template>
+  <div>
+    <div class="exchanger__block">
+      <p class="exchanger__title">что хотите продать</p>
+      <div class="exchanger__items">
+        <p class="exchanger__subtitle">криптовалюта</p>
+        <div class="exchanger__items--list">
+          <div v-for="(coin, index) in enabledCoins"
+               :key="index + 'coin--first'"
+               :class="['exchanger__item', {active: selectedSell.key === coin.key}, {'--disabled': isCryptoForBuy}]"
+               @click="selectSell('crypto', coin)">
+            <img :src="coin.image" />
+            {{ coin.title }}
+          </div>
+        </div>
+      </div>
+      <div class="exchanger__items">
+        <p class="exchanger__subtitle">фиат</p>
+        <div>
+          <div v-for="(valute, index) in enabledValutes"
+               :key="index + 'valute--first'" class="exchanger__item"
+               :class="['exchanger__item', {active: selectedSell.title === valute.title}, {'--disabled': isValuteForBuy}]"
+               @click="selectSell('valute', valute)">
+            <img :src="valute.image" />
+            {{ valute.title }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="exchanger__block">
+      <p class="exchanger__title">что хотите купить</p>
+      <div class="exchanger__items">
+        <p class="exchanger__subtitle">фиат</p>
+        <div>
+          <div
+            v-for="(valute, index) in enabledValutes"
+            :key="index + 'valute--second'"
+            class="exchanger__item"
+            :class="['exchanger__item', {active: selectedBuy.key === valute.key}, {'--disabled': isValuteForSell}]"
+            @click="selectBuy('valute', valute)">
+            <img :src="valute.image" />
+            {{ valute.title }}
+          </div>
+        </div>
+      </div>
+      <div class="exchanger__items">
+        <p class="exchanger__subtitle">криптовалюта</p>
+        <div class="exchanger__items--list">
+          <div v-for="(coin, index) in enabledCoins"
+               :key="index + 'coin--first'"
+               :class="['exchanger__item', {active: selectedBuy.key === coin.key}, {'--disabled': isCryptoForSell}]"
+               @click="selectBuy('crypto', coin)">
+            <img :src="coin.image" />
+            {{ coin.title }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { type Selected, useExchangerStore } from '~/stores/exchanger'
+import { Getter } from '~/helpers/getter'
+import { watch } from 'vue'
+import AppBackButton from '~/components/App/AppBackButton.vue'
+
+const { $databaseRef } = useNuxtApp()
+const {coins, valutes, selectedBuy, selectedSell, enabledCoins, enabledValutes, isValuteForSell, isCryptoForSell, isCryptoForBuy, isValuteForBuy} = storeToRefs(useExchangerStore())
+
+
+
+const {data} = useAsyncData(async () => {
+  const {COINS, VALUTE} =  await Getter.getFromDB($databaseRef, 'exchangePairs/')
+
+  coins.value = COINS
+  valutes.value = VALUTE
+})
+
+watch(selectedSell, () => {
+  if (selectedSell.value?.type === selectedBuy.value.type ) {
+    selectedBuy.value = {}
+  }
+})
+watch(selectedBuy, () => {
+  if (selectedSell.value?.type === selectedBuy.value.type ) {
+    selectedBuy.value = {}
+  }
+})
+const selectSell = (type: 'crypto' | 'valute', item: Selected) => {
+  if (type === 'crypto') {
+    if (isCryptoForBuy.value) return
+    selectedSell.value = item
+  }
+  if (type === 'valute') {
+    if (isValuteForBuy.value) return
+    selectedSell.value = item
+  }
+}
+const selectBuy = (type: 'crypto' | 'valute', item: Selected) => {
+  if (type === 'crypto') {
+    if (isCryptoForSell.value) return
+    selectedBuy.value = item
+  }
+  if (type === 'valute') {
+    if (isValuteForSell.value) return
+    selectedBuy.value = item
+  }
+}
+
+</script>
+
+<style lang="scss" scoped>
+
+.exchanger__title {
+  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: 600;
+}
+.exchanger__subtitle {
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.exchanger__block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 0 40px;
+
+  &:first-child {
+    border-right: 1px solid rgba(128, 128, 128, 0.36);
+  }
+
+  @include mobile-all {
+    padding: 0 20px;
+  }
+
+
+}
+.exchanger__items--list {
+  display: flex;
+  flex-direction: column;
+}
+.exchanger__item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 8px 10px;
+  border: 1px solid rgba(0,0,0, 0.1);
+  font-size: 14px;
+  @include mobile {
+    font-size: 13px;
+  }
+
+  @include mobile-xs {
+    padding: 8px 5px;
+    font-size: 12px;
+  }
+  &:hover {
+    cursor: pointer;
+    border: 1px solid $brand_yellow;
+    background: rgba(254,190,22,0.1);
+  }
+  img {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 9px 3px rgba(0, 0, 0, 0.23);
+  }
+}
+.--disabled {
+  position: relative;
+  &:hover {
+    cursor: not-allowed;
+  }
+  &::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    background: rgba(254, 190, 22, 0.16);
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+  }
+}
+.active {
+  border: 1px solid $brand_yellow;
+  background: rgba(254,190,22,0.1);
+}
+.exchanger__subtitle {
+  margin: 10px
+}
+</style>

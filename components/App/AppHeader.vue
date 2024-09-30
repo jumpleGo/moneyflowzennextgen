@@ -5,9 +5,9 @@
       <nuxt-link class="mfz_wrapper__header_navbar--link" to="/">
         главная
       </nuxt-link>
-      <nuxt-link v-if="showTest" class="mfz_wrapper__header_navbar--link deactive" to="/test">
-        проверка знаний
-      </nuxt-link>
+<!--      <nuxt-link v-if="showTest" class="mfz_wrapper__header_navbar&#45;&#45;link deactive" to="/test">-->
+<!--        проверка знаний-->
+<!--      </nuxt-link>-->
       <nuxt-link class="mfz_wrapper__header_navbar--link" to="/exchanger">
         обменник
       </nuxt-link>

@@ -1,210 +1,151 @@
 <template>
-  <div class="wrapper exchanger">
-    <div class="exchanger__left">
-      <div class="exchanger__block">
-        <p class="exchanger__title">что хотите продать</p>
-        <div class="exchanger__items">
-          <p class="exchanger__subtitle">криптовалюта</p>
-          <div class="exchanger__items--list">
-            <div v-for="(coin, index) in coins"
-                 :key="index + 'coin--first'"
-                 :class="['exchanger__item', {active: selectedSell.key === coin.key}]"
-            @click="selectedSell = coin">
-              <img :src="coin.image" />
-              {{ coin.title }}
-            </div>
-          </div>
-        </div>
-        <div class="exchanger__items">
-          <p class="exchanger__subtitle">фиат</p>
-          <div>
-            <div v-for="(valute, index) in valutes"
-                 :key="index + 'valute--first'" class="exchanger__item"
-                 :class="['exchanger__item', {active: selectedSell.title === valute.title}]"
-                 @click="selectedSell = valute">
-              <img :src="valute.image" />
-              {{ valute.title }}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="exchanger__block">
-        <p class="exchanger__title">что хотите купить</p>
-        <div class="exchanger__items">
-          <p class="exchanger__subtitle">фиат</p>
-          <div>
-            <div
-              v-for="(valute, index) in valutes"
-              :key="index + 'valute--second'"
-              class="exchanger__item"
-              :class="['exchanger__item', {active: selectedBuy.key === valute.key}, {'--disabled': isValuteForSell}]"
-              @click="selectForSell(valute)">
-              <img :src="valute.image" />
-              {{ valute.title }}
-            </div>
-          </div>
-        </div>
-        <div class="exchanger__items">
-          <p class="exchanger__subtitle">криптовалюта</p>
-          <div class="exchanger__items--list">
-            <div v-for="(coin, index) in coins"
-                 :key="index + 'coin--first'"
-                 :class="['exchanger__item', {active: selectedBuy.key === coin.key}, {'--disabled': isCryptoForSell}]"
-                 @click="selectForSell(coin)">
-              <img :src="coin.image" />
-              {{ coin.title }}
-            </div>
-          </div>
-        </div>
+  <div class="exchanger__wrapper">
+    <div class="exchanger">
+      <NotificationBlock v-if="exchangerSettings?.notificationType" :notify-type="exchangerSettings.notificationType" />
+      <div class="exchanger__content">
+        <img class="exchanger__content--icon" src="/assets/icons/airdrop.png" @click="showModal = true" />
+        <LeftExchangerBlock v-if="showLeftBlock && !isLoadingResize" :class="['exchanger__left', {'--disabled-block': activeTransaction}]"  />
+        <TransactionBlock v-if="activeTransaction && !isLoadingResize" class="exchanger__right__payment"/>
+        <RightExchangerBlock v-if="showRightBlock && !isLoadingResize" class="exchanger__right" @back="backToPair" />
       </div>
     </div>
-    <RightExchangerBlock />
   </div>
+  <AppPopup v-if="showModal">
+    <div class="investment__offer">
+      <h2 id="-mfz">Инвестиции в экосистему MFZ  | Donation</h2>
+      <br><br>
+      <p>Тут я предлагаю вам инвестировать в экосистему MFZ.</p>
+      <br>
+      <p>Продукты будут постоянно развиваться, а для этого нужно больше рук, чем 2. Вы можете поддержкать проект, и, как амбассадор, получить первые бенефиты.</p>
+      <br>
+      <br>
+      <h3 id="-">Бенефиты:</h3>
+      <ol>
+        <li>Обмены без комиссий на протяжении 3 месяцев (после интеграции обменника с Telegram App)</li>
+        <li>Ранние поинты, после введения их в экосистему</li>
+      </ol>
+      <p>Далее, по усмотрению автора</p>
+      <br>
+      <p><b>Старт от 100$</b></p>
+      <br>
+      <p>За подробностями <nuxt-link to="https://t.me/mfz_owner" target="_blank">@mfz_owner</nuxt-link></p>
+      <p>Roadmap (скоро)</p>
+    </div>
+  </AppPopup>
 </template>
+
 <script lang="ts" setup>
-import { Getter } from '@/helpers/getter'
-
-import { type Selected, useExchangerStore } from '~/stores/exchanger'
-import { computed, onMounted, reactive, ref, watch } from 'vue'
 import RightExchangerBlock from '~/components/Exchanger/RightExchangerBlock.vue'
-
+import LeftExchangerBlock from '~/components/Exchanger/LeftExchangerBlock.vue'
+import TransactionBlock from '~/components/Exchanger/TransactionBlock.vue'
+import useResponsive from '~/composables/useResponsive'
+import NotificationBlock from '~/components/Exchanger/NotificationBlock.vue'
+import { storeToRefs } from 'pinia'
+import { useMainStore } from '~/stores/main'
+import { binance } from '~/api'
+import { Getter } from '~/helpers/getter'
+const { activeTransaction, isSelectedBothItem, selectedBuy, selectedSell, time, exchangerSettings} = storeToRefs(useExchangerStore())
+const hideRightBlock = shallowRef(true)
+const {isMobile, isLoadingResize} = useResponsive()
+const {showModal} = storeToRefs(useMainStore())
 const { $databaseRef } = useNuxtApp()
-const {coins, valutes, selectedBuy, selectedSell} = storeToRefs(useExchangerStore())
-
-const {data} = useAsyncData(async () => {
-  const {COINS, VALUTE} =  await Getter.getFromDB($databaseRef, 'exchangePairs/')
-  coins.value = COINS
-  valutes.value = VALUTE
+definePageMeta({
+  middleware:['exchanger']
 })
 
+useAsyncData(async () => {
+  exchangerSettings.value = await Getter.getFromDB($databaseRef, 'exchangerSettings/')
+})
 
-watch(selectedSell, () => {
-  if (selectedSell.value?.type === selectedBuy.value.type ) {
-    selectedBuy.value = {}
+const showLeftBlock = computed(() => {
+  if (isMobile.value) {
+    return !isSelectedBothItem.value ? !activeTransaction.value : false
+  }
+  return true
+})
+const showRightBlock = computed(() => {
+  if (isMobile.value) {
+    return isSelectedBothItem.value && !activeTransaction.value
+  } else {
+    return !activeTransaction.value
   }
 })
-watch(selectedBuy, () => {
-  if (selectedSell.value?.type === selectedBuy.value.type ) {
-    selectedBuy.value = {}
-  }
-})
 
-const isCryptoForSell = computed(() => {
-  return selectedSell.value?.key && Object.values(coins.value)?.map(i => i.key).includes(selectedSell.value?.key)
+watch(isSelectedBothItem, (value) => {
+  if (value) hideRightBlock.value = false
 })
-const isValuteForSell = computed(() => {
-  return selectedSell.value?.key && Object.values(valutes.value)?.map(i => i.key).includes(selectedSell.value?.key)
-})
-
-
-const selectForSell = (item: Selected) => {
-  if (item.type === 'valute' && isValuteForSell.value) return
-  if (item.type === 'crypto' && isCryptoForSell.value) return
-  selectedBuy.value = item
+const backToPair = () => {
+  selectedBuy.value = {}
+  selectedSell.value = {}
 }
-
 </script>
-<style lang="scss" scoped>
-
-
+<style lang="scss">
+@import './../style/exchanger.scss';
+.exchanger__wrapper {
+  margin-top: 20px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  @include mobile-all {
+    margin-top: 10px;
+  }
+}
 .exchanger {
   display: flex;
-  justify-content: center;
-  padding-top: 150px;
-  width: 100%;
-  gap: 100px;
-}
-.exchanger__title {
-  text-transform: uppercase;
-  font-size: 16px;
-  font-weight: 600;
-}
-.exchanger__subtitle {
-  text-transform: uppercase;
-  font-size: 14px;
-}
-.exchanger__left {
-  color: black;
-  z-index: 1;
-  background: rgba(255,255,255, 0.9);
-  box-shadow: 0px 0px 36px -2px rgba(254,190,22,1);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  width: calc(50vw - 300px);
-  display: flex;
-  justify-content: center;
-  padding: 60px 0;
-}
-
-.exchanger__block {
-  width: 100%;
-  display: flex;
   flex-direction: column;
-  gap: 30px;
-  padding: 0 40px;
-
-  &:first-child {
-    border-right: 1px solid rgba(128, 128, 128, 0.36);
-  }
-
-}
-.exchanger__items--list {
-  display: flex;
-  flex-direction: column;
-}
-.exchanger__item {
-  display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 10px;
-  border: 1px solid rgba(0,0,0, 0.1);
-  &:hover {
-    cursor: pointer;
-    border: 1px solid $brand_yellow;
-    background: rgba(254,190,22,0.1);
-  }
-  img {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    box-shadow: 0px 0px 9px 3px rgba(0, 0, 0, 0.23);
-  }
+  width: 100%;
+  max-width: 1300px;
 }
-.--disabled {
+.exchanger__content {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: calc(100vh - 100px);
+  gap: 100px;
   position: relative;
-  &:hover {
-    cursor: not-allowed;
+
+  @include mobile-all {
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    margin: unset;
+    height: auto;
+    gap: unset;
   }
-  &::before {
-    content: '';
-    width: 100%;
-    height: 100%;
-    background: rgba(254, 190, 22, 0.16);
+
+  &--icon {
     position: absolute;
-    left: 0;
-    top: 0
+    right: 10px;
+    top: 10px;
+    z-index: 10;
+    width: 25px;
+    height: auto;
+    background: rgba(254,190,22,0.1);
+    padding: 5px;
+    border: 1px solid #f1b000;
+    border-radius: 10px;
+    animation: boxShadowAnim 5s infinite;
+
+    @include mobile-all {
+      right: calc(5vw + 10px);
+    }
   }
-}
-.active {
-  border: 1px solid $brand_yellow;
-  background: rgba(254,190,22,0.1);
-}
-.exchanger__subtitle {
-  margin: 10px
 }
 
-.--disabled-block {
-  position: relative;
-  &::after {
-    content: '';
-    position: absolute;
-    z-index: 2;
-    width: 100%;
-    height: 100%;
-    background: #cecece;
-    opacity: 0.5;
-    left: 0;
-    top: 0;
+@keyframes boxShadowAnim {
+  50% {box-shadow: 0 0 30px $brand_yellow;}
+}
+
+.investment__offer {
+  max-width: 1000px;
+  background: white;
+  overflow-y: scroll;
+  height: 70vh;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 </style>

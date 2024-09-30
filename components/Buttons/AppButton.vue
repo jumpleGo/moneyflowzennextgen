@@ -1,5 +1,5 @@
 <template>
-  <component :is="componentButton" :disabled="disabled" :href="props.to" :to="props.to" :class="[buttonClass, {'--fluid': fluid}, {'--disabled': disabled}]">
+  <component :is="componentButton" :disabled="disabled" :href="props.to" :to="props.to" :class="['app__button', buttonClass, {'--fluid': fluid}, {'--disabled': disabled}]">
     {{ props.title }}
   </component>
 </template>
@@ -8,7 +8,7 @@ import {computed} from "vue";
 
 interface IDefaultYellowButton {
   title: string,
-  fluid: boolean,
+  fluid?: boolean,
   type?: 'yellow' | 'black',
   to?: string,
   disabled?: boolean
@@ -24,10 +24,16 @@ const classByType = {
   black: 'button__black'
 }
 
-const componentButton = computed(() => props.to ? props.to.startsWith('http') ? 'a' : 'router-link' : 'button')
+const componentButton = computed(() => props.to ? props.to.startsWith('http') ? 'a' : 'nuxt-link' : 'button')
 const buttonClass = computed(() => classByType[props.type])
 </script>
 <style lang="scss" scoped>
+.app__button {
+  font-size: 16px;
+  @include mobile-all {
+    font-size: 14px;
+  }
+}
 .button__main {
   display: flex;
   align-items: center;
@@ -39,7 +45,20 @@ const buttonClass = computed(() => classByType[props.type])
   text-transform: uppercase;
   border-radius: 20px;
   font-weight: 700;
-  font-size: 18px;
+  border: unset;
+}
+
+.button__black {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding: 16px 20px;
+  background: black;
+  box-shadow: 0 4px 11px 0 rgba(0, 0, 0, 0.31);
+  text-transform: uppercase;
+  border-radius: 20px;
+  font-weight: 700;
   border: unset;
 }
 

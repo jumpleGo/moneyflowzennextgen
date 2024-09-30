@@ -7,6 +7,7 @@ export default () => {
   const isTablet  = ref(false);
   const isMobile  = ref(false);
   const isMobileS = ref(false);
+  const isLoadingResize = ref(true)
 
   const clientWidthDetected = computed(() => isDesktop.value || isTablet.value || isMobile.value || isMobileS.value);
 
@@ -45,11 +46,13 @@ export default () => {
       isMobile.value  = true;
       isMobileS.value = true;
     }
+
+    isLoadingResize.value = false
   }, 50);
 
   onMounted(() => {
     setResponsive();
     addEventListener('resize', setResponsive);
   });
-  return { breakpoints, isDesktop, isTablet, isMobile, isMobileS, clientWidthDetected };
+  return { isLoadingResize, breakpoints, isDesktop, isTablet, isMobile, isMobileS, clientWidthDetected };
 };

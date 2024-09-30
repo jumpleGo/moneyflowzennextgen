@@ -1,8 +1,9 @@
 <template>
   <div class="mfz_app_popup__bg"></div>
   <div class="mfz_app_popup__template">
-    <img src="../assets/close.png" class="close" alt="" @click="showModal = false">
+    <img src="/assets/close.png" class="close" alt="" @click="showModal = false">
     <component v-if="showModalType" :is="component" />
+    <slot />
   </div>
 </template>
 <script lang="ts" setup>
@@ -34,6 +35,7 @@ const component = computed(() => showModalType.value && components[showModalType
   height: 100vh;
   z-index: 100;
   pointer-events: none;
+
 }
 .mfz_app_popup__template {
   position: fixed;
@@ -52,5 +54,10 @@ const component = computed(() => showModalType.value && components[showModalType
   bottom: 0;
   margin: auto;
   z-index: 1000;
+  @include mobile-all {
+    max-width: 90vw;
+    width: calc(100% - 100px);
+
+  }
 }
 </style>

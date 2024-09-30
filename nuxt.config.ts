@@ -14,7 +14,15 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-09-08',
-  modules: ['@pinia/nuxt'],
+  modules: ['@pinia/nuxt', ['nuxt-mail', {
+    message: {
+      to: 'foo@bar.de',
+    },
+    smtp: {
+      host: "smtp.example.com",
+      port: 587,
+    },
+  }]],
 
   runtimeConfig: {
     public: {

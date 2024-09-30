@@ -35,7 +35,7 @@
       <img class="call-to-action__guru" src="../assets/guru.png" />
       <div class="call-to-action__wrapper">
         <div class="call-to-action__light" />
-        <AppButton title="стать гуру" class="call-to-action__button" to="https://t.me/rrotatew" />
+        <AppButton title="стать гуру" class="call-to-action__button" to="https://t.me/mfz_owner" />
       </div>
     </div>
   </div>

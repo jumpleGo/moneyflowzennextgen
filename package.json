@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -12,13 +12,14 @@
   "dependencies": {
     "@nuxtjs/style-resources": "^1.2.2",
     "@pinia/nuxt": "^0.5.4",
-    "@vee-validate/i18n": "^4.13.2",
-    "@vee-validate/nuxt": "^4.13.2",
+    "@vuelidate/core": "^2.0.3",
+    "@vuelidate/validators": "^2.0.4",
     "axios": "^1.7.7",
     "dayjs": "^1.11.13",
     "firebase": "^10.13.1",
     "lodash.debounce": "^4.0.8",
     "nuxt": "^3.13.0",
+    "nuxt-mail": "^5.0.1",
     "pinia": "^2.2.2",
     "vue": "latest",
     "vue-router": "latest",
