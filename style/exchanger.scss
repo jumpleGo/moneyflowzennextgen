@@ -15,13 +15,13 @@
   flex: 0 50%;
 
   @include mobile {
-    max-width: 90vw;
+    max-width: 95vw;
     height: calc(100vh - 150px);
     flex: unset;
   }
 
   @include mobile-xs {
-    max-width: 90vw;
+    max-width: 95vw;
     height: 80vh;
     flex: unset;
     margin-bottom: 40px;
@@ -91,5 +91,8 @@ a {
   color: #f5b11d;
   font-weight: 600;
   text-decoration: none;
+}
 
+li {
+  line-height: unset;
 }
