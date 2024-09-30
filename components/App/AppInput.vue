@@ -88,7 +88,7 @@ const onPaste = async () => {
     border: 1px solid $brand_yellow;
     width: 100%;
     @include mobile-all {
-      font-size: 14px;
+      font-size: 16px;
     }
   }
 }
