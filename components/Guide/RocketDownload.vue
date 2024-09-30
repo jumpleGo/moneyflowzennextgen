@@ -1,9 +1,10 @@
 <template>
-  <img
-    v-if="showRocket"
-    src="/assets/rocket.png"
-    :class="['link_image', {'link_image_up': rocketClicked }]"
-    @click="download"/>
+  <nuxt-link :to="guideUrl" target="_blank">
+    <img
+      v-if="showRocket"
+      src="/assets/rocket.png"
+      :class="['link_image', {'link_image_up': rocketClicked }]"/>
+  </nuxt-link>
 </template>
 <script lang="ts" setup>
 import useResponsive from '~/composables/useResponsive'

@@ -16,7 +16,7 @@
       <RocketDownload
         :rocketClicked="rocketClicked"
         :show-rocket="counter === MAX_CLICK_COUNT"
-        guide-url="https://moneyflowzen.ru/guide_money_flow_zen.pdf" />
+        guide-url="https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/guide_money_flow_zen.pdf?alt=media&token=10235d51-6d22-4a35-99cd-aeb6a19309a8" />
   </div>
 </template>
 <script lang="ts" setup>
