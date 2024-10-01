@@ -1,4 +1,5 @@
 <template>
+  <LandscapePrevent />
   <AppHeader v-if="showHeader" />
   <NuxtLayout name="default">
     <NuxtPage/>

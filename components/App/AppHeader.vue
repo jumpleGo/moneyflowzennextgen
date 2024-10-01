@@ -1,21 +1,23 @@
 <template>
   <header class="mfz_wrapper__header">
-    <img class="mfz_wrapper__header--logo logo" src="/assets/logo.png">
-    <nav class="mfz_wrapper__header_navbar">
-      <nuxt-link class="mfz_wrapper__header_navbar--link" to="/">
-        главная
-      </nuxt-link>
-<!--      <nuxt-link v-if="showTest" class="mfz_wrapper__header_navbar&#45;&#45;link deactive" to="/test">-->
-<!--        проверка знаний-->
-<!--      </nuxt-link>-->
-      <nuxt-link class="mfz_wrapper__header_navbar--link" to="/exchanger">
-        обменник
-      </nuxt-link>
-      <nuxt-link class="mfz_wrapper__header_navbar--link" to="/products">
-        продукты
-      </nuxt-link>
+    <div class="mfz_wrapper__header-wrapper">
+      <img class="mfz_wrapper__header--logo logo" src="/assets/logo.png">
+      <nav class="mfz_wrapper__header_navbar">
+        <nuxt-link class="mfz_wrapper__header_navbar--link" to="/">
+          главная
+        </nuxt-link>
+        <!--      <nuxt-link v-if="showTest" class="mfz_wrapper__header_navbar&#45;&#45;link deactive" to="/test">-->
+        <!--        проверка знаний-->
+        <!--      </nuxt-link>-->
+        <nuxt-link class="mfz_wrapper__header_navbar--link" to="/exchanger">
+          обменник
+        </nuxt-link>
+        <nuxt-link class="mfz_wrapper__header_navbar--link" to="/products">
+          продукты
+        </nuxt-link>
 
-    </nav>
+      </nav>
+    </div>
   </header>
 </template>
 <script setup lang="ts">
@@ -32,31 +34,36 @@ withDefaults(defineProps<{
   left: 0;
   right: 0;
   display: flex;
-  align-items: center;
   z-index: 2;
   background: transparent;
 
-  @include mobile {
-    padding: 30px 15px;
-    width: 100%;
-  }
+  &-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
 
-  @include mobile-xs {
-    padding: 30px 15px;
-    width: 100%;
-  }
+    @include mobile {
+      padding: 30px 15px;
+      width: 100%;
+    }
 
-  @include tablet {
-    padding: 30px 15px;
-    width: 100%;
-  }
+    @include mobile-xs {
+      padding: 30px 15px;
+      width: 100%;
+    }
 
-  @include desktop {
-    padding: 32px 40px;
-  }
+    @include tablet {
+      padding: 30px 15px;
+      width: 100%;
+    }
 
-  @include desktop-lg {
-    padding: 32px 40px;
+    @include desktop {
+      padding: 32px 40px;
+    }
+
+    @include desktop-lg {
+      padding: 32px 40px;
+    }
   }
 }
 .mfz_wrapper__header--logo {

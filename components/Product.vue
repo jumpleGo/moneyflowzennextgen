@@ -11,10 +11,12 @@
       }}</span>
     </div>
     <div class="product__content">
-      <img :src="props.image" class="product__image" />
+      <img v-if="props.image" :src="props.image" class="product__image" />
 
-      <h3 class="product__title" v-html="props.title" />
-      <p class="product__description" v-html="props.description" />
+      <h3 v-if="props.title" class="product__title" v-html="props.title" />
+      <client-only>
+        <p class="product__description" v-html="props.description" />
+      </client-only>
     </div>
     <div @click="openLink" class="product__footer">
       <span class="product__more" @click="isOpenHint = !isOpenHint">Подробнее</span>
@@ -26,7 +28,6 @@
 import dayjs from 'dayjs'
 dayjs.locale('ru')
 import { computed, ref } from 'vue'
-import { useDetailInfoStore } from '@/stores/detail'
 import { useRouter } from 'vue-router'
 import { getNoun } from '@/helpers/date'
 
@@ -40,7 +41,7 @@ const props = withDefaults(
     start?: string
     nextGroup?: string
     end?: string
-    outDate: string
+    outDate?: string
   }>(),
   {
     link: '/'
@@ -122,7 +123,6 @@ const isOpenHint = ref(false)
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
   overflow: hidden;
   padding: 16px;
   border-radius: 20px;

@@ -65,7 +65,6 @@ import AppInput from '~/components/App/AppInput.vue'
 import { computed, type ComputedRef } from 'vue'
 import type { IPrices } from '~/types/pages/exchangerTypes'
 import { binance } from '~/api'
-import { Getter } from '~/helpers/getter'
 import { alphaNum, decimal, minLength } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import { translates } from '../../helpers/i18n'
@@ -152,8 +151,9 @@ const sumLabel = computed(() => {
 })
 
 const prices =  computed<IPrices>(() => {
+  console.log(data.value)
   const usdt = data.value?.prices.find(item => item.symbol === 'USDTRUB')?.price || 0
-  const btc = data.value?.prices.find(item => item.symbol === 'BTCRUB')?.price || 0
+  const btc = (data.value?.prices.find(item => item.symbol === 'BTCUSDT')?.price || 0) * usdt
   const ton = (data.value?.prices.find(item => item.symbol === 'TONUSDT')?.price || 0) * usdt
   const not = (data.value?.prices.find(item => item.symbol === 'NOTUSDT')?.price || 0) * usdt
 
@@ -164,6 +164,7 @@ const prices =  computed<IPrices>(() => {
     btc: +btc
   }
 })
+console.log(prices.value)
 
 const initialRubCount = computed(() => {
   if (!selectedSell.value.key) return 1

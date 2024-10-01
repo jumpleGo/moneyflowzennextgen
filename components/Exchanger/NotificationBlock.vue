@@ -13,8 +13,6 @@ const props = defineProps<{
   notifyType: 'bugs'
 }>()
 
-
-
 const text = computed(() => data[props.notifyType])
 
 const data = {
@@ -28,11 +26,15 @@ const data = {
   box-shadow: 0 6px 10px #99a1aa26;
   background: #fff2cb;
   margin-bottom: 20px;
-  border-radius: 5px;
   max-width: 83vw;
   font-size: 14px;
   display: flex;
   justify-content: space-between;
+
+  @include mobile-xs {
+    width: unset;
+    max-width: unset;
+  }
 
 }
 </style>

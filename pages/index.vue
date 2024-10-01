@@ -30,11 +30,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  max-width: 100vw;
   height: 100vh;
   color: $brand_yellow;
   padding-top: 144px;
-  overflow: hidden;
+  overflow-x: hidden;
 
   @include desktop-lg {
     overflow: unset

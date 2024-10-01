@@ -10,9 +10,9 @@
 
     <div class="round" />
     <div class="list-products__content">
-      <img v-if="productsActive.length" src="../assets/moln.svg" class="list-products__moln">
-      <div v-if="productsActive.length" class="list-products--list">
-        <Product  v-for="item in productsActive" :key="item.link" v-bind="item" class="product-item" />
+      <img v-if="productsActive?.length" src="../assets/moln.svg" class="list-products__moln">
+      <div v-if="products.length" class="list-products--list">
+        <Product  v-for="item in products" :key="item.link" v-bind="item" class="product-item" />
       </div>
       <div v-else class="list-products--list">
         <ProductSceleton  v-for="item in 3" :key="`mock-${item}`" class="product-item" />
@@ -35,10 +35,10 @@ import ProductSceleton from "@/components/ProductSceleton.vue";
 import {useDetailInfoStore} from "@/stores/detail";
 import {storeToRefs} from "pinia";
 import { Getter } from '~/helpers/getter'
-const {productsActive, products, tariffs} = storeToRefs(useDetailInfoStore())
+const {productsActive, products, tariffs } = storeToRefs(useDetailInfoStore())
 const { $databaseRef } = useNuxtApp()
 
-useAsyncData(async () => {
+const {data} = useAsyncData(async () => {
   products.value = await Getter.getFromDB($databaseRef, 'products/')
   tariffs.value = await Getter.getFromDB($databaseRef, 'tariffs/')
 })

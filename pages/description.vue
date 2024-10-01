@@ -380,7 +380,7 @@ li {
 }
 .call-to-action__ball {
   position: absolute;
-  width: 20%;
+  width: 10%;
   right: 13%;
   top: 10%;
   z-index: 2;

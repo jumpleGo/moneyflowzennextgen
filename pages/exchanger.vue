@@ -2,11 +2,11 @@
   <div class="exchanger__wrapper">
     <div class="exchanger">
       <NotificationBlock v-if="exchangerSettings?.notificationType" :notify-type="exchangerSettings.notificationType" />
-      <div class="exchanger__content">
+      <div v-if="!isLoadingResize" class="exchanger__content">
         <img class="exchanger__content--icon" src="/assets/icons/airdrop.png" @click="showModal = true" />
-        <LeftExchangerBlock v-if="showLeftBlock && !isLoadingResize" :class="['exchanger__left', {'--disabled-block': activeTransaction}]"  />
-        <TransactionBlock v-if="activeTransaction && !isLoadingResize" class="exchanger__right__payment"/>
-        <RightExchangerBlock v-if="showRightBlock && !isLoadingResize" class="exchanger__right" @back="backToPair" />
+        <LeftExchangerBlock v-if="showLeftBlock" :class="['exchanger__left', {'--disabled-block': activeTransaction}]"  />
+        <TransactionBlock v-if="activeTransaction" class="exchanger__right__payment"/>
+        <RightExchangerBlock v-if="showRightBlock" class="exchanger__right" @back="backToPair" />
       </div>
     </div>
   </div>
@@ -97,6 +97,10 @@ const backToPair = () => {
   align-items: center;
   width: 100%;
   max-width: 1300px;
+
+  @include mobile-all {
+    padding: 0 15px;
+  }
 }
 .exchanger__content {
   display: flex;
@@ -127,10 +131,6 @@ const backToPair = () => {
     border: 1px solid #f1b000;
     border-radius: 10px;
     animation: boxShadowAnim 5s infinite;
-
-    @include mobile-all {
-      right: calc(5vw + 10px);
-    }
   }
 }
 
