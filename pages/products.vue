@@ -11,8 +11,8 @@
     <div class="round" />
     <div class="list-products__content">
       <img v-if="productsActive?.length" src="../assets/moln.svg" class="list-products__moln">
-      <div v-if="products.length" class="list-products--list">
-        <Product  v-for="item in products" :key="item.link" v-bind="item" class="product-item" />
+      <div v-if="productsActive.length" class="list-products--list">
+        <Product  v-for="item in productsActive" :key="item.link" v-bind="item" class="product-item" />
       </div>
       <div v-else class="list-products--list">
         <ProductSceleton  v-for="item in 3" :key="`mock-${item}`" class="product-item" />
