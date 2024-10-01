@@ -74,6 +74,7 @@ const showRightBlock = computed(() => {
 watch(isSelectedBothItem, (value) => {
   if (value) hideRightBlock.value = false
 })
+
 const backToPair = () => {
   selectedBuy.value = {}
   selectedSell.value = {}

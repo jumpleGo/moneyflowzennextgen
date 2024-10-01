@@ -27,13 +27,13 @@
   align-items: center;
   justify-content: center;
   background: black;
-}
 
-@include landscape {
-  .landscape-prevent {
-    display: true;
+  @include landscape {
+    display: flex;
   }
 }
+
+
 
 
 </style>

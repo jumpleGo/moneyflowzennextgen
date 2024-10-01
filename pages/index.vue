@@ -34,8 +34,11 @@
   height: 100vh;
   color: $brand_yellow;
   padding-top: 144px;
-  overflow-x: hidden;
+  overflow: hidden;
 
+  @include mobile-all {
+    padding-top: unset;
+  }
   @include desktop-lg {
     overflow: unset
   }

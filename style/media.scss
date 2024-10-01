@@ -11,7 +11,7 @@
 }
 
 @mixin landscape {
-  @media (max-width: 768px) and (orientation: portrait) {@content;}
+  @media screen and (max-width: 950px) and (orientation: landscape)  {@content;}
 }
 
 @mixin not-mobile {
