@@ -64,7 +64,7 @@ import AppButton from '~/components/Buttons/AppButton.vue'
 import AppInput from '~/components/App/AppInput.vue'
 import { computed, type ComputedRef } from 'vue'
 import type { IPrices } from '~/types/pages/exchangerTypes'
-import { binance } from '~/api'
+import { binance, rateApi } from '~/api'
 import { alphaNum, decimal, minLength } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import { translates } from '../../helpers/i18n'
@@ -88,9 +88,12 @@ const {exchangerSettings, time, selectedBuy, selectedSell, isUSDTSell, isCryptoF
 
 const {data} = useAsyncData(async () => {
   const { data: prices } = await binance.getPriceByTickers()
+  const { data: pricesUsd } = await rateApi.getPriceByTickers()
+
 
   return {
     prices,
+    priceUSDT: pricesUsd.data.RUB.value
   }
 })
 
@@ -151,20 +154,17 @@ const sumLabel = computed(() => {
 })
 
 const prices =  computed<IPrices>(() => {
-  console.log(data.value)
-  const usdt = data.value?.prices.find(item => item.symbol === 'USDTRUB')?.price || 0
+  const usdt = data.value?.priceUSDT || 0
   const btc = (data.value?.prices.find(item => item.symbol === 'BTCUSDT')?.price || 0) * usdt
   const ton = (data.value?.prices.find(item => item.symbol === 'TONUSDT')?.price || 0) * usdt
   const not = (data.value?.prices.find(item => item.symbol === 'NOTUSDT')?.price || 0) * usdt
-
   return {
     not,
     ton,
-    usdt: +usdt,
-    btc: +btc
+    usdt,
+    btc
   }
 })
-console.log(prices.value)
 
 const initialRubCount = computed(() => {
   if (!selectedSell.value.key) return 1
