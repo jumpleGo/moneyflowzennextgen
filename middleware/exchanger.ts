@@ -7,7 +7,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (transaction) {
     const parsedTransaction = JSON.parse(transaction)
     const itemFromDb = await Getter.getByKey('transactions', parsedTransaction.key)
-    if (itemFromDb.status === 'payed') {
+    if (!itemFromDb) {
+      window.localStorage.removeItem('transaction')
+    } else if (itemFromDb.status === 'payed') {
       activeTransaction.value = itemFromDb
     } else if (itemFromDb.status === 'rejected') {
       window.localStorage.removeItem('transaction')
