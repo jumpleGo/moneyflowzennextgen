@@ -22,7 +22,7 @@ export default defineNuxtConfig({
       host: "smtp.example.com",
       port: 587,
     },
-  }]],
+  }], '@nuxt/image'],
 
   runtimeConfig: {
     public: {

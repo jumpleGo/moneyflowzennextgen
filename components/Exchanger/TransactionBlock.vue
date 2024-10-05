@@ -103,6 +103,7 @@ import { Getter } from '~/helpers/getter'
 import AppButton from '~/components/Buttons/AppButton.vue'
 import { Setter } from '~/helpers/setter'
 import AppFrame from '~/components/App/AppFrame.vue'
+import { copy } from '~/helpers/copy'
 const exchangerStore = useExchangerStore()
 const {activeTransaction, time} = storeToRefs(exchangerStore)
 
@@ -122,7 +123,7 @@ onMounted(() => {
 
 const { $databaseRef } = useNuxtApp()
 const {data} = useAsyncData(async () => {
-  const paymentData = await Getter.getFromDB($databaseRef, 'paymentData/')
+  const paymentData = await Getter.getFromDB( 'paymentData/')
 
   return {
     paymentData
@@ -131,27 +132,7 @@ const {data} = useAsyncData(async () => {
 
 const getPayment = computed(() => data.value?.paymentData[activeTransaction.value!.sell])
 const formatAddress = computed(() => `${activeTransaction.value?.address.slice(0, 3)}...${activeTransaction.value?.address.slice(activeTransaction.value?.address.length - 3)}`)
-const copy = (event: MouseEvent, str: string) => {
-  const {clientX, clientY} = event
 
-  const span = document.createElement('span')
-  span.appendChild(document.createTextNode('скопировано'))
-  span.classList.add('fly-up')
-  span.classList.add('copied')
-  span.style.cssText = `position:absolute;left:${clientX}px;top:${clientY}px; z-index: 999`
-  document.body.appendChild(span)
-  setTimeout(() => {
-    document.body.removeChild(span)
-  }, 1900)
-
-
-
-  navigator.clipboard.writeText(str).then(() => {
-    console.log('Async: Copying to clipboard was successful!');
-  }, (err) => {
-    console.error('Async: Could not copy text: ', err);
-  });
-}
 
 function getTimeRemaining(){
   var t = Date.parse(new Date(time.value)) - Date.parse(new Date());

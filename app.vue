@@ -10,7 +10,7 @@
 
 const route = useRoute()
 const showHeader = computed(() => {
-  const restricted = ['/exchanger']
+  const restricted = ['/exchanger', '/adminex']
   return !restricted.includes(route.path);
 })
 const showFooter = computed(() => {

@@ -54,7 +54,7 @@ definePageMeta({
 })
 
 useAsyncData(async () => {
-  exchangerSettings.value = await Getter.getFromDB($databaseRef, 'exchangerSettings/')
+  exchangerSettings.value = await Getter.getFromDB('exchangerSettings/')
 })
 
 const showLeftBlock = computed(() => {

@@ -1,29 +1,5 @@
 import { computed, ref } from 'vue'
-
-export type CryptoKeys = 'btc' | 'ton' | 'not' | 'usdt'
-export type ValuteKeys = 'ozon' | 'sber' | 'yandex' | 'tbank'
-export type Selected = {
-  title: string,
-  enabled: boolean,
-  key: CryptoKeys,
-  image: string,
-  type: 'valute' | 'crypto'
-}
-type Status =  'created' | 'rejected' | 'done' | 'timeout' | 'payed'
-export type IActiveTransaction = {
-  id: number,
-  sell: CryptoKeys | ValuteKeys,
-  buy: CryptoKeys | ValuteKeys,
-  countSell: number,
-  countBuy: number,
-  address: string,
-  memo: string,
-  net: string,
-  telegram: string,
-  status: Status
-}
-
-type IActiveTransactionWithKey = IActiveTransaction & {key?: string}
+import type { IActiveTransactionWithKey, IExchangerSettings, Selected } from '~/stores/exchangerTypes'
 
 
 export const useExchangerStore = defineStore('exchanger', () => {
@@ -32,6 +8,11 @@ export const useExchangerStore = defineStore('exchanger', () => {
   const activeTransaction = ref<IActiveTransactionWithKey | null>(null)
   const updateStatus = (status: Status) => activeTransaction.value!.status = status
   const time = ref()
+  const selectedSell = ref<Partial<Selected>>({})
+  const selectedBuy = ref<Partial<Selected>>({})
+
+  const exchangerSettings = ref<IExchangerSettings>()
+
 
   const enabledCoins = computed<Record<string, Selected >>(() => {
     return Object.values(coins.value).filter(item => item.enabled).reduce((acc, item) => {
@@ -40,7 +21,7 @@ export const useExchangerStore = defineStore('exchanger', () => {
     }, {})
   })
 
-  const enabledValutes = computed<Record<string, Selected >>(() => {
+  const enabledValutes = computed<Record<string, Selected>>(() => {
     return Object.values(valutes.value).filter(item => item.enabled).reduce((acc, item) => {
       acc[item.key] = item
       return acc
@@ -48,8 +29,7 @@ export const useExchangerStore = defineStore('exchanger', () => {
   })
 
 
-  const selectedSell = ref<Partial<Selected>>({})
-  const selectedBuy = ref<Partial<Selected>>({})
+
 
   const isUSDTSell = computed(() => selectedSell.value.key === 'usdt')
   const isCryptoForSell = computed(() => {
@@ -67,7 +47,7 @@ export const useExchangerStore = defineStore('exchanger', () => {
 
   const isSelectedBothItem = computed(() => selectedBuy.value.key && selectedSell.value.key)
 
-  const exchangerSettings = ref<Record<string, any>>()
+
 
   return { exchangerSettings, time, valutes, coins, selectedSell, selectedBuy, enabledCoins, enabledValutes, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isValuteForBuy, isCryptoForBuy, updateStatus}
 })

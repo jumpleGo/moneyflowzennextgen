@@ -39,8 +39,8 @@ const {productsActive, products, tariffs } = storeToRefs(useDetailInfoStore())
 const { $databaseRef } = useNuxtApp()
 
 const {data} = useAsyncData(async () => {
-  products.value = await Getter.getFromDB($databaseRef, 'products/')
-  tariffs.value = await Getter.getFromDB($databaseRef, 'tariffs/')
+  products.value = await Getter.getFromDB( 'products/')
+  tariffs.value = await Getter.getFromDB('tariffs/')
 })
 
 </script>

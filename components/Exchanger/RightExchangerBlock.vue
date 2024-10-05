@@ -70,10 +70,11 @@ import { useVuelidate } from '@vuelidate/core'
 import { translates } from '../../helpers/i18n'
 import type { IOption } from '~/components/App/types'
 import { usdtNet, VAT_MINUS_BIG, VAT_MINUS_SMALL, VAT_PLUS_BIG, VAT_PLUS_SMALL } from '~/components/Exchanger/consts'
-import type { IActiveTransaction } from '~/stores/exchanger'
+
 import AppBackButton from '~/components/App/AppBackButton.vue'
 import useResponsive from '~/composables/useResponsive'
 import { Setter } from '~/helpers/setter'
+import type { IActiveTransaction } from '~/stores/exchangerTypes'
 
 const { $databaseRef } = useNuxtApp()
 
@@ -188,7 +189,7 @@ const withVat = computed<IPrices>(() => ({
 
 
 const calculateAmount: ComputedRef<number> = computed(() => {
-  if (isNaN(+model.count)) return 0
+  if (!prices.value?.usdt) return 0
   if (isCryptoForSell.value) {
     if (!selectedSell.value?.key) return 0
     return +(+model.count * withVat.value[selectedSell.value?.key]).toFixed(2)

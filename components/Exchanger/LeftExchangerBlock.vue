@@ -9,7 +9,7 @@
                :key="index + 'coin--first'"
                :class="['exchanger__item', {active: selectedSell.key === coin.key}, {'--disabled': isCryptoForBuy}]"
                @click="selectSell('crypto', coin)">
-            <img :src="coin.image" />
+            <NuxtImg :src="coin.image" loading="lazy" />
             {{ coin.title }}
           </div>
         </div>
@@ -21,7 +21,7 @@
                :key="index + 'valute--first'" class="exchanger__item"
                :class="['exchanger__item', {active: selectedSell.title === valute.title}, {'--disabled': isValuteForBuy}]"
                @click="selectSell('valute', valute)">
-            <img :src="valute.image" />
+            <NuxtImg :src="valute.image"  loading="lazy" />
             {{ valute.title }}
           </div>
         </div>
@@ -38,7 +38,7 @@
             class="exchanger__item"
             :class="['exchanger__item', {active: selectedBuy.key === valute.key}, {'--disabled': isValuteForSell}]"
             @click="selectBuy('valute', valute)">
-            <img :src="valute.image" />
+            <NuxtImg :src="valute.image" loading="lazy"  />
             {{ valute.title }}
           </div>
         </div>
@@ -50,7 +50,7 @@
                :key="index + 'coin--first'"
                :class="['exchanger__item', {active: selectedBuy.key === coin.key}, {'--disabled': isCryptoForSell}]"
                @click="selectBuy('crypto', coin)">
-            <img :src="coin.image" />
+            <NuxtImg :src="coin.image" loading="lazy" />
             {{ coin.title }}
           </div>
         </div>
@@ -60,10 +60,10 @@
 </template>
 
 <script lang="ts" setup>
-import { type Selected, useExchangerStore } from '~/stores/exchanger'
+import { useExchangerStore } from '~/stores/exchanger'
 import { Getter } from '~/helpers/getter'
 import { watch } from 'vue'
-import AppBackButton from '~/components/App/AppBackButton.vue'
+import type { Selected } from '~/stores/exchangerTypes'
 
 const { $databaseRef } = useNuxtApp()
 const {coins, valutes, selectedBuy, selectedSell, enabledCoins, enabledValutes, isValuteForSell, isCryptoForSell, isCryptoForBuy, isValuteForBuy} = storeToRefs(useExchangerStore())
@@ -71,7 +71,7 @@ const {coins, valutes, selectedBuy, selectedSell, enabledCoins, enabledValutes, 
 
 
 const {data} = useAsyncData(async () => {
-  const {COINS, VALUTE} =  await Getter.getFromDB($databaseRef, 'exchangePairs/')
+  const {COINS, VALUTE} =  await Getter.getFromDB('exchangePairs/')
 
   coins.value = COINS
   valutes.value = VALUTE
@@ -175,15 +175,15 @@ const selectBuy = (type: 'crypto' | 'valute', item: Selected) => {
   &:hover {
     cursor: not-allowed;
   }
-  &::before {
+  &::after {
     content: '';
     width: 100%;
     height: 100%;
-    background: rgba(254, 190, 22, 0.16);
+    background: rgba(222, 217, 210, 0.54);
     position: absolute;
     left: 0;
     top: 0;
-    z-index: 1;
+    z-index: 2;
   }
 }
 .active {

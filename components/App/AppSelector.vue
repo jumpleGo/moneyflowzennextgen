@@ -1,6 +1,6 @@
 <template>
   <div class="app_selector">
-    <div :class="['app_selector__input', {'error': error}]" @click="isOpenList = true">
+    <div :class="['app_selector__input', {'error': error}]" @click="isOpenList = !isOpenList">
       <span v-if="modelValue.name">{{ modelValue.name }}</span>
       <span v-else class="--placeholder">{{ placeholder }}</span>
       <img src="/assets/down-arrow.png" :class="['app_selector__icon', {'--opened': isOpenList}]" />
@@ -19,15 +19,13 @@ import type { IOption } from '~/components/App/types'
 const emit = defineEmits<{
   (e: 'update:modelValue', option: IOption): void
 }>()
-const props = withDefaults(defineProps<{
+const props = defineProps<{
   options: IOption[],
   placeholder?: string,
   id: string,
   modelValue: IOption,
   error?: boolean
-}>(), {
-
-})
+}>()
 
 const isOpenList = shallowRef(false)
 const selectItem = (option: IOption) => {
@@ -44,7 +42,7 @@ const selectItem = (option: IOption) => {
     position: absolute;
     left: 0;
     width: 100%;
-    top: 45px;
+    top: 41px;
     border-radius: 51px;
     z-index: 2;
   }
@@ -53,6 +51,13 @@ const selectItem = (option: IOption) => {
     padding: 10px 20px;
     background: white;
     border: 1px solid rgba(0,0,0, 0.1);
+    font-size: 16px;
+    &:first-child {
+      border-radius: 20px 20px 0 0;
+    }
+    &:last-child {
+      border-radius:  0 0 20px 20px;
+    }
 
     &:hover {
       cursor: pointer;
@@ -60,6 +65,7 @@ const selectItem = (option: IOption) => {
       background: rgb(255, 240, 199);
     }
   }
+
 
   &__icon {
     position: absolute;
@@ -91,7 +97,7 @@ const selectItem = (option: IOption) => {
   width: 100%;
   padding: 10px 15px;
   border-radius: 20px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
   outline: unset;
   border: 1px solid $brand_yellow;
