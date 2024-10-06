@@ -17,7 +17,7 @@
           </span>
         </div>
         <div class="transaction__block-payment-action">
-          <h3>Переведите {{ activeTransaction.countSell }} {{ activeTransaction.sell.toUpperCase() }} по реквизитам:</h3>
+          <h3>Переведите {{ activeTransaction.countSell }} {{ activeTransaction.sell.toUpperCase() }} {{ activeTransaction.sell === 'usdt' ? '(TON)' : '' }} по реквизитам:</h3>
           <span>(копируется нажатием)</span>
           <div class="transaction__block-payment-data">
             <span v-if="getPayment?.address" class="transaction__block-payment-data--address" @click="copy($event, getPayment.address)">{{ getPayment?.address }}</span>

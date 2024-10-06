@@ -5,7 +5,8 @@ export type Selected = {
   enabled: boolean,
   key: CryptoKeys,
   image: string,
-  type: 'valute' | 'crypto'
+  type: 'valute' | 'crypto',
+  options: ['sell', 'buy']
 }
 export type Status =  'created' | 'rejected' | 'done' | 'timeout' | 'payed'
 export type IActiveTransaction = {

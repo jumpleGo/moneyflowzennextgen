@@ -22,6 +22,13 @@ export const useExchangerStore = defineStore('exchanger', () => {
     return Object.values(valutes.value).filter(item => item.enabled)
   })
 
+  const valutesForSell = computed<Selected[]>(() => {
+    return enabledValutes.value?.filter(item => item.options?.includes('sell')) || []
+  })
+  const valutesForBuy = computed<Selected[]>(() => {
+    return enabledValutes.value?.filter(item => item.options?.includes('buy')) || []
+  })
+
 
 
 
@@ -43,5 +50,5 @@ export const useExchangerStore = defineStore('exchanger', () => {
 
 
 
-  return { exchangerSettings, time, valutes, coins, selectedSell, selectedBuy, enabledCoins, enabledValutes, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isValuteForBuy, isCryptoForBuy, updateStatus}
+  return { exchangerSettings, time, valutes, coins, selectedSell, selectedBuy, enabledCoins, enabledValutes, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isValuteForBuy, isCryptoForBuy, valutesForSell, valutesForBuy, updateStatus}
 })

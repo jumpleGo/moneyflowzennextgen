@@ -7,7 +7,7 @@
         <div v-if="enabledCoins.length"  class="exchanger__items--list">
           <div v-for="(coin, index) in enabledCoins"
                :key="index + 'coin--first'"
-               :class="['exchanger__item', {active: selectedSell.key === coin.key}, {'--disabled': isCryptoForBuy}]"
+               :class="['exchanger__item', {active: selectedSell?.key === coin.key}, {'--disabled': isCryptoForBuy}]"
                @click="selectSell('crypto', coin)">
             <NuxtImg :src="coin.image"  preload="high" />
             {{ coin.title }}
@@ -16,8 +16,8 @@
       </div>
       <div class="exchanger__items">
         <p class="exchanger__subtitle">фиат</p>
-        <div v-if="enabledValutes.length" class="exchanger__items--list">
-          <div v-for="(valute, index) in enabledValutes"
+        <div v-if="valutesForSell.length" class="exchanger__items--list">
+          <div v-for="(valute, index) in valutesForSell"
                :key="index + 'valute--first'" class="exchanger__item"
                :class="['exchanger__item', {active: selectedSell.title === valute.title}, {'--disabled': isValuteForBuy}]"
                @click="selectSell('valute', valute)">
@@ -31,9 +31,9 @@
       <p class="exchanger__title">что хотите купить</p>
       <div class="exchanger__items">
         <p class="exchanger__subtitle">фиат</p>
-        <div v-if="enabledValutes.length" class="exchanger__items--list">
+        <div v-if="valutesForBuy.length" class="exchanger__items--list">
           <div
-            v-for="(valute, index) in enabledValutes"
+            v-for="(valute, index) in valutesForBuy"
             :key="index + 'valute--second'"
             class="exchanger__item"
             :class="['exchanger__item', {active: selectedBuy.key === valute.key}, {'--disabled': isValuteForSell}]"
@@ -66,7 +66,7 @@ import { watch } from 'vue'
 import type { Selected } from '~/stores/exchangerTypes'
 
 const { $databaseRef } = useNuxtApp()
-const {coins, valutes, selectedBuy, selectedSell, enabledCoins, enabledValutes, isValuteForSell, isCryptoForSell, isCryptoForBuy, isValuteForBuy} = storeToRefs(useExchangerStore())
+const {coins, valutes, valutesForSell, valutesForBuy, selectedBuy, selectedSell, enabledCoins, enabledValutes, isValuteForSell, isCryptoForSell, isCryptoForBuy, isValuteForBuy} = storeToRefs(useExchangerStore())
 
 
 
