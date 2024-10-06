@@ -31,13 +31,14 @@
   justify-content: center;
   align-items: center;
   max-width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 144px);
   color: $brand_yellow;
   padding-top: 144px;
   overflow: hidden;
 
   @include mobile-all {
     padding-top: unset;
+    height: 100vh;
   }
   @include desktop-lg {
     overflow: unset
@@ -45,7 +46,6 @@
 
   .mfz-main__title {
     position: relative;
-
     text-transform: uppercase;
     font-family: 'DUERRA' !important;
     display: flex;

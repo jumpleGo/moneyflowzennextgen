@@ -4,24 +4,24 @@
       <p class="exchanger__title">что хотите продать</p>
       <div class="exchanger__items">
         <p class="exchanger__subtitle">криптовалюта</p>
-        <div class="exchanger__items--list">
+        <div v-if="enabledCoins.length"  class="exchanger__items--list">
           <div v-for="(coin, index) in enabledCoins"
                :key="index + 'coin--first'"
                :class="['exchanger__item', {active: selectedSell.key === coin.key}, {'--disabled': isCryptoForBuy}]"
                @click="selectSell('crypto', coin)">
-            <NuxtImg :src="coin.image" loading="lazy" />
+            <NuxtImg :src="coin.image"  preload="high" />
             {{ coin.title }}
           </div>
         </div>
       </div>
       <div class="exchanger__items">
         <p class="exchanger__subtitle">фиат</p>
-        <div>
+        <div v-if="enabledValutes.length" class="exchanger__items--list">
           <div v-for="(valute, index) in enabledValutes"
                :key="index + 'valute--first'" class="exchanger__item"
                :class="['exchanger__item', {active: selectedSell.title === valute.title}, {'--disabled': isValuteForBuy}]"
                @click="selectSell('valute', valute)">
-            <NuxtImg :src="valute.image"  loading="lazy" />
+            <NuxtImg :src="valute.image"  preload="high" />
             {{ valute.title }}
           </div>
         </div>
@@ -31,26 +31,26 @@
       <p class="exchanger__title">что хотите купить</p>
       <div class="exchanger__items">
         <p class="exchanger__subtitle">фиат</p>
-        <div>
+        <div v-if="enabledValutes.length" class="exchanger__items--list">
           <div
             v-for="(valute, index) in enabledValutes"
             :key="index + 'valute--second'"
             class="exchanger__item"
             :class="['exchanger__item', {active: selectedBuy.key === valute.key}, {'--disabled': isValuteForSell}]"
             @click="selectBuy('valute', valute)">
-            <NuxtImg :src="valute.image" loading="lazy"  />
+            <NuxtImg :src="valute.image"  preload="high"  />
             {{ valute.title }}
           </div>
         </div>
       </div>
       <div class="exchanger__items">
         <p class="exchanger__subtitle">криптовалюта</p>
-        <div class="exchanger__items--list">
+        <div v-if="enabledCoins.length" class="exchanger__items--list">
           <div v-for="(coin, index) in enabledCoins"
                :key="index + 'coin--first'"
                :class="['exchanger__item', {active: selectedBuy.key === coin.key}, {'--disabled': isCryptoForSell}]"
                @click="selectBuy('crypto', coin)">
-            <NuxtImg :src="coin.image" loading="lazy" />
+            <NuxtImg :src="coin.image"  preload="high" />
             {{ coin.title }}
           </div>
         </div>

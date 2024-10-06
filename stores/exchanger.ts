@@ -14,18 +14,12 @@ export const useExchangerStore = defineStore('exchanger', () => {
   const exchangerSettings = ref<IExchangerSettings>()
 
 
-  const enabledCoins = computed<Record<string, Selected >>(() => {
-    return Object.values(coins.value).filter(item => item.enabled).reduce((acc, item) => {
-      acc[item.key] = item
-      return acc
-    }, {})
+  const enabledCoins = computed<Selected[]>(() => {
+    return Object.values(coins.value).filter(item => item.enabled)
   })
 
-  const enabledValutes = computed<Record<string, Selected>>(() => {
-    return Object.values(valutes.value).filter(item => item.enabled).reduce((acc, item) => {
-      acc[item.key] = item
-      return acc
-    }, {})
+  const enabledValutes = computed<Selected[]>(() => {
+    return Object.values(valutes.value).filter(item => item.enabled)
   })
 
 

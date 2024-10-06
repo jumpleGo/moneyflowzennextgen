@@ -14,6 +14,7 @@
           <AppInput
             v-model="v$.count.$model"
             id="sum"
+            :maska-options="countMaskaOptions"
             :error="v$.count.$error"
             placeholder="Сумма обмена"
             :label="sumLabel">
@@ -40,6 +41,7 @@
           <AppInput
             v-if="isMemoShow"
             v-model="v$.memo.$model"
+            :maska-options="memoMaskaOptions"
             :error="v$.memo.$error"
             id="memo"
             placeholder="memo"
@@ -69,7 +71,14 @@ import { alphaNum, decimal, minLength } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import { translates } from '../../helpers/i18n'
 import type { IOption } from '~/components/App/types'
-import { usdtNet, VAT_MINUS_BIG, VAT_MINUS_SMALL, VAT_PLUS_BIG, VAT_PLUS_SMALL } from '~/components/Exchanger/consts'
+import {
+  countMaskaOptions, memoMaskaOptions,
+  usdtNet,
+  VAT_MINUS_BIG,
+  VAT_MINUS_SMALL,
+  VAT_PLUS_BIG,
+  VAT_PLUS_SMALL
+} from '~/components/Exchanger/consts'
 
 import AppBackButton from '~/components/App/AppBackButton.vue'
 import useResponsive from '~/composables/useResponsive'
@@ -83,6 +92,8 @@ const {isMobile} = useResponsive()
 const emit = defineEmits<{
   (e: 'back'): void
 }>()
+
+
 
 
 const {exchangerSettings, time, selectedBuy, selectedSell, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction} = storeToRefs(useExchangerStore())

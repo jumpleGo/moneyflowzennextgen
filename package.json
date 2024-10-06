@@ -19,6 +19,7 @@
     "dayjs": "^1.11.13",
     "firebase": "^10.13.1",
     "lodash.debounce": "^4.0.8",
+    "maska": "^3.0.3",
     "nuxt": "^3.13.0",
     "nuxt-mail": "^5.0.1",
     "pinia": "^2.2.2",

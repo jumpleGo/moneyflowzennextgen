@@ -6,7 +6,7 @@
         v-model="modelValueRef"
         :disabled="disabled"
         :id="id"
-        v-bind="rules"
+        v-maska="maskaOptions"
         :placeholder="placeholder"
         :class="['app_input__input', {'error': error}]"
         @blur="emit('blur')"
@@ -23,6 +23,7 @@
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | number): void
@@ -32,15 +33,19 @@ const props = withDefaults(defineProps<{
   id: string,
   placeholder?: string,
   label?: string,
+  type?: string,
   modelValue?: string | number,
-  rules?: Record<string, any>,
   error?: boolean,
   disabled?: boolean,
   editable?: boolean
-  paste?: boolean
+  paste?: boolean,
+  maskaOptions?: Record<string, any>
 }>(), {
-  editable: true
+  editable: true,
+  type: 'text',
+  maskaTokens: undefined
 })
+
 
 const modelValueRef = useModel(props,  'modelValue')
 const onPaste = async () => {

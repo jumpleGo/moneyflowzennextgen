@@ -4,12 +4,11 @@
     <div class="detail-information-page__header">
       <h1 v-if="currentProduct?.title" class="detail-information-page__title">
         <span v-html="currentProduct.title"></span>
-        <img class="detail-information-page__image" :src="currentProduct.image" />
+        <nuxt-img loading="lazy" class="detail-information-page__image" :src="currentProduct.image" />
       </h1>
       <h1 v-if="!currentProduct?.title" class="detail-information-page__title--sceleton" />
       <div class="detail-information-page__moln-wrapper">
-        <img class="detail-information-page__moln" src="../assets/molnBig.svg">
-        <img class="detail-information-page__coins" src="../assets/coins.png">
+        <img class="detail-information-page__moln" src="../assets/molnBig.svg" />
       </div>
     </div>
     <div v-if="currentProduct?.description" class="detail-information-page__content">
@@ -78,13 +77,12 @@ li {
   bottom: 10px;
 }
 .detail-information-page {
-  width: 100%;
   display: flex;
   flex-direction: column;
-  padding-top: 90px;
+  align-items: center;
   overflow: hidden;
   height: 100%;
-  padding-bottom: 180px;
+  padding: 90px 15px 180px;
 
   @include tablet {
     padding-top: 120px;
@@ -195,7 +193,7 @@ li {
 }
 .detail-information-page__moln-wrapper {
   position: relative;
-  width: 100%;
+  width: 100vw;
   height: 50px;
   z-index: 1;
   margin-top: 100px;
@@ -208,57 +206,17 @@ li {
 }
 .detail-information-page__moln {
   position: absolute;
-  bottom: -170px;
+  bottom: -50px;
   right: -10%;
-  width: 100%;
+  width: 50%;
 
   @include mobile-xs {
     bottom: -120px;
   }
 }
 
-.detail-information-page__coins {
-  position: absolute;
-  width: 100px;
-
-
-  @include mobile-xs {
-    width: 70px;
-    left: 5%;
-    bottom: -270%;
-  }
-
-  @include mobile {
-    left: 5%;
-    bottom: -350%;
-  }
-
-  @include tablet {
-    left: 8%;
-    bottom: -330%;
-  }
-
-  @include desktop {
-    width: 200px;
-    left: 7%;
-    bottom: -350%;
-  }
-
-  @include desktop-md {
-    width: 200px;
-    left: 7%;
-    bottom: -300%;
-  }
-
-  @include desktop-lg {
-    width: 200px;
-    bottom: -300%;
-    left: 8%;
-  }
-}
 .detail-information-page__content {
   margin-top: 200px;
-  padding: 0 20px;
   display: flex;
   justify-content: center;
 }
@@ -273,10 +231,9 @@ li {
 }
 .detail-information-page__tariffs {
   display: flex;
-  width: 100%;
   gap: 20px;
-  margin: 25px auto;
-  padding: 0 20px;
+  margin: 25px 0;
+  width: 100%;
   flex-wrap: wrap;
   justify-content: center;
 
@@ -296,6 +253,7 @@ li {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   box-shadow: inset 0px 0px 10px -3px $brand_yellow;
   width: calc(50% - 10px);
   border-radius: 20px;
@@ -346,13 +304,13 @@ li {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 350px;
+  width: 250px;
   border-radius: 50%;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  height: 350px;
+  height: 250px;
   margin-top: 60px;
-  box-shadow: 0 4px 11px 0 rgba(0, 0, 0, 0.44);
+  box-shadow: 0 4px 11px 0 rgba(255, 217, 89, 0.44);
   z-index: 3;
 
   @include tablet {
@@ -375,6 +333,7 @@ li {
 .call-to-action {
   padding: 0 20px;
   position: relative;
+  width: 100%;
   display: flex;
   justify-content: center;
 }
@@ -424,8 +383,8 @@ li {
 
 .call-to-action__moln {
   position: absolute;
-  width: 30%;
-  top: 40%;
+  width: 20%;
+  top: 30%;
   right: 0;
 
   @include desktop-lg {
@@ -436,8 +395,8 @@ li {
 
 .call-to-action__dollar {
   position: absolute;
-  width: 45%;
-  right: 15%;
+  width: 35%;
+  right: 20%;
   top: -15%;
   z-index: 1;
 

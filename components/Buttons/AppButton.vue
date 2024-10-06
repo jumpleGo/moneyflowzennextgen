@@ -1,5 +1,5 @@
 <template>
-  <component :is="componentButton" :disabled="disabled" :href="props.to" :to="props.to" :class="['app__button', buttonClass, {'--fluid': fluid}, {'--disabled': disabled}]">
+  <component :is="componentButton" :disabled="disabled" :href="props.to" :to="props.to" :class="['app__button', buttonClass, {'--fluid': fluid}, {'--disabled': disabled}]" target="_blank">
     {{ props.title }}
   </component>
 </template>
