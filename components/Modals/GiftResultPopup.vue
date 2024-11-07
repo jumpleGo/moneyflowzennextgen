@@ -35,6 +35,7 @@ const {selectedGift} = storeToRefs(useGiftStore())
 
   &__img-gift {
     width: 40%;
+    height: auto;
 
     @include not-mobile {
       width: 20%;

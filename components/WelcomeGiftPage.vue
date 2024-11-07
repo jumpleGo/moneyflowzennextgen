@@ -5,14 +5,14 @@
     <img src="../assets/light.svg" class="mfz_welcome-gift--light" />
 
 
-    <img src="../assets/romb.png" class="mfz_welcome-gift--romb badge" />
-    <img src="../assets/gift.png" class="mfz_welcome-gift--gift-badge badge" />
-    <img src="../assets/dollar_big.svg" class="mfz_welcome-gift--dollar-badge badge" />
+    <img src="../assets/romb.png" class="mfz_welcome-gift--romb badge_gift" />
+    <img src="../assets/gift.png" class="mfz_welcome-gift--gift-badge badge_gift"  />
+    <img src="../assets/dollar_big.svg" class="mfz_welcome-gift--dollar-badge badge_gift" />
     <div class="mfz_welcome-content">
       <h1 class="mfz_welcome-gift--title">время<br/>изобилия</h1>
-      <img src="../assets/andGift.png" class="mfz_welcome-gift--andGift-badge badge" />
-      <img src="../assets/getIt.png" class="mfz_welcome-gift--getIt-badge badge" />
-      <img src="../assets/gift.png" class="mfz_welcome-gift--gift" />
+      <img src="../assets/andGift.png" class="mfz_welcome-gift--andGift-badge badge_gift" />
+      <img src="../assets/getIt.png" class="mfz_welcome-gift--getIt-badge badge_gift" />
+      <img src="../assets/gift.png" class="mfz_welcome-gift--gift " />
     </div>
     <app-button :disabled="!existGame" title="получить" class="mfz_welcome-gift--button" @click="emit('openGame')" />
     <p v-if="existGame" class="mfz_welcome-gift--button_tip">у вас {{ existGame }} попыток</p>
@@ -30,9 +30,13 @@ const emit = defineEmits<{
 }>()
 </script>
 <style lang="scss" scoped>
+.badge_gift {
+  position: absolute;
+}
 .mfz_welcome-gift {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   height: calc(100vh - 100px);
   position: relative;
@@ -43,7 +47,7 @@ const emit = defineEmits<{
   flex-direction: column;
   align-items: center;
   position: relative;
-  margin-top: 20vh;
+  margin-top: 10vh;
   z-index: 2;
 }
 .mfz_welcome-gift--gift {
@@ -57,18 +61,18 @@ const emit = defineEmits<{
   height: auto;
 }
 .mfz_welcome-gift--romb {
-  margin-top: 25%;
+  margin-top: -35vh;
   margin-right: 10%;
 }
 .mfz_welcome-gift--gift-badge {
   width: 50px;
   transform: rotate(30deg);
   margin-top: 100px;
-  margin-left: 40%;
+  margin-left: 80%;
 }
 .mfz_welcome-gift--dollar-badge {
-  width: 80px;
-  margin-right: 50%;
+  width: 120px;
+  left: 0;
   margin-top: 20%;
 }
 .mfz_welcome-gift--text {

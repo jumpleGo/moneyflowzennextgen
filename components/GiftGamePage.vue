@@ -65,12 +65,14 @@ const selectGift = async (index: number) => {
     reset()
     return
   }
-  setTimeout(() => {
-    showModal.value = true
-    showModalType.value = 'GiftResultPopup'
-  }, 1000)
+
+
 
   selectedGift.value = data.value?.gifts[index-1]
+  showModal.value = true
+  showModalType.value = 'GiftResultPopup'
+
+  await Setter.pushToDb('winnedGift/', {...selectedGift.value, currentHash, giftKey: giftKey.value})
 
   const myGifts = localStorage.getItem('myGifts')
   if (!myGifts) {
@@ -115,6 +117,7 @@ const selectGift = async (index: number) => {
   position: absolute;
   bottom: 0;
   right: 0;
+  width: 120%;
 
   @include not-mobile {
     display: none;
