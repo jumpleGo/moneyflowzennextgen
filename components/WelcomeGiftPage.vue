@@ -21,7 +21,7 @@
 </template>
 <script lang="ts" setup>
 import AppButton from "@/components/Buttons/AppButton.vue";
-const props = defineProps<{
+defineProps<{
   existGame?: number
 }>()
 

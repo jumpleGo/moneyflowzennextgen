@@ -34,8 +34,8 @@ const {selectedGift} = storeToRefs(useGiftStore())
   border-radius: 16px;
 
   &__img-gift {
-    width: 40%;
-    height: auto;
+    width: auto;
+    height: 140px;
 
     @include not-mobile {
       width: 20%;
@@ -44,11 +44,11 @@ const {selectedGift} = storeToRefs(useGiftStore())
 
   &__img-blick-second {
     position: absolute;
-    right: 10%;
+    right: 1%;
   }
   &__img-blick-first {
     position: absolute;
-    left: 10%;
+    left: 7%;
     top: 10%;
   }
   &__img-blick-third {
