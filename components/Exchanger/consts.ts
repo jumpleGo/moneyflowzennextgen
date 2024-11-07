@@ -23,9 +23,11 @@ export const VAT_MINUS_BIG: number = 0.9
 export const VAT_MINUS_SMALL: number = 0.95
 
 export const countMaskaOptions = {
-  mask  : '9',
+  mask  : '91.00',
   tokens: {
-    9: { pattern : /[0-9]/, repeated: true },
+    9: { pattern : /[1-9]/},
+    1: { pattern : /[0-9]/, optional: true, multiple: true},
+    0: { pattern : /[0-9]/, multiple: true },
   }
 };
 

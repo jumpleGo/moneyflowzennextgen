@@ -3,7 +3,7 @@
     <div class="exchanger">
       <NotificationBlock v-if="exchangerSettings?.notificationType" :notify-type="exchangerSettings.notificationType" />
       <div v-if="!isLoadingResize" class="exchanger__content">
-        <img class="exchanger__content--icon" src="/assets/icons/airdrop.png" @click="showModal = true" />
+        <img v-if="exchangerSettings.showOffer" class="exchanger__content--icon" src="/assets/icons/airdrop.png" @click="showModal = true" />
         <LeftExchangerBlock v-if="showLeftBlock" :class="['exchanger__left', {'--disabled-block': activeTransaction}]"  />
         <TransactionBlock v-if="activeTransaction" class="exchanger__right__payment"/>
         <RightExchangerBlock v-if="showRightBlock" class="exchanger__right" @back="backToPair" />
@@ -42,13 +42,12 @@ import useResponsive from '~/composables/useResponsive'
 import NotificationBlock from '~/components/Exchanger/NotificationBlock.vue'
 import { storeToRefs } from 'pinia'
 import { useMainStore } from '~/stores/main'
-import { binance } from '~/api'
 import { Getter } from '~/helpers/getter'
-const { activeTransaction, isSelectedBothItem, selectedBuy, selectedSell, time, exchangerSettings} = storeToRefs(useExchangerStore())
+
+const { activeTransaction, isSelectedBothItem, exchangerSettings} = storeToRefs(useExchangerStore())
 const hideRightBlock = shallowRef(true)
 const {isMobile, isLoadingResize} = useResponsive()
 const {showModal} = storeToRefs(useMainStore())
-const { $databaseRef } = useNuxtApp()
 definePageMeta({
   middleware:['exchanger']
 })
@@ -76,8 +75,8 @@ watch(isSelectedBothItem, (value) => {
 })
 
 const backToPair = () => {
-  selectedBuy.value = {}
-  selectedSell.value = {}
+  console.log(',,')
+  useExchangerStore().clearSelected()
 }
 </script>
 <style lang="scss">

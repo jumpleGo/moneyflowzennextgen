@@ -3,23 +3,23 @@
     <div class='exchanger__right__content-wrapper'>
       <div class="exchanger__right__content">
         <div class="exchanger__right__content--header">
-          <AppBackButton v-if="isMobile" @click="emit('back')" class="exchanger__right__content-back" />
+          <AppBackButton @click="emit('back')" class="exchanger__right__content-back" />
           <div class="exchanger__content--title-wrapper">
-            <h2 class="exchanger__content--title">Обмен <span>{{ selectedSell.title || '...' }}</span></h2>
-            <h2 class="exchanger__content--title">на <span>{{ selectedBuy.title || '...' }}</span></h2>
+            <h2 class="exchanger__content--title">Обмен <span>{{ selectedSell?.title || '...' }}</span></h2>
+            <h2 class="exchanger__content--title">на <span>{{ selectedBuy?.title || '...' }}</span></h2>
           </div>
-
         </div>
+
        <div class="exchanger__inputs">
           <AppInput
             v-model="v$.count.$model"
             id="sum"
             :maska-options="countMaskaOptions"
-            :error="v$.count.$error"
+            :error="!countValidate"
             placeholder="Сумма обмена"
             :label="sumLabel">
-            <template v-if="v$.count.$error || !countValidate" #error>{{ (v$.count.$error && translates.count) || (!countValidate && translates.limit) }}</template>
-            <span v-if="selectedBuy.key && selectedSell.key"> {{ additionalText }}</span>
+            <template v-if="!countValidate" #error>{{ (!countValidate && translates.limit(exchangerSettings)) }}</template>
+            <span v-if="selectedBuy?.key && selectedSell?.key"> {{ additionalText }}</span>
           </AppInput>
           <AppInput
             v-model="v$.telegram.$model"
@@ -67,7 +67,7 @@ import AppInput from '~/components/App/AppInput.vue'
 import { computed, type ComputedRef } from 'vue'
 import type { IPrices } from '~/types/pages/exchangerTypes'
 import { binance, rateApi } from '~/api'
-import { alphaNum, decimal, minLength } from '@vuelidate/validators'
+import { alphaNum, decimal, minLength, required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import { translates } from '../../helpers/i18n'
 import type { IOption } from '~/components/App/types'
@@ -81,20 +81,12 @@ import {
 } from '~/components/Exchanger/consts'
 
 import AppBackButton from '~/components/App/AppBackButton.vue'
-import useResponsive from '~/composables/useResponsive'
 import { Setter } from '~/helpers/setter'
 import type { IActiveTransaction } from '~/stores/exchangerTypes'
-
-const { $databaseRef } = useNuxtApp()
-
-const {isMobile} = useResponsive()
 
 const emit = defineEmits<{
   (e: 'back'): void
 }>()
-
-
-
 
 const {exchangerSettings, time, selectedBuy, selectedSell, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction} = storeToRefs(useExchangerStore())
 
@@ -123,13 +115,20 @@ const netModel = computed({
 })
 
 const rubTransferValue = computed<number>(() => isCryptoForSell.value ? calculateAmount.value : model.count)
-const rules = computed(() => ({
-  memo: {minLength: minLength(6), decimal },
-  net: { required: isUSDTSell.value },
-  count: { required: true, decimal },
-  telegram: { alphaNum, required: true,  minLength: minLength(3)  },
-  address: { minLength: minLength(11), required: true, alphaNum },
-}))
+const rules = computed(() => {
+  const ruleOptions = {
+    memo: {minLength: minLength(6), decimal },
+    count: { required, decimal },
+    telegram: { alphaNum, required,  minLength: minLength(3)  },
+    address: { minLength: minLength(11), required, alphaNum },
+  }
+
+  if (isUSDTSell.value) {
+    ruleOptions.net = { required }
+  }
+
+  return ruleOptions
+})
 
 const v$ = useVuelidate(
   rules,
@@ -145,7 +144,7 @@ const isCountValid = computed(() => isCryptoForSell.value
 const enabledButton = computed(() => !v$.value.$errors.length && isCountValid.value && model.telegram && model.address)
 
 const calculateItem = computed(() => {
-  return selectedBuy.value.type === 'valute' ? 'RUB' : selectedBuy.value.key?.toUpperCase()
+  return selectedBuy.value?.type === 'valute' ? 'RUB' : selectedBuy.value?.key?.toUpperCase()
 })
 
 const isMemoShow = computed(() => {
@@ -212,9 +211,9 @@ const calculateAmount: ComputedRef<number> = computed(() => {
 
 
 
-const placeholderAddress = computed(() => selectedBuy.value.type === 'crypto' ? 'Адрес кошелька' : 'Телефон или номер карты')
+const placeholderAddress = computed(() => selectedBuy.value?.type === 'crypto' ? 'Адрес кошелька' : 'Телефон или номер карты')
 
-const additionalText  = computed<string>(() => `Вы получите: ${calculateAmount.value} ${calculateItem.value}`)
+const additionalText  = computed<string>(() => `Вы получите: ${new Intl.NumberFormat('ru-RU').format(calculateAmount.value)} ${calculateItem.value}`)
 
 const validateForm = async () => {
   const isValid = await v$.value.$validate()
@@ -225,8 +224,8 @@ const validateForm = async () => {
 
 const sendForm = async () => {
   const payload: IActiveTransaction = {
-    sell: selectedSell.value.key,
-    buy: selectedBuy.value.key,
+    sell: selectedSell.value?.key,
+    buy: selectedBuy.value?.key,
     countSell: model.count,
     countBuy: calculateAmount.value,
     address: model.address,

@@ -1,3 +1,6 @@
+import type { IExchangerSettings } from '~/stores/exchangerTypes'
+
+
 export const translates = {
   required: 'Поле обязательно для заполения',
   telegram: 'Введите корректный username',
@@ -5,5 +8,5 @@ export const translates = {
   phone: 'Введите корректный телефон',
   memo: 'Введите корректный memo',
   count: 'Поле обязательно для заполнения',
-  limit: 'Лимит транзакций 700 - 30.000 руб',
+  limit: (exchangerSettings: IExchangerSettings) => `Лимит транзакций ${exchangerSettings.minLimit} - ${exchangerSettings.maxLimit} руб`,
 }

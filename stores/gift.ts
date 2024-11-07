@@ -10,7 +10,10 @@ interface ISelectedGift {
 }
 export const useGiftStore = defineStore('gift', () => {
   const selectedGift = ref<ISelectedGift>()
+  const giftHash = shallowRef<string>()
+  const giftKey = shallowRef<string>()
+  const giftCount = shallowRef<number>()
 
 
-  return { selectedGift }
+  return { selectedGift, giftCount, giftHash, giftKey }
 })

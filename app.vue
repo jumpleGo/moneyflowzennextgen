@@ -5,16 +5,20 @@
     <NuxtPage/>
   </NuxtLayout>
   <AppFooter v-if="showFooter" />
+  <AppPopup v-if="showModal" />
 </template>
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+import { useMainStore } from '~/stores/main'
 
+const {showModal} = storeToRefs(useMainStore())
 const route = useRoute()
 const showHeader = computed(() => {
   const restricted = ['/exchanger', '/adminex']
   return !restricted.includes(route.path);
 })
 const showFooter = computed(() => {
-  const restricted = ['/guideStartToTrading', '/exchanger']
+  const restricted = ['/guideStartToTrading', '/exchanger', '/gift']
   return !restricted.includes(route.path);
 })
 

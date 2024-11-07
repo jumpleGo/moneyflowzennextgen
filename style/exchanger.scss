@@ -54,7 +54,7 @@
   text-transform: uppercase;
   font-weight: 500;
   display: flex;
-  font-size: 26px;
+  font-size: 22px;
   justify-content: center;
   gap: 5px;
 
@@ -74,10 +74,10 @@
   justify-content: center;
   gap: 10px;
   width: 100%;
+  margin-left: -44px;
   @include mobile-all {
     width: 100%;
     justify-content: unset;
-    margin-left: -44px;
     flex-direction: column;
     align-items: center;
   }

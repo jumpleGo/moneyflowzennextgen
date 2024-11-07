@@ -2,7 +2,9 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   rootDir: './',
-
+  alias: {
+    "@assets": "/<rootDir>/assets",
+  },
   vite: {
     css: {
       preprocessorOptions: {

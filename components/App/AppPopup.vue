@@ -1,9 +1,11 @@
 <template>
   <div class="mfz_app_popup__bg"></div>
   <div class="mfz_app_popup__template">
-    <img src="/assets/close.png" class="close" alt="" @click="showModal = false">
-    <component v-if="showModalType" :is="component" />
-    <slot />
+    <div class="mfz_app_popup__wrapper-content">
+      <img src="/assets/close.png" class="close" alt="" @click="showModal = false">
+      <component v-if="showModalType" :is="component" />
+      <slot />
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -24,6 +26,13 @@ const component = computed(() => showModalType.value && components[showModalType
 .close {
   width: 20px;
   height: auto;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 1;
+  &:hover {
+    cursor: pointer;
+  }
 }
 .mfz_app_popup__bg {
   position: fixed;
@@ -34,29 +43,26 @@ const component = computed(() => showModalType.value && components[showModalType
   height: 100vh;
   z-index: 100;
   pointer-events: none;
+  top: 0;
+  left: 0
 
 }
 .mfz_app_popup__template {
   position: fixed;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  max-width: 600px;
-  width: calc(100% - 30px);
-  height: fit-content;
-  padding: 30px;
-  background: white;
-  border-radius: 16px;
+  align-items: center;
+  justify-content: center;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
   margin: auto;
   z-index: 1000;
-  @include mobile-all {
-    max-width: 90vw;
-    width: calc(100% - 100px);
+  width: 100%;
+}
 
-  }
+.mfz_app_popup__wrapper-content {
+  position: relative;
 }
 </style>
