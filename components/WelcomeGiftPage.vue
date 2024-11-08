@@ -14,15 +14,18 @@
       <img src="../assets/getIt.png" class="mfz_welcome-gift--getIt-badge badge_gift" />
       <img src="../assets/gift.png" class="mfz_welcome-gift--gift " />
     </div>
-    <app-button :disabled="!existGame" title="получить" class="mfz_welcome-gift--button" @click="emit('openGame')" />
-    <p v-if="existGame" class="mfz_welcome-gift--button_tip">у вас {{ existGame }} попыток</p>
-    <p v-if="!existGame" class="mfz_welcome-gift--button_tip">пока у вас нет попыток</p>
+    <app-button :disabled="!existGame" :loading="loading" :title="loading ? 'загрузка...' : 'получить'" class="mfz_welcome-gift--button" @click="emit('openGame')" />
+    <div class="mfz_welcome-gif__tip">
+      <p v-if="existGame && !loading" class="mfz_welcome-gift--button_tip">у вас {{ existGame }} попыток</p>
+      <p v-if="!existGame && !loading" class="mfz_welcome-gift--button_tip">пока у вас нет попыток</p>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
 import AppButton from "@/components/Buttons/AppButton.vue";
 defineProps<{
-  existGame?: number
+  existGame?: number,
+  loading?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -123,8 +126,11 @@ const emit = defineEmits<{
   left: 5%;
   margin-top: 25%
 }
+.mfz_welcome-gif__tip {
+  height: 40px;
+}
 .mfz_welcome-gift--button_tip {
   color: white;
-  margin-top: 20px
+  margin-top: 20px;
 }
 </style>

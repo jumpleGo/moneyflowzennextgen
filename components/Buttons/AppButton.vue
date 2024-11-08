@@ -1,14 +1,16 @@
 <template>
   <component :is="componentButton" :disabled="disabled" :href="props.to" :to="props.to" :class="['app__button', buttonClass, {'--fluid': fluid}, {'--disabled': disabled}]" target="_blank">
     {{ props.title }}
-  </component>
+    </component>
 </template>
 <script lang="ts" setup>
 import {computed} from "vue";
+import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 
 interface IDefaultYellowButton {
   title: string,
   fluid?: boolean,
+  loading?: boolean,
   type?: 'yellow' | 'black',
   to?: string,
   disabled?: boolean

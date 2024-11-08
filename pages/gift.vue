@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <WelcomeGiftPage v-if="!showGame" :exist-game="storeGiftCount" @openGame="showGame = true"/>
+    <WelcomeGiftPage v-if="!showGame" :loading="loading" :exist-game="storeGiftCount" @openGame="showGame = true"/>
     <GiftGamePage v-else @goBack="showGame = false"  />
 <!--    <MyGifts />-->
 <!--    <div class="gift__footerBar">-->
@@ -28,6 +28,7 @@ const {giftCount: storeGiftCount, giftHash: storeGiftHash, giftKey: storeGiftKey
 
 const route = useRoute()
 const { accessGiftCode } = route.query
+const loading = shallowRef(true)
 
 
 onMounted(async () => {
@@ -39,7 +40,7 @@ onMounted(async () => {
     storeGiftHash.value = lsGiftHash
     storeGiftCount.value = Number(lsGiftCount)
     storeGiftKey.value = lsGiftKey
-
+    loading.value = false
     return
   }
 
@@ -69,7 +70,7 @@ onMounted(async () => {
     window.localStorage.setItem('giftCount', String(storeGiftCount.value))
     window.localStorage.setItem('giftHash', storeGiftHash.value)
   }
-
+  loading.value = false
 })
 
 
