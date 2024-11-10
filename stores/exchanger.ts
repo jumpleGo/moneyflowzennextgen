@@ -44,6 +44,8 @@ export const useExchangerStore = defineStore('exchanger', () => {
 
 
   const isUSDTSell = computed(() => selectedSell.value.key === 'usdt')
+  const isUSDTBuy = computed(() => selectedBuy.value.key === 'usdt')
+
   const isCryptoForSell = computed(() => {
     return selectedSell.value?.key && Object.values(enabledCoins.value)?.map((i: Selected) => i.key).includes(selectedSell.value?.key)
   })
@@ -61,5 +63,5 @@ export const useExchangerStore = defineStore('exchanger', () => {
 
 
 
-  return { clearSelected, exchangerSettings, time, valutes, coins, selectedSell, selectedBuy, enabledCoins, enabledValutes, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isValuteForBuy, isCryptoForBuy, valutesForSell, valutesForBuy, updateStatus}
+  return { clearSelected, exchangerSettings, time, valutes, coins, selectedSell, selectedBuy, enabledCoins, enabledValutes, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isValuteForBuy, isCryptoForBuy, valutesForSell, valutesForBuy, updateStatus, isUSDTBuy}
 })

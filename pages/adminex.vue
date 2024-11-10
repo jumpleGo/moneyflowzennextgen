@@ -70,7 +70,6 @@ onMounted(() => {
 })
 
 const payed = (id: number) => {
-
   const key = Object.keys(transactions.value).find(key => transactions.value?.[key].id === id)
   console.log(id, key)
   if (key) {

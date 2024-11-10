@@ -88,7 +88,7 @@ const emit = defineEmits<{
   (e: 'back'): void
 }>()
 
-const {exchangerSettings, time, selectedBuy, selectedSell, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction} = storeToRefs(useExchangerStore())
+const {exchangerSettings, time, selectedBuy, selectedSell, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isUSDTBuy} = storeToRefs(useExchangerStore())
 
 const {data} = useAsyncData(async () => {
   const { data: prices } = await binance.getPriceByTickers()
@@ -123,7 +123,7 @@ const rules = computed(() => {
     address: { minLength: minLength(11), required, alphaNum },
   }
 
-  if (isUSDTSell.value) {
+  if (isUSDTBuy.value) {
     ruleOptions.net = { required }
   }
 
@@ -217,6 +217,7 @@ const additionalText  = computed<string>(() => `Вы получите: ${new Int
 
 const validateForm = async () => {
   const isValid = await v$.value.$validate()
+  console.log(isValid, v$.value)
   if (isValid) {
     await sendForm()
   }
