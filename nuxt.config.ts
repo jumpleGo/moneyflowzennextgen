@@ -18,12 +18,14 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-09-08',
   modules: ['@pinia/nuxt', ['nuxt-mail', {
     message: {
-      to: 'foo@bar.de',
+      to: 'rrotatew@gmail.com',
     },
-    smtp: {
-      host: "smtp.example.com",
-      port: 587,
-    },
+    host: "smtp.timeweb.ru",
+    port: 25,
+    auth: {
+      user: 'emil@moneyflowzen.ru',
+      pass: 'B|.Wc15GO/X$hV'
+    }
   }], '@nuxt/image'],
 
   runtimeConfig: {
