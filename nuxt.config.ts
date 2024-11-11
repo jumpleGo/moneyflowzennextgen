@@ -20,11 +20,13 @@ export default defineNuxtConfig({
     message: {
       to: 'rrotatew@gmail.com',
     },
-    host: "smtp.timeweb.ru",
-    port: 25,
-    auth: {
-      user: 'emil@moneyflowzen.ru',
-      pass: 'B|.Wc15GO/X$hV'
+    smtp: {
+      host: "smtp.timeweb.ru",
+      port: 25,
+      auth: {
+        user: 'emil@moneyflowzen.ru',
+        pass: 'B|.Wc15GO/X$hV'
+      }
     }
   }], '@nuxt/image'],
 

@@ -84,7 +84,7 @@ import AppBackButton from '~/components/App/AppBackButton.vue'
 import { Setter } from '~/helpers/setter'
 import type { IActiveTransaction } from '~/stores/exchangerTypes'
 
-const { $mail } = useNuxtApp()
+const mail = useMail()
 
 const emit = defineEmits<{
   (e: 'back'): void
@@ -248,10 +248,10 @@ const sendForm = async () => {
     time.value = currentTime
     activeTransaction.value = { ...payload, key: data.key }
 
-    $mail.send({
+    mail.send({
       from: 'Обмен на MFZ-Exchanger',
       subject: 'MFZ-Exchanger',
-      text: `Новый обмен от @${activeTransaction.value.telegram},`
+      text: `Новый обмен от @${activeTransaction.value?.telegram},`
     })
   }).catch((err) => {
     console.log('err')
