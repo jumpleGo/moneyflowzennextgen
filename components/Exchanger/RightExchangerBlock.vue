@@ -217,7 +217,6 @@ const additionalText  = computed<string>(() => `Вы получите: ${new Int
 
 const validateForm = async () => {
   const isValid = await v$.value.$validate()
-  console.log(isValid, v$.value)
   if (isValid) {
     await sendForm()
   }
@@ -241,7 +240,6 @@ const sendForm = async () => {
   currentTime.setMinutes(currentTime.getMinutes() + 15)
 
   await Setter.pushToDb('transactions', payload).then((data) => {
-
     window.localStorage.setItem('transaction', JSON.stringify({ ...payload, key: data.key }))
     window.localStorage.setItem('expTime', currentTime.toString())
 

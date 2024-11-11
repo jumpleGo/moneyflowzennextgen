@@ -75,7 +75,6 @@ watch(isSelectedBothItem, (value) => {
 })
 
 const backToPair = () => {
-  console.log(',,')
   useExchangerStore().clearSelected()
 }
 </script>

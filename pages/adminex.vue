@@ -1,6 +1,6 @@
 <template>
   <div class="adminex_wrapper">
-    <AppInput v-model="search" placeholder="поиск" />
+    <AppInput v-if="inputAdminHash === adminHash" v-model="search" placeholder="поиск" />
     <div class="transaction__list" v-if="inputAdminHash === adminHash">
       <div v-for="transaction in sortedTransactions" class="transaction__item">
         <div class="transaction__item--header">
@@ -14,17 +14,17 @@
         <span>{{ new Date(transaction.id).getHours() }}:{{ new Date(transaction.id).getMinutes() }}</span>
         <div class="transaction__item--prices">
           <h3 class="box-title">
-            {{ transaction.sell }} {{ transaction.countSell }}
+           {{ transaction.sell }} {{ transaction.countSell }}
           </h3>
 
           <h3 class="box-title" @click="copy($event, transaction.countBuy)">
-            {{ transaction.buy }} {{ transaction.countBuy }}
+            в  {{ transaction.buy }} {{ transaction.countBuy }}
           </h3>
         </div>
 
         <span v-if="transaction.net">сеть: {{ transaction.net }} </span>
         <span @click="copy($event, transaction.address)">адрес: {{ transaction.address }} </span>
-        <span  @click="copy($event, transaction.memo)">мемо: {{ transaction.memo }} </span>
+        <span v-if="transaction.memo" @click="copy($event, transaction.memo)">мемо: {{ transaction.memo }} </span>
         <span>тг: <nuxt-link :to="`https://t.me/${transaction.telegram}`" target="_blank">{{ transaction.telegram }}</nuxt-link> </span>
 
       </div>
@@ -113,14 +113,15 @@ const payed = (id: number) => {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 200px;
-  height: 300px;
+  max-width: 200px;
+  flex: 1;
   align-items: flex-start;
   background: white;
   box-shadow: 0 0 5px 2px rgba(128, 128, 128, 0.63);
 
   @include mobile-all {
     width: -webkit-fill-available;
+    max-width: unset
   }
 
   &--prices {
@@ -135,6 +136,9 @@ const payed = (id: number) => {
     justify-content: space-between;
     font-size: 18px;
     width: 100%;
+    h4 {
+      margin: unset;
+    }
   }
 
   &--button {

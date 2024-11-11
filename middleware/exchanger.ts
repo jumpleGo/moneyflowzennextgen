@@ -10,11 +10,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     if (!itemFromDb) {
       window.localStorage.removeItem('transaction')
     } else if (itemFromDb.status === 'payed') {
-      activeTransaction.value = itemFromDb
+      activeTransaction.value = { ...itemFromDb, key: parsedTransaction.key }
     } else if (itemFromDb.status === 'rejected') {
       window.localStorage.removeItem('transaction')
     } else {
-      activeTransaction.value = itemFromDb
+      activeTransaction.value = { ...itemFromDb, key: parsedTransaction.key }
     }
 
     navigateTo(to.path)
