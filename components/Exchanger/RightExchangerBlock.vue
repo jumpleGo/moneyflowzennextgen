@@ -30,6 +30,7 @@
             <template v-if="v$.telegram.$error" #error>{{ v$.telegram.$error && translates.telegram }}</template>
           </AppInput>
           <AppInput
+            v-if="!isStarsBuy"
             v-model="v$.address.$model"
             paste
             :error="v$.address.$error"
@@ -90,7 +91,7 @@ const emit = defineEmits<{
   (e: 'back'): void
 }>()
 
-const {exchangerSettings, time, selectedBuy, selectedSell, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isUSDTBuy} = storeToRefs(useExchangerStore())
+const {exchangerSettings, time, selectedBuy, selectedSell, isStarsBuy, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isUSDTBuy} = storeToRefs(useExchangerStore())
 
 const {data} = useAsyncData(async () => {
   const { data: prices } = await binance.getPriceByTickers()
@@ -122,7 +123,10 @@ const rules = computed(() => {
     memo: {minLength: minLength(6), decimal },
     count: { required, decimal },
     telegram: { alphaNum, required,  minLength: minLength(3)  },
-    address: { minLength: minLength(11), required, alphaNum },
+  }
+
+  if (!isStarsBuy.value) {
+    ruleOptions.address ={ minLength: minLength(11), required, alphaNum }
   }
 
   if (isUSDTBuy.value) {
@@ -143,7 +147,7 @@ const isCountValid = computed(() => isCryptoForSell.value
   ? rubTransferValue.value > exchangerSettings.value?.minLimit && rubTransferValue.value < exchangerSettings.value?.maxLimit
   : model.count  > exchangerSettings.value?.minLimit && model.count < exchangerSettings.value?.maxLimit)
 
-const enabledButton = computed(() => !v$.value.$errors.length && isCountValid.value && model.telegram && model.address)
+const enabledButton = computed(() => !v$.value.$errors.length && isCountValid.value && model.telegram)
 
 const calculateItem = computed(() => {
   return selectedBuy.value?.type === 'valute' ? 'RUB' : selectedBuy.value?.key?.toUpperCase()
@@ -171,11 +175,13 @@ const prices =  computed<IPrices>(() => {
   const btc = (data.value?.prices.find(item => item.symbol === 'BTCUSDT')?.price || 0) * usdt
   const ton = (data.value?.prices.find(item => item.symbol === 'TONUSDT')?.price || 0) * usdt
   const not = (data.value?.prices.find(item => item.symbol === 'NOTUSDT')?.price || 0) * usdt
+  const stars = 0.0188
   return {
     not,
     ton,
     usdt,
-    btc
+    btc,
+    stars
   }
 })
 
@@ -197,15 +203,18 @@ const withVat = computed<IPrices>(() => ({
   not: prices.value.not*factor.value,
   usdt: prices.value.usdt*factor.value,
   btc: prices.value.btc*factor.value,
+  stars: prices.value.stars
 }))
 
 
 const calculateAmount: ComputedRef<number> = computed(() => {
   if (!prices.value?.usdt) return 0
-  if (isCryptoForSell.value) {
+  if (isStarsBuy.value) {
+    return +model.count * (data.value?.prices.find(item => item.symbol === 'TONUSDT')?.price || 0) / prices.value.stars
+  } else if (isCryptoForSell.value) {
     if (!selectedSell.value?.key) return 0
     return +(+model.count * withVat.value[selectedSell.value?.key]).toFixed(2)
-  } else {
+  } else if (isValuteForSell.value) {
     if (!selectedBuy.value?.key) return 0
     return +(+model.count / withVat.value[selectedBuy.value?.key]).toFixed(selectedBuy.value.key === 'btc' ? 6 : 2)
   }

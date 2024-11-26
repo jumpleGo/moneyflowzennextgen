@@ -131,7 +131,7 @@ const {data} = useAsyncData(async () => {
 })
 
 const getPayment = computed(() => data.value?.paymentData[activeTransaction.value!.sell])
-const formatAddress = computed(() => `${activeTransaction.value?.address.slice(0, 3)}...${activeTransaction.value?.address.slice(activeTransaction.value?.address.length - 3)}`)
+const formatAddress = computed(() => activeTransaction.value?.buy === 'stars' ? '@' + activeTransaction.value.telegram : `${activeTransaction.value?.address.slice(0, 3)}...${activeTransaction.value?.address.slice(activeTransaction.value?.address.length - 3)}`)
 
 
 function getTimeRemaining(){

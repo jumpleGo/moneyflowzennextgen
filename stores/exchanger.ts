@@ -5,6 +5,7 @@ import type { IActiveTransactionWithKey, IExchangerSettings, Selected, Status } 
 export const useExchangerStore = defineStore('exchanger', () => {
   const coins = ref<Selected[]>([])
   const valutes = ref<Selected[]>([])
+  const others = ref<Selected[]>([])
   const activeTransaction = ref<IActiveTransactionWithKey | null>(null)
   const updateStatus = (status: Status) => activeTransaction.value!.status = status
   const time = ref()
@@ -29,6 +30,10 @@ export const useExchangerStore = defineStore('exchanger', () => {
     return Object.values(coins.value).filter(item => item.enabled)
   })
 
+  const enabledOthers = computed<Selected[]>(() => {
+    return Object.values(others.value).filter(item => item.enabled)
+  })
+
   const enabledValutes = computed<Selected[]>(() => {
     return Object.values(valutes.value).filter(item => item.enabled)
   })
@@ -45,6 +50,9 @@ export const useExchangerStore = defineStore('exchanger', () => {
 
   const isUSDTSell = computed(() => selectedSell.value.key === 'usdt')
   const isUSDTBuy = computed(() => selectedBuy.value.key === 'usdt')
+  const isStarsBuy = computed(() => selectedBuy.value?.key === 'stars')
+
+  const isTonForSell = computed(() => selectedSell.value?.key === 'ton')
 
   const isCryptoForSell = computed(() => {
     return selectedSell.value?.key && Object.values(enabledCoins.value)?.map((i: Selected) => i.key).includes(selectedSell.value?.key)
@@ -63,5 +71,5 @@ export const useExchangerStore = defineStore('exchanger', () => {
 
 
 
-  return { clearSelected, exchangerSettings, time, valutes, coins, selectedSell, selectedBuy, enabledCoins, enabledValutes, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isValuteForBuy, isCryptoForBuy, valutesForSell, valutesForBuy, updateStatus, isUSDTBuy}
+  return { clearSelected, others, isTonForSell, isStarsBuy, exchangerSettings, time, valutes, coins, selectedSell, selectedBuy, enabledCoins, enabledValutes, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isValuteForBuy, isCryptoForBuy, valutesForSell, valutesForBuy, updateStatus, enabledOthers, isUSDTBuy}
 })

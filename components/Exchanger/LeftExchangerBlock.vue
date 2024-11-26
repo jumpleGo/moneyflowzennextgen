@@ -55,6 +55,18 @@
           </div>
         </div>
       </div>
+      <div class="exchanger__items">
+        <p class="exchanger__subtitle">другое</p>
+        <div v-if="enabledOthers.length" class="exchanger__items--list">
+          <div v-for="(coin, index) in enabledOthers"
+               :key="index + 'coin--first'"
+               :class="['exchanger__item', {active: selectedBuy?.key && selectedBuy.key === coin.key}, {'--disabled': !isTonForSell}]"
+               @click="selectBuy('others', coin)">
+            <NuxtImg :src="coin.image"  preload="high" />
+            {{ coin.title }}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -66,15 +78,17 @@ import { watch } from 'vue'
 import type { Selected } from '~/stores/exchangerTypes'
 
 const { $databaseRef } = useNuxtApp()
-const {coins, valutes, valutesForSell, valutesForBuy, selectedBuy, selectedSell, enabledCoins, enabledValutes, isValuteForSell, isCryptoForSell, isCryptoForBuy, isValuteForBuy} = storeToRefs(useExchangerStore())
+const {
+  coins, valutes, valutesForSell, valutesForBuy, selectedBuy, selectedSell, enabledCoins, enabledValutes, enabledOthers, isValuteForSell, isCryptoForSell, isCryptoForBuy, isValuteForBuy, others, isTonForSell} = storeToRefs(useExchangerStore())
 
 
 
 const {data} = useAsyncData(async () => {
-  const {COINS, VALUTE} =  await Getter.getFromDB('exchangePairs/')
+  const {COINS, VALUTE, OTHERS} =  await Getter.getFromDB('exchangePairs/')
 
   coins.value = COINS
   valutes.value = VALUTE
+  others.value = OTHERS
 })
 
 watch(selectedSell, () => {
@@ -99,7 +113,7 @@ const selectSell = (type: 'crypto' | 'valute', item: Selected) => {
     selectedSell.value = item
   }
 }
-const selectBuy = (type: 'crypto' | 'valute', item: Selected) => {
+const selectBuy = (type: 'crypto' | 'valute' | 'others', item: Selected) => {
   if (type === 'crypto') {
     if (isCryptoForSell.value) return
     selectedBuy.value = item
@@ -108,6 +122,8 @@ const selectBuy = (type: 'crypto' | 'valute', item: Selected) => {
     if (isValuteForSell.value) return
     selectedBuy.value = item
   }
+
+  selectedBuy.value = item
 }
 
 </script>
