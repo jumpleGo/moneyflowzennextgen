@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="activeTransaction.status === 'created'" class="transaction__block-wrapper">
+    <div v-if="activeTransaction && activeTransaction?.status === 'created'" class="transaction__block-wrapper">
       <div class="transaction__block">
         <div class="exchanger__content--title-wrapper">
             <div  class="exchanger__content--title">

@@ -84,10 +84,12 @@ const backToPair = () => {
   margin-top: 20px;
   display: flex;
   width: 100%;
+  height: calc(100vh - 20px);
   justify-content: center;
   align-items: center;
   @include mobile-all {
     margin-top: 10px;
+    height: calc(100vh - 10px);
   }
 }
 .exchanger {

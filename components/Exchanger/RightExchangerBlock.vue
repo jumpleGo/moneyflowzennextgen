@@ -122,11 +122,11 @@ const rules = computed(() => {
   const ruleOptions = {
     memo: {minLength: minLength(6), decimal },
     count: { required, decimal },
-    telegram: { alphaNum, required,  minLength: minLength(3)  },
+    telegram: { required,  minLength: minLength(3)  },
   }
 
   if (!isStarsBuy.value) {
-    ruleOptions.address ={ minLength: minLength(11), required, alphaNum }
+    ruleOptions.address ={ minLength: minLength(11), required }
   }
 
   if (isUSDTBuy.value) {
