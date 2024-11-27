@@ -122,8 +122,12 @@ const selectBuy = (type: 'crypto' | 'valute' | 'others', item: Selected) => {
     if (isValuteForSell.value) return
     selectedBuy.value = item
   }
-
-  selectedBuy.value = item
+  if (type === 'others') {
+    if (isTonForSell.value) {
+      selectedBuy.value = item
+    }
+    return
+  }
 }
 
 </script>
