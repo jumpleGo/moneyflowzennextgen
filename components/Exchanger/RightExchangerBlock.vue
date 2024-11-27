@@ -14,7 +14,7 @@
           <AppInput
             v-model="v$.count.$model"
             id="sum"
-            :maska-options="isStarsBuy ? countMaskaOptionsSmall : countMaskaOptionsBig"
+            :maska-options="countMaskaOptions"
             :error="!countValidate"
             placeholder="Сумма обмена"
             :label="sumLabel">
@@ -73,7 +73,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { translates } from '../../helpers/i18n'
 import type { IOption } from '~/components/App/types'
 import {
-  countMaskaOptions, countMaskaOptionsBig, countMaskaOptionsSmall, memoMaskaOptions,
+  countMaskaOptions, memoMaskaOptions,
   usdtNet,
   VAT_MINUS_BIG,
   VAT_MINUS_SMALL,
