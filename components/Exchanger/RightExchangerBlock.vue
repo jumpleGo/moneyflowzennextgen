@@ -14,7 +14,7 @@
           <AppInput
             v-model="v$.count.$model"
             id="sum"
-            :maska-options="countMaskaOptions"
+            :maska-options="isStarsBuy ? countMaskaOptionsSmall : countMaskaOptionsBig"
             :error="!countValidate"
             placeholder="Сумма обмена"
             :label="sumLabel">
@@ -73,7 +73,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { translates } from '../../helpers/i18n'
 import type { IOption } from '~/components/App/types'
 import {
-  countMaskaOptions, memoMaskaOptions,
+  countMaskaOptions, countMaskaOptionsBig, countMaskaOptionsSmall, memoMaskaOptions,
   usdtNet,
   VAT_MINUS_BIG,
   VAT_MINUS_SMALL,
@@ -143,9 +143,17 @@ const v$ = useVuelidate(
 
 const countValidate = computed(() => model.count > 0 ? isCountValid.value : true )
 
-const isCountValid = computed(() => isCryptoForSell.value
-  ? rubTransferValue.value > exchangerSettings.value?.minLimit && rubTransferValue.value < exchangerSettings.value?.maxLimit
-  : model.count  > exchangerSettings.value?.minLimit && model.count < exchangerSettings.value?.maxLimit)
+const isCountValid = computed(() => {
+  if (isStarsBuy.value) {
+    return ( model.count * prices.value.ton) >  exchangerSettings.value?.minLimit && ( model.count * prices.value.ton) < exchangerSettings.value?.maxLimit
+  }
+  else if (isCryptoForSell.value) {
+    return rubTransferValue.value > exchangerSettings.value?.minLimit && rubTransferValue.value < exchangerSettings.value?.maxLimit
+  } else if (isValuteForSell.value) {
+   return model.count  > exchangerSettings.value?.minLimit && model.count < exchangerSettings.value?.maxLimit
+  }
+})
+
 
 const enabledButton = computed(() => !v$.value.$errors.length && isCountValid.value && model.telegram)
 
@@ -210,7 +218,7 @@ const withVat = computed<IPrices>(() => ({
 const calculateAmount: ComputedRef<number> = computed(() => {
   if (!prices.value?.usdt) return 0
   if (isStarsBuy.value) {
-    return +model.count * (data.value?.prices.find(item => item.symbol === 'TONUSDT')?.price || 0) / prices.value.stars
+    return (+model.count * (data.value?.prices.find(item => item.symbol === 'TONUSDT')?.price || 0) / prices.value.stars).toFixed(0)
   } else if (isCryptoForSell.value) {
     if (!selectedSell.value?.key) return 0
     return +(+model.count * withVat.value[selectedSell.value?.key]).toFixed(2)
