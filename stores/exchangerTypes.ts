@@ -23,8 +23,10 @@ export type IActiveTransaction = {
   status: Status
 }
 
+export interface IAdmin {key: string, privileges: string}
+
 export type IExchangerSettings = {
-  adminHash: string,
+  adminHashes: IAdmin[],
   maxLimit: number,
   minLimit: number,
   notificationType: string,

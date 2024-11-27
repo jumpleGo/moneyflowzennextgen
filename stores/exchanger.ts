@@ -18,7 +18,7 @@ export const useExchangerStore = defineStore('exchanger', () => {
   }
 
   const exchangerSettings = ref<IExchangerSettings>({
-    adminHash: '',
+    adminHashes: [],
     maxLimit: 0,
     minLimit: 0,
     notificationType: '',

@@ -1,8 +1,11 @@
 <template>
   <div class="adminex_wrapper">
-    <AppInput v-if="inputAdminHash === adminHash" v-model="search" placeholder="поиск" />
-    <div class="transaction__list" v-if="inputAdminHash === adminHash">
-      <div v-for="transaction in sortedTransactions" class="transaction__item">
+    <div  v-if="showAdminPanel" class="adminex_wrapper__header">
+      <AppInput  v-model="search" placeholder="поиск" />
+      <AppButton title="выход" @click="exit" type="black" class="adminex_wrapper__header-button" />
+    </div>
+    <div class="transaction__list" v-if="showAdminPanel">
+      <div v-for="transaction in transactionsByRules" class="transaction__item">
         <div class="transaction__item--header">
           <h4 class="box-title">
             {{ transaction.status }}
@@ -40,7 +43,7 @@ import { useExchangerStore } from '~/stores/exchanger'
 import AppButton from '~/components/Buttons/AppButton.vue'
 import { copy } from '~/helpers/copy'
 import { Setter } from '~/helpers/setter'
-import type { IActiveTransaction, Selected } from '~/stores/exchangerTypes'
+import type { IActiveTransaction, IAdmin, Selected } from '~/stores/exchangerTypes'
 
 const {exchangerSettings} = storeToRefs(useExchangerStore())
 const { $databaseRef } = useNuxtApp()
@@ -48,36 +51,55 @@ const { $databaseRef } = useNuxtApp()
 const inputAdminHash = ref('')
 const search = ref('')
 
-const adminHash = computed(() => exchangerSettings.value?.adminHash)
+const adminHashes = computed<IAdmin[]>(() => exchangerSettings.value?.adminHashes)
+const showAdminPanel = computed(() => adminHashes.value.some(item => item.key === inputAdminHash.value))
+const currentAdmin = computed<IAdmin | null>(() => adminHashes.value.find((item) => item.key === inputAdminHash.value) || null)
 const transactions = ref<Record<string, IActiveTransaction>>({})
+const transactionsByRules = computed(() => {
+  if (currentAdmin.value?.privileges === 'all') return sortedTransactions.value
+  else if (currentAdmin.value?.privileges === 'stars' ) return sortedTransactions.value?.filter(item => item.buy === 'stars')
+})
 const sortedTransactions = computed(() => transactions.value &&  Object.values(transactions.value)?.sort((a: IActiveTransaction, b: IActiveTransaction) => a.id > b.id ? -1 : 1 ).filter(item => String(item.id).includes(search.value)))
 
-watch(inputAdminHash, async (value) => {
-  if (inputAdminHash.value === adminHash.value) {
-    window.localStorage.setItem('adminHash', value)
+watch(inputAdminHash, async () => {
+  if (showAdminPanel.value && currentAdmin.value) {
+    window.localStorage.setItem('adminHash', JSON.stringify(currentAdmin.value))
     transactions.value = await Getter.getFromDB('transactions')
-    console.log(transactions.value)
   }
 })
 useAsyncData(async () => {
-  if (exchangerSettings.value?.adminHash) return
+  if (exchangerSettings.value?.adminHashes.length) return
   exchangerSettings.value = await Getter.getFromDB('exchangerSettings/')
 })
 
 onMounted(() => {
   const hashFromLS = window.localStorage.getItem('adminHash')
-  if (hashFromLS) inputAdminHash.value = hashFromLS
+
+  if (hashFromLS) {
+    const parsedHashFromLs = JSON.parse(hashFromLS)
+    if (adminHashes.value.some(item => item.key === parsedHashFromLs.key)) {
+      inputAdminHash.value = parsedHashFromLs.key
+    } else {
+      window.localStorage.removeItem('adminHash')
+    }
+  }
+
 })
 
 const payed = (id: number) => {
   const key = Object.keys(transactions.value).find(key => transactions.value?.[key].id === id)
-  console.log(id, key)
   if (key) {
     transactions.value[key].status = 'payed'
     const updates: Record<string, Object> = {}
     updates[`transactions/${key}`] = {...transactions.value[key], status: 'payed'}
     Setter.updateToDb(updates)
   }
+}
+
+
+const exit = () => {
+  window.localStorage.removeItem('adminHash')
+  inputAdminHash.value = ''
 }
 </script>
 <style lang="scss" scoped>
@@ -88,6 +110,19 @@ const payed = (id: number) => {
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    gap: 40px
+  }
+
+  &__header-button {
+    font-size: 14px;
+    font-weight: 500;
+  }
 
 }
 .admin__login {
