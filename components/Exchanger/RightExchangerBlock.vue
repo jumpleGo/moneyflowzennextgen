@@ -266,7 +266,7 @@ const sendForm = async () => {
     activeTransaction.value = { ...payload, key: data.key }
 
     mail.send({
-      from: 'Обмен на MFZ-Exchanger',
+      from: `Обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} на MFZ-Exchanger`,
       subject: 'MFZ-Exchanger',
       text: `Новый обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} от @${activeTransaction.value?.telegram},`
     })
