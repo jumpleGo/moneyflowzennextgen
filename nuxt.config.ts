@@ -25,8 +25,8 @@ export default defineNuxtConfig({
       host: "smtp.timeweb.ru",
       port: 25,
       auth: {
-        user: 'emil@moneyflowzen.ru',
-        pass: 'B|.Wc15GO/X$hV'
+        user: 'exchanger@moneyflowzen.ru',
+        pass: '>g!A<44\\gswHAK'
       }
     }
   }], '@nuxt/image'],
