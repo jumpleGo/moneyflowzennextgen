@@ -268,7 +268,7 @@ const sendForm = async () => {
     mail.send({
       from: 'Обмен на MFZ-Exchanger',
       subject: 'MFZ-Exchanger',
-      text: `Новый обмен от @${activeTransaction.value?.telegram},`
+      text: `Новый обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} от @${activeTransaction.value?.telegram},`
     })
   }).catch((err) => {
     console.log('err')
