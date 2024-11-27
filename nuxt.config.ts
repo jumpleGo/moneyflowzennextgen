@@ -17,9 +17,10 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2024-09-08',
   modules: ['@pinia/nuxt', ['nuxt-mail', {
-    message: {
-      to: 'rrotatew@gmail.com',
-    },
+    message: [
+      { name: 'main', to: 'rrotatew@gmail.com', },
+      { name: 'managerStars', to: 'yakushevnikita0501@gmail.com', }
+    ],
     smtp: {
       host: "smtp.timeweb.ru",
       port: 25,

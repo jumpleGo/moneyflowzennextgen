@@ -266,10 +266,19 @@ const sendForm = async () => {
     activeTransaction.value = { ...payload, key: data.key }
 
     mail.send({
+      config: 1,
       from: `Обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} на MFZ-Exchanger`,
       subject: 'MFZ-Exchanger',
       text: `Новый обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} от @${activeTransaction.value?.telegram},`
     })
+    if (isStarsBuy.value) {
+      mail.send({
+        config: 2,
+        from: `Обмен ЗВЕЗД на MFZ-Exchanger`,
+        subject: 'MFZ-Exchanger',
+        text: `Новый обмен ЗВЕЗД от @${activeTransaction.value?.telegram}, на ${payload.countBuy} STARS`
+      })
+    }
   }).catch((err) => {
     console.log('err')
   })
