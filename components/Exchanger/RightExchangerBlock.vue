@@ -97,7 +97,6 @@ const {data} = useAsyncData(async () => {
   const { data: prices } = await binance.getPriceByTickers()
   const { data: pricesUsd } = await rateApi.getPriceByTickers()
 
-
   return {
     prices,
     priceUSDT: pricesUsd.data.RUB.value
