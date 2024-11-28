@@ -52,7 +52,7 @@ export const useExchangerStore = defineStore('exchanger', () => {
   const isUSDTBuy = computed(() => selectedBuy.value.key === 'usdt')
   const isStarsBuy = computed(() => selectedBuy.value?.key === 'stars')
 
-  const isTonForSell = computed(() => selectedSell.value?.key === 'ton')
+  const isTonForSell = computed(() => ['not', 'ton'].includes(selectedSell.value?.key || ''))
 
   const isCryptoForSell = computed(() => {
     return selectedSell.value?.key && Object.values(enabledCoins.value)?.map((i: Selected) => i.key).includes(selectedSell.value?.key)

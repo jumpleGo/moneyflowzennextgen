@@ -145,7 +145,7 @@ const countValidate = computed(() => model.count > 0 ? isCountValid.value : true
 
 const isCountValid = computed(() => {
   if (isStarsBuy.value) {
-    return ( model.count * prices.value.ton) >  exchangerSettings.value?.minLimit && ( model.count * prices.value.ton) < exchangerSettings.value?.maxLimit
+    return ( model.count * prices.value[selectedSell.value.key]) >  exchangerSettings.value?.minLimit && ( model.count * prices.value[selectedSell.value.key]) < exchangerSettings.value?.maxLimit
   }
   else if (isCryptoForSell.value) {
     return rubTransferValue.value > exchangerSettings.value?.minLimit && rubTransferValue.value < exchangerSettings.value?.maxLimit
@@ -202,7 +202,7 @@ const factor: ComputedRef<number> = computed(() => {
   if (isValuteForSell.value) {
     return initialRubCount.value < 2000 ? VAT_PLUS_BIG : VAT_PLUS_SMALL
   } else {
-    return model.count < 2000 ? VAT_MINUS_BIG : VAT_MINUS_SMALL
+    return calculateAmount.value < 2000 ? VAT_MINUS_BIG : VAT_MINUS_SMALL
   }
 })
 
@@ -218,7 +218,7 @@ const withVat = computed<IPrices>(() => ({
 const calculateAmount: ComputedRef<number> = computed(() => {
   if (!prices.value?.usdt) return 0
   if (isStarsBuy.value) {
-    return (+model.count * (data.value?.prices.find(item => item.symbol === 'TONUSDT')?.price || 0) / prices.value.stars).toFixed(0)
+    return (+model.count * (data.value?.prices.find(item => item.symbol === `${selectedSell.value.key.toUpperCase()}USDT`)?.price || 0) / prices.value.stars).toFixed(0)
   } else if (isCryptoForSell.value) {
     if (!selectedSell.value?.key) return 0
     return +(+model.count * withVat.value[selectedSell.value?.key]).toFixed(2)
