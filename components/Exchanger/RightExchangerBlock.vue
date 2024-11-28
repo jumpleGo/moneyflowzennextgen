@@ -91,7 +91,7 @@ const emit = defineEmits<{
   (e: 'back'): void
 }>()
 
-const {exchangerSettings, time, selectedBuy, selectedSell, isStarsBuy, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isUSDTBuy} = storeToRefs(useExchangerStore())
+const {exchangerSettings, time, selectedBuy, selectedSell, isStarsBuy, isTonForSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isUSDTBuy} = storeToRefs(useExchangerStore())
 
 const {data} = useAsyncData(async () => {
   const { data: prices } = await binance.getPriceByTickers()
@@ -145,7 +145,11 @@ const countValidate = computed(() => model.count > 0 ? isCountValid.value : true
 
 const isCountValid = computed(() => {
   if (isStarsBuy.value) {
-    return ( model.count * prices.value[selectedSell.value.key]) >  exchangerSettings.value?.minLimit && ( model.count * prices.value[selectedSell.value.key]) < exchangerSettings.value?.maxLimit
+    if (isTonForSell.value) {
+      return (model.count * prices.value[selectedSell.value.key]) > exchangerSettings.value?.minLimit && (model.count * prices.value[selectedSell.value.key]) < exchangerSettings.value?.maxLimit
+    } else if (isValuteForSell.value) {
+      return model.count  > exchangerSettings.value?.minLimit && model.count < exchangerSettings.value?.maxLimit
+    }
   }
   else if (isCryptoForSell.value) {
     return rubTransferValue.value > exchangerSettings.value?.minLimit && rubTransferValue.value < exchangerSettings.value?.maxLimit
@@ -183,7 +187,7 @@ const prices =  computed<IPrices>(() => {
   const btc = (data.value?.prices.find(item => item.symbol === 'BTCUSDT')?.price || 0) * usdt
   const ton = (data.value?.prices.find(item => item.symbol === 'TONUSDT')?.price || 0) * usdt
   const not = (data.value?.prices.find(item => item.symbol === 'NOTUSDT')?.price || 0) * usdt
-  const stars = 0.0188
+  const stars = 0.018
   return {
     not,
     ton,
@@ -218,7 +222,11 @@ const withVat = computed<IPrices>(() => ({
 const calculateAmount: ComputedRef<number> = computed(() => {
   if (!prices.value?.usdt) return 0
   if (isStarsBuy.value) {
-    return (+model.count * (data.value?.prices.find(item => item.symbol === `${selectedSell.value.key.toUpperCase()}USDT`)?.price || 0) / prices.value.stars).toFixed(0)
+    if (isTonForSell.value) {
+      return (+model.count * (data.value?.prices.find(item => item.symbol === `${selectedSell.value.key.toUpperCase()}USDT`)?.price || 0) / prices.value.stars).toFixed(0)
+    } else if (isValuteForSell.value) {
+      return (+model.count / data.value?.priceUSDT / prices.value.stars).toFixed()
+    }
   } else if (isCryptoForSell.value) {
     if (!selectedSell.value?.key) return 0
     return +(+model.count * withVat.value[selectedSell.value?.key]).toFixed(2)

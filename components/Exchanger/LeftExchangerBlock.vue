@@ -60,7 +60,7 @@
         <div v-if="enabledOthers.length" class="exchanger__items--list">
           <div v-for="(coin, index) in enabledOthers"
                :key="index + 'coin--first'"
-               :class="['exchanger__item', {active: selectedBuy?.key && selectedBuy.key === coin.key}, {'--disabled': !isTonForSell}]"
+               :class="['exchanger__item', {active: selectedBuy?.key && selectedBuy.key === coin.key}, {'--disabled': !isTonForSell && !isValuteForSell}]"
                @click="selectBuy('others', coin)">
             <NuxtImg :src="coin.image"  preload="high" />
             {{ coin.title }}
@@ -123,7 +123,7 @@ const selectBuy = (type: 'crypto' | 'valute' | 'others', item: Selected) => {
     selectedBuy.value = item
   }
   if (type === 'others') {
-    if (isTonForSell.value) {
+    if (isTonForSell.value || isValuteForSell.value) {
       selectedBuy.value = item
     }
     return
