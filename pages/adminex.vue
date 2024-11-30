@@ -26,7 +26,7 @@
         </div>
 
         <span v-if="transaction.net">сеть: {{ transaction.net }} </span>
-        <span @click="copy($event, transaction.address)">адрес: {{ transaction.address }} </span>
+        <span v-if="transaction.address" @click="copy($event, transaction.address)">адрес: {{ transaction.address }} </span>
         <span v-if="transaction.memo" @click="copy($event, transaction.memo)">мемо: {{ transaction.memo }} </span>
         <span>тг: <nuxt-link :to="`https://t.me/${transaction.telegram}`" target="_blank">{{ transaction.telegram }}</nuxt-link> </span>
 
@@ -107,7 +107,7 @@ const exit = () => {
   min-height: 100vh;
   background: #ececec;
   padding: 20px;
-  display: flex;
+ display: flex;
   flex-direction: column;
   gap: 20px;
 
@@ -133,48 +133,40 @@ const exit = () => {
   align-items: center;
 }
 .transaction__list {
-  display: flex;
-  width: 100%;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 20px;
-  @include mobile-all {
-    flex-direction: column;
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Адаптивное количество колонок */
+  gap: 20px; /* Отступы между карточками */
+  width: 100%; /* Растягивание на всю ширину */
 }
+
 .transaction__item {
   padding: 20px;
-  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  max-width: 200px;
-  flex: 1;
-  align-items: flex-start;
   background: white;
   box-shadow: 0 0 5px 2px rgba(128, 128, 128, 0.63);
+  overflow: hidden; /* Скрываем переполненный текст */
 
-  @include mobile-all {
-    width: -webkit-fill-available;
-    max-width: unset
+  h4,
+  span {
+    white-space: nowrap; /* Запрещаем перенос текста */
+    overflow: hidden; /* Скрываем переполненный текст */
+    text-overflow: ellipsis; /* Добавляем троеточие */
   }
 
   &--prices {
     display: flex;
-    align-items: center;
-    font-size: 14px;
+    flex-direction: column; /* Для лучшей адаптивности */
     gap: 10px;
   }
+
   &--header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 18px;
     width: 100%;
-    h4 {
-      margin: unset;
-    }
   }
+
 
   &--button {
     font-size: 14px;

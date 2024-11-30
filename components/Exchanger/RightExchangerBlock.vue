@@ -26,7 +26,7 @@
             :error="v$.telegram.$error"
             id="mail"
             placeholder="@user"
-            label="Телеграм ник" >
+            label="Телеграм ник без '@'" >
             <template v-if="v$.telegram.$error" #error>{{ v$.telegram.$error && translates.telegram }}</template>
           </AppInput>
           <AppInput
