@@ -23,7 +23,6 @@ const data = {
   padding: 15px;
   box-shadow: 0 6px 10px #99a1aa26;
   background: #fff2cb;
-  margin-bottom: 20px;
   font-size: 14px;
   display: flex;
   justify-content: space-between;
@@ -31,6 +30,7 @@ const data = {
   @include mobile-xs {
     width: unset;
     max-width: unset;
+    font-size: 11px;
   }
 
 }

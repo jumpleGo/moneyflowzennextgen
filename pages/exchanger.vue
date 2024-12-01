@@ -1,7 +1,8 @@
 <template>
   <div class="exchanger__wrapper">
+    <NotificationBlock class="exchanger__notification-block" v-if="exchangerSettings?.notificationType && !isLoadingResize && showLeftBlock" :notify-type="exchangerSettings.notificationType" />
+
     <div class="exchanger">
-      <NotificationBlock v-if="exchangerSettings?.notificationType" :notify-type="exchangerSettings.notificationType" />
       <div v-if="!isLoadingResize" class="exchanger__content">
         <img v-if="exchangerSettings.showOffer" class="exchanger__content--icon" src="/assets/icons/airdrop.png" @click="showModal = true" />
         <LeftExchangerBlock v-if="showLeftBlock" :class="['exchanger__left', {'--disabled-block': activeTransaction}]"  />
@@ -81,15 +82,15 @@ const backToPair = () => {
 <style lang="scss">
 @import './../style/exchanger.scss';
 .exchanger__wrapper {
-  margin-top: 20px;
+  padding: 15px 0;
   display: flex;
   width: 100%;
   height: calc(100vh - 20px);
   justify-content: center;
   align-items: center;
+  position: relative;
   @include mobile-all {
-    margin-top: 10px;
-    height: calc(100vh - 10px);
+    height: auto;
   }
 }
 .exchanger {
@@ -102,6 +103,11 @@ const backToPair = () => {
   @include mobile-all {
     padding: 0 15px;
   }
+  &__notification-block {
+    top: 0;
+     position: absolute;
+     z-index: 999;
+   }
 }
 .exchanger__content {
   display: flex;

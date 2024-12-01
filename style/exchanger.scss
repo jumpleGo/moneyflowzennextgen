@@ -24,11 +24,14 @@
     max-width: 95vw;
     height: 90vh;
     flex: unset;
-    margin-bottom: 40px;
     padding: 30px 0;
   }
 }
-
+.exchanger__left {
+  @include mobile-all {
+    padding: 60px 0 30px 0;
+  }
+}
 .exchanger__right {
   flex-direction: column;
   justify-content: unset;

@@ -273,7 +273,7 @@ const sendForm = async () => {
       config: 'main',
       from: `Обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} на MFZ-Exchanger`,
       subject: 'MFZ-Exchanger',
-      text: `Новый обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} от @${activeTransaction.value?.telegram} \n ${payload.sell} ${payload.buy} \n <a href="https://moneyflowzen.ru/adminex" target="_blank">в админку</a>`
+      text: `Новый обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} от @${activeTransaction.value?.telegram} \n ${payload.sell.toUpperCase()} ${payload.countSell} → ${payload.buy.toUpperCase()} ${payload.countBuy} \n https://moneyflowzen.ru/adminex`
     })
     if (isStarsBuy.value) {
       mail.send({
