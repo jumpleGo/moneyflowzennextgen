@@ -66,7 +66,7 @@
 import AppButton from '~/components/Buttons/AppButton.vue'
 import AppInput from '~/components/App/AppInput.vue'
 import { computed, type ComputedRef } from 'vue'
-import type { IPrices } from '~/types/pages/exchangerTypes'
+import type { IPrices, IVats } from '~/types/pages/exchangerTypes'
 import { binance, rateApi } from '~/api'
 import { alphaNum, decimal, minLength, required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
@@ -75,15 +75,12 @@ import type { IOption } from '~/components/App/types'
 import {
   countMaskaOptions, memoMaskaOptions,
   usdtNet,
-  VAT_MINUS_BIG,
-  VAT_MINUS_SMALL,
-  VAT_PLUS_BIG,
-  VAT_PLUS_SMALL
 } from '~/components/Exchanger/consts'
 
 import AppBackButton from '~/components/App/AppBackButton.vue'
 import { Setter } from '~/helpers/setter'
 import type { IActiveTransaction } from '~/stores/exchangerTypes'
+import { Getter } from '~/helpers/getter'
 
 const mail = useMail()
 
@@ -96,12 +93,15 @@ const {exchangerSettings, time, selectedBuy, selectedSell, isStarsBuy, isTonForS
 const {data} = useAsyncData(async () => {
   const { data: prices } = await binance.getPriceByTickers()
   const { data: pricesUsd } = await rateApi.getPriceByTickers()
-
+  const vats =  await Getter.getFromDB('vats/')
   return {
     prices,
-    priceUSDT: pricesUsd.data.RUB.value
+    priceUSDT: pricesUsd.data.RUB.value,
+    vats
   }
 })
+
+const vats = computed<IVats>(() => data.value?.vats)
 
 const model = reactive({
   memo: '',
@@ -186,13 +186,11 @@ const prices =  computed<IPrices>(() => {
   const btc = (data.value?.prices.find(item => item.symbol === 'BTCUSDT')?.price || 0) * usdt
   const ton = (data.value?.prices.find(item => item.symbol === 'TONUSDT')?.price || 0) * usdt
   const not = (data.value?.prices.find(item => item.symbol === 'NOTUSDT')?.price || 0) * usdt
-  const stars = 0.018
   return {
     not,
     ton,
     usdt,
     btc,
-    stars
   }
 })
 
@@ -203,9 +201,9 @@ const initialRubCount = computed(() => {
 
 const factor: ComputedRef<number> = computed(() => {
   if (isValuteForSell.value) {
-    return initialRubCount.value < 2000 ? VAT_PLUS_BIG : VAT_PLUS_SMALL
+    return initialRubCount.value < 3000 ? vats.value.VAT_PLUS_BIG : vats.value.VAT_PLUS_SMALL
   } else {
-    return calculateAmount.value < 2000 ? VAT_MINUS_BIG : VAT_MINUS_SMALL
+    return calculateAmount.value < 3000 ? vats.value.VAT_MINUS_BIG : vats.value.VAT_MINUS_SMALL
   }
 })
 
@@ -214,7 +212,6 @@ const withVat = computed<IPrices>(() => ({
   not: prices.value.not*factor.value,
   usdt: prices.value.usdt*factor.value,
   btc: prices.value.btc*factor.value,
-  stars: prices.value.stars
 }))
 
 
@@ -222,9 +219,9 @@ const calculateAmount: ComputedRef<number> = computed(() => {
   if (!prices.value?.usdt) return 0
   if (isStarsBuy.value) {
     if (isTonForSell.value) {
-      return (+model.count * (data.value?.prices.find(item => item.symbol === `${selectedSell.value.key.toUpperCase()}USDT`)?.price || 0) / prices.value.stars).toFixed(0)
+      return (+model.count * (data.value?.prices.find(item => item.symbol === `${selectedSell.value.key?.toUpperCase()}USDT`)?.price || 0) / exchangerSettings.value.starsRate).toFixed(0)
     } else if (isValuteForSell.value) {
-      return (+model.count / data.value?.priceUSDT / prices.value.stars).toFixed()
+      return Math.floor((+model.count / data.value?.priceUSDT / exchangerSettings.value.starsRate))
     }
   } else if (isCryptoForSell.value) {
     if (!selectedSell.value?.key) return 0
@@ -276,7 +273,7 @@ const sendForm = async () => {
       config: 'main',
       from: `Обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} на MFZ-Exchanger`,
       subject: 'MFZ-Exchanger',
-      text: `Новый обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} от @${activeTransaction.value?.telegram}`
+      text: `Новый обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} от @${activeTransaction.value?.telegram} \n ${payload.sell} ${payload.buy} \n <a href="https://moneyflowzen.ru/adminex" target="_blank">в админку</a>`
     })
     if (isStarsBuy.value) {
       mail.send({

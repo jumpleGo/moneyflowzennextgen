@@ -18,6 +18,7 @@ export const useExchangerStore = defineStore('exchanger', () => {
   }
 
   const exchangerSettings = ref<IExchangerSettings>({
+    starsRate: 0,
     adminHashes: [],
     maxLimit: 0,
     minLimit: 0,

@@ -17,11 +17,6 @@ export const usdtNet = [
   }
 ]
 
-export const VAT_PLUS_BIG: number = 1.1
-export const VAT_PLUS_SMALL: number = 1.06
-export const VAT_MINUS_BIG: number = 0.9
-export const VAT_MINUS_SMALL: number = 0.94
-
 
 export const countMaskaOptions = {
   mask  : '0.2',

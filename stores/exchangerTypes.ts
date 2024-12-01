@@ -29,6 +29,7 @@ export type IExchangerSettings = {
   adminHashes: IAdmin[],
   maxLimit: number,
   minLimit: number,
+  starsRate: number,
   notificationType: string,
   showOffer: boolean,
 
