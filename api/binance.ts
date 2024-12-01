@@ -1,6 +1,6 @@
 import axios, { type AxiosResponse } from 'axios'
 
-interface ISymbolPrice {
+export interface ISymbolPrice {
   symbol: string
   price: number
 }

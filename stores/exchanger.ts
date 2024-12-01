@@ -1,5 +1,7 @@
 import { computed, ref } from 'vue'
 import type { IActiveTransactionWithKey, IExchangerSettings, Selected, Status } from '~/stores/exchangerTypes'
+import type { IVats } from '~/types/pages/exchangerTypes'
+import type { ISymbolPrice } from '~/api/binance'
 
 
 export const useExchangerStore = defineStore('exchanger', () => {
@@ -11,6 +13,14 @@ export const useExchangerStore = defineStore('exchanger', () => {
   const time = ref()
   const selectedSell = ref<Partial<Selected>>({})
   const selectedBuy = ref<Partial<Selected>>({})
+  const vats = ref<IVats>({
+    VAT_PLUS_BIG: 0,
+    VAT_MINUS_BIG:0,
+    VAT_MINUS_SMALL: 0,
+    VAT_PLUS_SMALL: 0
+  })
+  const pricesList = ref<ISymbolPrice[]>([])
+  const priceUsd = ref<number>(0)
 
   const clearSelected = () => {
     selectedSell.value = {}
@@ -72,5 +82,5 @@ export const useExchangerStore = defineStore('exchanger', () => {
 
 
 
-  return { clearSelected, others, isTonForSell, isStarsBuy, exchangerSettings, time, valutes, coins, selectedSell, selectedBuy, enabledCoins, enabledValutes, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isValuteForBuy, isCryptoForBuy, valutesForSell, valutesForBuy, updateStatus, enabledOthers, isUSDTBuy}
+  return { clearSelected, others,vats, pricesList, priceUsd, isTonForSell, isStarsBuy, exchangerSettings, time, valutes, coins, selectedSell, selectedBuy, enabledCoins, enabledValutes, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isValuteForBuy, isCryptoForBuy, valutesForSell, valutesForBuy, updateStatus, enabledOthers, isUSDTBuy}
 })

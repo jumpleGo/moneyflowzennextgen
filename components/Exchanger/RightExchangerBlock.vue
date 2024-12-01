@@ -67,8 +67,7 @@ import AppButton from '~/components/Buttons/AppButton.vue'
 import AppInput from '~/components/App/AppInput.vue'
 import { computed, type ComputedRef } from 'vue'
 import type { IPrices, IVats } from '~/types/pages/exchangerTypes'
-import { binance, rateApi } from '~/api'
-import { alphaNum, decimal, minLength, required } from '@vuelidate/validators'
+import { decimal, minLength, required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import { translates } from '../../helpers/i18n'
 import type { IOption } from '~/components/App/types'
@@ -80,7 +79,6 @@ import {
 import AppBackButton from '~/components/App/AppBackButton.vue'
 import { Setter } from '~/helpers/setter'
 import type { IActiveTransaction } from '~/stores/exchangerTypes'
-import { Getter } from '~/helpers/getter'
 
 const mail = useMail()
 
@@ -88,20 +86,8 @@ const emit = defineEmits<{
   (e: 'back'): void
 }>()
 
-const {exchangerSettings, time, selectedBuy, selectedSell, isStarsBuy, isTonForSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isUSDTBuy} = storeToRefs(useExchangerStore())
+const {exchangerSettings, vats, priceUsd, pricesList, time, selectedBuy, selectedSell, isStarsBuy, isTonForSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isUSDTBuy} = storeToRefs(useExchangerStore())
 
-const {data} = useAsyncData(async () => {
-  const { data: prices } = await binance.getPriceByTickers()
-  const { data: pricesUsd } = await rateApi.getPriceByTickers()
-  const vats =  await Getter.getFromDB('vats/')
-  return {
-    prices,
-    priceUSDT: pricesUsd.data.RUB.value,
-    vats
-  }
-})
-
-const vats = computed<IVats>(() => data.value?.vats)
 
 const model = reactive({
   memo: '',
@@ -182,10 +168,10 @@ const sumLabel = computed(() => {
 })
 
 const prices =  computed<IPrices>(() => {
-  const usdt = data.value?.priceUSDT || 0
-  const btc = (data.value?.prices.find(item => item.symbol === 'BTCUSDT')?.price || 0) * usdt
-  const ton = (data.value?.prices.find(item => item.symbol === 'TONUSDT')?.price || 0) * usdt
-  const not = (data.value?.prices.find(item => item.symbol === 'NOTUSDT')?.price || 0) * usdt
+  const usdt = priceUsd.value || 0
+  const btc = (pricesList.value.find(item => item.symbol === 'BTCUSDT')?.price || 0) * usdt
+  const ton = (pricesList.value.find(item => item.symbol === 'TONUSDT')?.price || 0) * usdt
+  const not = (pricesList.value.find(item => item.symbol === 'NOTUSDT')?.price || 0) * usdt
   return {
     not,
     ton,
@@ -199,13 +185,7 @@ const initialRubCount = computed(() => {
   return +model.count * prices.value[selectedSell.value.key]
 })
 
-const factor: ComputedRef<number> = computed(() => {
-  if (isValuteForSell.value) {
-    return initialRubCount.value < 3000 ? vats.value.VAT_PLUS_BIG : vats.value.VAT_PLUS_SMALL
-  } else {
-    return calculateAmount.value < 3000 ? vats.value.VAT_MINUS_BIG : vats.value.VAT_MINUS_SMALL
-  }
-})
+const factor = ref<number>(0)
 
 const withVat = computed<IPrices>(() => ({
   ton: prices.value.ton*factor.value,
@@ -219,9 +199,9 @@ const calculateAmount: ComputedRef<number> = computed(() => {
   if (!prices.value?.usdt) return 0
   if (isStarsBuy.value) {
     if (isTonForSell.value) {
-      return (+model.count * (data.value?.prices.find(item => item.symbol === `${selectedSell.value.key?.toUpperCase()}USDT`)?.price || 0) / exchangerSettings.value.starsRate).toFixed(0)
+      return (+model.count * (pricesList.value.find(item => item.symbol === `${selectedSell.value.key?.toUpperCase()}USDT`)?.price || 0) / exchangerSettings.value.starsRate).toFixed(0)
     } else if (isValuteForSell.value) {
-      return Math.floor((+model.count / data.value?.priceUSDT / exchangerSettings.value.starsRate))
+      return Math.floor((+model.count / priceUsd.value / exchangerSettings.value.starsRate))
     }
   } else if (isCryptoForSell.value) {
     if (!selectedSell.value?.key) return 0
@@ -237,6 +217,8 @@ const calculateAmount: ComputedRef<number> = computed(() => {
 const placeholderAddress = computed(() => selectedBuy.value?.type === 'crypto' ? 'Адрес кошелька' : 'Телефон или номер карты')
 
 const additionalText  = computed<string>(() => `Вы получите: ${new Intl.NumberFormat('ru-RU').format(calculateAmount.value)} ${calculateItem.value}`)
+watch(() => model.count, () => calculateFactor())
+onMounted(() => calculateFactor())
 
 const validateForm = async () => {
   const isValid = await v$.value.$validate()
@@ -244,7 +226,13 @@ const validateForm = async () => {
     await sendForm()
   }
 }
-
+const calculateFactor = () => {
+  if (isValuteForSell.value) {
+    factor.value =  initialRubCount.value < 3000 ? vats.value?.VAT_PLUS_BIG : vats.value?.VAT_PLUS_SMALL
+  } else {
+    factor.value = calculateAmount.value < 3000 ? vats.value?.VAT_MINUS_BIG : vats?.value?.VAT_MINUS_SMALL
+  }
+}
 const sendForm = async () => {
   const payload: IActiveTransaction = {
     sell: selectedSell.value?.key,

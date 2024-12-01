@@ -16,7 +16,10 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-09-08',
-  modules: ['@pinia/nuxt', ['nuxt-mail', {
+  modules: ['@pinia/nuxt', ['yandex-metrika-module-nuxt3', {
+    id: 99093121,
+    webvisor: true
+  }], ['nuxt-mail', {
     message: [
       { name: 'main', to: 'rrotatew@gmail.com', },
       { name: 'managerStars', to: 'yakushevnikita0501@gmail.com', }

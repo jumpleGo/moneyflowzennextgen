@@ -26,6 +26,7 @@
     "pinia": "^2.2.2",
     "vue": "latest",
     "vue-router": "latest",
+    "yandex-metrika-module-nuxt3": "^1.5.3",
     "yup": "^1.4.0"
   },
   "devDependencies": {

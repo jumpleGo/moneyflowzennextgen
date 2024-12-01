@@ -44,8 +44,9 @@ import NotificationBlock from '~/components/Exchanger/NotificationBlock.vue'
 import { storeToRefs } from 'pinia'
 import { useMainStore } from '~/stores/main'
 import { Getter } from '~/helpers/getter'
+import { binance, rateApi } from '~/api'
 
-const { activeTransaction, isSelectedBothItem, exchangerSettings} = storeToRefs(useExchangerStore())
+const { activeTransaction, isSelectedBothItem, exchangerSettings, vats, pricesList, priceUsd } = storeToRefs(useExchangerStore())
 const hideRightBlock = shallowRef(true)
 const {isMobile, isLoadingResize} = useResponsive()
 const {showModal} = storeToRefs(useMainStore())
@@ -53,8 +54,24 @@ definePageMeta({
   middleware:['exchanger']
 })
 
-useAsyncData(async () => {
-  exchangerSettings.value = await Getter.getFromDB('exchangerSettings/')
+
+const { refresh, status} = await useAsyncData(async () => {
+  try {
+    exchangerSettings.value = await Getter.getFromDB('exchangerSettings/')
+    vats.value = await Getter.getFromDB('vats/')
+  } catch {
+    return
+  }
+
+  const { data: pricesTickers } = await binance.getPriceByTickers()
+  pricesList.value = pricesTickers
+
+  const { data: priceUsdRes } = await rateApi.getPriceByTickers()
+  priceUsd.value = priceUsdRes.data.RUB.value
+})
+
+onMounted(() => {
+  if (status.value === 'error') refresh()
 })
 
 const showLeftBlock = computed(() => {
