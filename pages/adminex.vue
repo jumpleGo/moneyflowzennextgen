@@ -1,9 +1,19 @@
 <template>
   <div class="adminex_wrapper">
-    <div  v-if="showAdminPanel" class="adminex_wrapper__header">
+    <div v-if="showAdminPanel" class="adminex_wrapper__header">
       <AppInput  v-model="search" placeholder="поиск" />
       <AppButton title="выход" @click="exit" type="black" class="adminex_wrapper__header-button" />
     </div>
+    <div v-if="currentAdmin?.privileges === 'all'" class="adminex_wrapper__total">
+      <div v-for="[key, value] in Object.entries(totalValue)">
+        <span class="adminex_wrapper__total-key">{{key}}</span>: <span class="adminex_wrapper__total-value">{{value}}</span>
+      </div>
+    </div>
+    <AppRadioGroup v-if="showAdminPanel">
+      <div class="adminex_wrapper__filters">
+        <AppRadioButton v-for="filter in filters" :selected="selectedFilter.value"  :value="filter.value" :name="filter.name" @update-radio="selectRadio">{{ filter.text }}</AppRadioButton>
+      </div>
+    </AppRadioGroup>
     <div class="transaction__list" v-if="showAdminPanel">
       <div v-for="transaction in transactionsByRules" class="transaction__item">
         <div class="transaction__item--header">
@@ -51,6 +61,38 @@ const { $databaseRef } = useNuxtApp()
 const inputAdminHash = ref('')
 const search = ref('')
 
+const filters = [{
+  value: 'all',
+  text: 'все',
+  name: 'all'
+}, {
+  value: 'timeout',
+  text: 'таймаут',
+  name: 'timeout'
+}, {
+  value: 'payed',
+  text: 'оплаченные',
+  name: 'payed'
+}, {
+  value: 'done',
+  text: 'ждут оплаты от меня',
+  name: 'done'
+}, {
+  value: 'rejected',
+  text: 'отменены',
+  name: 'rejected'
+}]
+
+const selectedFilter = ref({
+  value: 'all',
+  text: 'все',
+  name: 'all'
+});
+const selectRadio = (value: string) => {
+  console.log(value)
+  selectedFilter.value = filters.find(item => item.value === value) || filters[0]
+}
+
 const adminHashes = computed<IAdmin[]>(() => exchangerSettings.value?.adminHashes)
 const showAdminPanel = computed(() => adminHashes.value.some(item => item.key === inputAdminHash.value))
 const currentAdmin = computed<IAdmin | null>(() => adminHashes.value.find((item) => item.key === inputAdminHash.value) || null)
@@ -59,7 +101,41 @@ const transactionsByRules = computed(() => {
   if (currentAdmin.value?.privileges === 'all') return sortedTransactions.value
   else if (currentAdmin.value?.privileges === 'stars' ) return sortedTransactions.value?.filter(item => item.buy === 'stars')
 })
-const sortedTransactions = computed(() => transactions.value &&  Object.values(transactions.value)?.sort((a: IActiveTransaction, b: IActiveTransaction) => a.id > b.id ? -1 : 1 ).filter(item => String(item.id).includes(search.value)))
+const sortedTransactions = computed(() =>
+  transactions.value
+  &&  Object.values(transactions.value)
+    ?.sort((a: IActiveTransaction, b: IActiveTransaction) => a.id > b.id ? -1 : 1 )
+    .filter(item => selectedFilter.value.value === 'all' ? item : item.status === selectedFilter.value.value)
+    .filter(item => String(item.id).includes(search.value)))
+
+const totalValue = computed(() => {
+  return Object.values(transactions.value)
+    .filter(item => item.status === 'payed')
+    .reduce((acc, item) => {
+      if (item.buy === 'stars') {
+        if (acc[item.sell]) acc[item.sell]+= item.countSell / 10
+        else  acc[item.sell] = item.countSell / 10
+      } else if (['sber', 'tbank'].includes(item.sell)) {
+        if (item.countSell < 3000) {
+          if (acc[item.sell]) acc[item.sell]+= item.countSell / 10
+          else  acc[item.sell] = item.countSell / 10
+        } else {
+          if (acc[item.sell]) acc[item.sell]+= item.countSell * 6 / 100
+          else  acc[item.sell] = item.countSell * 6 / 100
+        }
+      } else {
+        if (item.countBuy < 3000) {
+          if (acc[item.sell]) acc[item.sell]+= item.countSell / 10
+          else  acc[item.sell] = item.countSell / 10
+        } else {
+          if (acc[item.sell]) acc[item.sell]+= item.countSell * 6 / 100
+          else  acc[item.sell] = item.countSell * 6 / 100
+        }
+      }
+
+      return acc
+    }, {})
+})
 
 watch(inputAdminHash, async () => {
   if (showAdminPanel.value && currentAdmin.value) {
@@ -111,12 +187,31 @@ const exit = () => {
   flex-direction: column;
   gap: 20px;
 
+  &__total {
+    display: flex;
+    gap: 1rem;
+    max-width: 90vw;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &-value {
+      color: green
+    }
+  }
+
   &__header {
     display: flex;
     align-items: center;
     width: 100%;
     justify-content: space-between;
     gap: 40px
+  }
+
+  &__filters {
+    display: flex;
+    gap: 1rem
   }
 
   &__header-button {
