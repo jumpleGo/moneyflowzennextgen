@@ -112,29 +112,23 @@ const totalValue = computed(() => {
   return Object.values(transactions.value)
     .filter(item => item.status === 'payed')
     .reduce((acc, item) => {
+      const rate = item.countSell < 3000 ? 1 / 10 : 6 / 100;
+
+      // Условие для stars
       if (item.buy === 'stars') {
-        if (acc[item.sell]) acc[item.sell]+= item.countSell / 10
-        else  acc[item.sell] = item.countSell / 10
-      } else if (['sber', 'tbank'].includes(item.sell)) {
-        if (item.countSell < 3000) {
-          if (acc[item.sell]) acc[item.sell]+= item.countSell / 10
-          else  acc[item.sell] = item.countSell / 10
-        } else {
-          if (acc[item.sell]) acc[item.sell]+= item.countSell * 6 / 100
-          else  acc[item.sell] = item.countSell * 6 / 100
-        }
-      } else {
-        if (item.countBuy < 3000) {
-          if (acc[item.sell]) acc[item.sell]+= item.countSell / 10
-          else  acc[item.sell] = item.countSell / 10
-        } else {
-          if (acc[item.sell]) acc[item.sell]+= item.countSell * 6 / 100
-          else  acc[item.sell] = item.countSell * 6 / 100
-        }
+        acc[item.sell] = (acc[item.sell] || 0) + item.countSell / 10;
+      }
+      // Условие для sber и tbank
+      else if (['sber', 'tbank'].includes(item.sell)) {
+        acc[item.sell] = (acc[item.sell] || 0) + item.countSell * rate;
+      }
+      // Условие для остальных
+      else {
+        acc[item.sell] = (acc[item.sell] || 0) + item.countSell * rate;
       }
 
-      return acc
-    }, {})
+      return acc;
+    }, {});
 })
 
 watch(inputAdminHash, async () => {

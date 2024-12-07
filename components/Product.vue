@@ -51,71 +51,41 @@ const props = withDefaults(
 const openLink = () => {
   router.push(props.link)
 }
+const calculateTime = (date, prefix, suffix) => {
+  if (!date) return undefined;
 
-const timeToStart = computed(() => {
-  if (!props.start) return undefined
-  let day = dayjs(props.start).diff(dayjs(new Date()), 'day', true)
-  let hours, minutes, word, endTime
-  let timeOut = getNoun(Math.ceil(day), 'день', 'дня', 'дней')
-  word = getNoun(Math.ceil(day), 'остался', 'осталось', 'осталось')
-  endTime = day
-  if (day < 1) {
-    hours = dayjs(props.start).diff(dayjs(new Date()), 'hours', true)
-    endTime = hours
-    timeOut = getNoun(Math.ceil(hours), 'час', 'часа', 'часов')
-    word = getNoun(Math.ceil(hours), 'остался', 'осталось', 'осталось')
-  } else if (hours < 1) {
-    minutes = dayjs(props.start).diff(dayjs(new Date()), 'minutes', true)
-    timeOut = getNoun(Math.ceil(minutes), 'минута', 'минуты', 'минут')
-    word = getNoun(Math.ceil(minutes), 'остался', 'осталось', 'осталось')
-    endTime = minutes
+  const now = dayjs(new Date());
+  let timeDiff = dayjs(date).diff(now, 'day', true);
+  let timeUnit = 'день';
+  let endTime = timeDiff;
+
+  if (timeDiff < 1) {
+    timeDiff = dayjs(date).diff(now, 'hours', true);
+    timeUnit = 'час';
+    endTime = timeDiff;
+  }
+  if (timeDiff < 1) {
+    timeDiff = dayjs(date).diff(now, 'minutes', true);
+    timeUnit = 'минута';
+    endTime = timeDiff;
   }
 
-  return endTime > 0 ? `до старта ${word} ${Math.ceil(endTime)} ${timeOut}` : false
-})
+  const timeOut = getNoun(Math.ceil(timeDiff), timeUnit, `${timeUnit}а`, `${timeUnit}ов`);
+  return endTime > 0 ? `${prefix} ${Math.ceil(endTime)} ${timeOut} ${suffix}` : false;
+};
 
-const timeForEnd = computed(() => {
-  if (!props.end) return undefined
-  let day = dayjs(props.end).diff(dayjs(new Date()), 'day', true)
-  let hours, minutes, endTime
-  let timeOut = getNoun(Math.ceil(day), 'день', 'дня', 'дней')
-  endTime = day
-  if (day < 1) {
-    hours = dayjs(props.end).diff(dayjs(new Date()), 'hours', true)
-    endTime = hours
-    timeOut = getNoun(Math.ceil(hours), 'час', 'часа', 'часов')
-  } else if (hours < 1) {
-    minutes = dayjs(props.end).diff(dayjs(new Date()), 'minutes', true)
-    timeOut = getNoun(Math.ceil(minutes), 'минута', 'минуты', 'минут')
-    endTime = minutes
-  }
 
-  return endTime > 0 ? `конец набора через ${Math.ceil(endTime)} ${timeOut}` : false
-})
-
+const timeToStart = computed(() => calculateTime(props.start, 'до старта осталось', ''));
+const timeForEnd = computed(() => calculateTime(props.end, 'конец набора через', ''));
 const outDate = computed(() => {
-  if (!props.outDate) return undefined
-  let day = dayjs(props.outDate).diff(dayjs(new Date()), 'day', true)
-  let endTime
-  let timeOut = getNoun(Math.ceil(day), 'день', 'дня', 'дней')
-  endTime = day
-  if (endTime <= 0) return false
+  const result = calculateTime(props.outDate, '', '');
+  if (result === undefined) return undefined;
 
-  const res = `через ${Math.ceil(endTime)} ${timeOut}`
-  return `конец курса ${day > 1 ? res : 'сегодня'}`
-})
-
-const nextGroup = computed(() => {
-  if (!props.nextGroup) return undefined
-  let day = dayjs(props.nextGroup).diff(dayjs(new Date()), 'day', true)
-  let endTime
-  let timeOut = getNoun(Math.ceil(day), 'день', 'дня', 'дней')
-  endTime = day
-  if (endTime <= 0) return false
-
-  return `следующий поток через ${Math.ceil(endTime)} ${timeOut}`
-})
-
+  return props.outDate && dayjs(props.outDate).diff(dayjs(new Date()), 'day') > 1
+    ? `конец курса ${result}`
+    : `конец курса сегодня`;
+});
+const nextGroup = computed(() => calculateTime(props.nextGroup, 'следующий поток через', ''));
 const isOpenHint = ref(false)
 </script>
 <style lang="scss" scoped>

@@ -66,8 +66,6 @@ const selectGift = async (index: number) => {
     return
   }
 
-
-
   selectedGift.value = data.value?.gifts[index-1]
   showModal.value = true
   showModalType.value = 'GiftResultPopup'
