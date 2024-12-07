@@ -263,14 +263,14 @@ const sendForm = async () => {
       subject: 'MFZ-Exchanger',
       text: `Новый обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} от @${activeTransaction.value?.telegram} \n ${payload.sell.toUpperCase()} ${payload.countSell} → ${payload.buy.toUpperCase()} ${payload.countBuy} \n https://moneyflowzen.ru/adminex`
     })
-    if (isStarsBuy.value) {
-      mail.send({
-        config: 'managerStars',
-        from: `Обмен ЗВЕЗД на MFZ-Exchanger`,
-        subject: 'MFZ-Exchanger',
-        text: `Новый обмен ЗВЕЗД от @${activeTransaction.value?.telegram}, на ${payload.countBuy} STARS`
-      })
-    }
+    // if (isStarsBuy.value) {
+    //   mail.send({
+    //     config: 'managerStars',
+    //     from: `Обмен ЗВЕЗД на MFZ-Exchanger`,
+    //     subject: 'MFZ-Exchanger',
+    //     text: `Новый обмен ЗВЕЗД от @${activeTransaction.value?.telegram}, на ${payload.countBuy} STARS`
+    //   })
+    // }
   }).catch((err) => {
     console.log('err')
   })
