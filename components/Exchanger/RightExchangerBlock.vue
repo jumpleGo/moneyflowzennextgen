@@ -59,7 +59,10 @@
         </div>
       </div>
       <AppButton title="создать заявку" :disabled="!enabledButton" @click="validateForm" />
-    </div>
+      <NuxtLink v-if="isStarsBuy" to="https://t.me/notpixel/app?startapp=f5038459873_t" target="_blank"  class="exchanger__right__banner">
+        <nuxt-img preload="high"  class="exchanger__right__banner_img" loading="lazy" src="https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/mfz_banner.png?alt=media&token=e24b712b-d864-4733-96b0-d75f719ce518" />
+      </NuxtLink>
+       </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -303,6 +306,14 @@ const sendForm = async () => {
 }
 
 .exchanger__right {
+  &__banner {
+    width: fit-content;
+    margin-top: 20px;
+    &_img {
+      border-radius: 10px;
+      width: 100%
+    }
+  }
   &__content {
     flex: 1;
     display: flex;
