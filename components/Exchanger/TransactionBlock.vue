@@ -19,9 +19,19 @@
         <div class="transaction__block-payment-action">
           <h3>Переведите {{ activeTransaction.countSell }} {{ activeTransaction.sell.toUpperCase() }} {{ activeTransaction.sell === 'usdt' ? '(TON)' : '' }} по реквизитам:</h3>
           <span>(копируется нажатием)</span>
-          <div class="transaction__block-payment-data">
-            <span v-if="getPayment?.address" class="transaction__block-payment-data--address" @click="copy($event, getPayment.address)">{{ getPayment?.address }}</span>
-            <span v-if="getPayment?.memo" @click="copy($event, getPayment.memo)">мемо: <span class="transaction__block-payment-data--memo">{{ getPayment.memo }}</span></span>
+          <div class="transaction__block-payment-wrapper">
+            <div v-if="isOkxPayment" class="transaction__block-payment-data">
+              <span class="transaction__block-payment-data--address" @click="copy($event, uids['okx'])">OKX UID: {{ uids['okx']}}</span>
+              <span class="transaction__block-payment-data--address" @click="copy($event, uids['bybit'])">BYBIT UID: {{ uids['bybit'] }}</span>
+            </div>
+            <div v-else class="transaction__block-payment-data">
+              <span v-if="getPayment?.address" class="transaction__block-payment-data--address" @click="copy($event, getPayment.address)">{{ getPayment?.address }}</span>
+              <span v-if="getPayment?.memo" @click="copy($event, getPayment.memo)">мемо: <span class="transaction__block-payment-data--memo">{{ getPayment.memo }}</span></span>
+            </div>
+
+            <div v-if="isTonForSell || isUSDTSell" class="transaction__block-button-okx">
+              <AppButton size="xs" :title="isOkxPayment ? 'вернуться' : 'я оплачиваю с OKX/BYBIT' " @click="isOkxPayment = !isOkxPayment"/>
+            </div>
           </div>
           <h4>И подтвердите оплату, нажав кнопку "оплачено"</h4>
           <span>по срочным вопросам: <a href="https://t.me/mfz_owner" target="_blank">@mfz_owner</a></span>
@@ -105,9 +115,14 @@ import { Setter } from '~/helpers/setter'
 import AppFrame from '~/components/App/AppFrame.vue'
 import { copy } from '~/helpers/copy'
 const exchangerStore = useExchangerStore()
-const {activeTransaction, time} = storeToRefs(exchangerStore)
+const {activeTransaction, time, isUSDTSell, isTonForSell} = storeToRefs(exchangerStore)
 
 const timer = ref()
+const isOkxPayment = shallowRef<boolean>(false)
+const uids = {
+  okx: '268050657901203456',
+  bybit: '26517026'
+}
 
 onMounted(() => {
   if (!time.value) {
@@ -190,6 +205,11 @@ const back = () => {
     margin: 40px 0;
   }
 }
+.transaction__block-button-okx {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 .transaction__block-wrapper {
   padding: 0 40px;
   display: flex;
@@ -240,18 +260,25 @@ const back = () => {
     color: gray;
 
   }
-
+&-payment-wrapper {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 20px;
+  box-shadow: 0 0 5px 1px rgba(128, 128, 128, 0.42);
+  row-gap: 16px;
+}
   &-payment-data {
     display: flex;
     flex-direction: column;
-    padding: 20px;
-    box-shadow: 0 0 5px 1px rgba(128, 128, 128, 0.42);
+
     row-gap: 16px;
-    background: white;
+
 
     &--address {
       font-weight: 500;
       font-size: 16px;
+      word-break: break-all;
     }
     &--memo {
       font-weight: 600;

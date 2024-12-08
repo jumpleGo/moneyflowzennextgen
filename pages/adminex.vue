@@ -2,6 +2,7 @@
   <div class="adminex_wrapper">
     <div v-if="showAdminPanel" class="adminex_wrapper__header">
       <AppInput  v-model="search" placeholder="поиск" />
+      ({{ transactionsByRules?.length }})
       <AppButton title="выход" @click="exit" type="black" class="adminex_wrapper__header-button" />
     </div>
     <div v-if="currentAdmin?.privileges === 'all'" class="adminex_wrapper__total">
@@ -9,36 +10,38 @@
         <span class="adminex_wrapper__total-key">{{key}}</span>: <span class="adminex_wrapper__total-value">{{value}}</span>
       </div>
     </div>
+
     <AppRadioGroup v-if="showAdminPanel">
       <div class="adminex_wrapper__filters">
         <AppRadioButton v-for="filter in filters" :selected="selectedFilter.value"  :value="filter.value" :name="filter.name" @update-radio="selectRadio">{{ filter.text }}</AppRadioButton>
       </div>
     </AppRadioGroup>
+    <input v-model="pickedDate" type="date">выберите дату</input>
     <div class="transaction__list" v-if="showAdminPanel">
       <div v-for="transaction in transactionsByRules" class="transaction__item">
         <div class="transaction__item--header">
           <h4 class="box-title">
-            {{ transaction.status }}
+            {{ getStatus(transaction.status) }}
           </h4>
           <AppButton v-if="transaction.status === 'done'" title="оплачено" class="transaction__item--button" @click="payed(transaction.id)"/>
         </div>
-        <span @click="copy($event, transaction.id)">#{{ transaction.id }}</span>
-        <span>{{ new Date(transaction.id).getDate() }}.{{ new Date(transaction.id).getMonth() }}.{{ new Date(transaction.id).getFullYear() }}</span>
-        <span>{{ new Date(transaction.id).getHours() }}:{{ new Date(transaction.id).getMinutes() }}</span>
-        <div class="transaction__item--prices">
-          <h3 class="box-title">
+        <span @click="copy($event, transaction.id)" class="transaction__item_id">#{{ transaction.id }}</span>
+        <span class="transaction__item_day">{{ dayjs(transaction.id).tz('Europe/Moscow').format('YYYY-MM-DD HH:mm') }} (MSK)</span>
+        <span class="transaction__item_day">{{ dayjs(transaction.id).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm') }} (BKK)</span>
+        <div class="transaction__item_prices">
+          <span class="transaction__item_prices_title">
            {{ transaction.sell }} {{ transaction.countSell }}
-          </h3>
+          </span>
 
-          <h3 class="box-title" @click="copy($event, transaction.countBuy)">
+          <span class="transaction__item_prices_title" @click="copy($event, transaction.countBuy)">
             в  {{ transaction.buy }} {{ transaction.countBuy }}
-          </h3>
+          </span>
         </div>
 
         <span v-if="transaction.net">сеть: {{ transaction.net }} </span>
         <span v-if="transaction.address" @click="copy($event, transaction.address)">адрес: {{ transaction.address }} </span>
         <span v-if="transaction.memo" @click="copy($event, transaction.memo)">мемо: {{ transaction.memo }} </span>
-        <span>тг: <nuxt-link :to="`https://t.me/${transaction.telegram}`" target="_blank">{{ transaction.telegram }}</nuxt-link> </span>
+        <span class="transaction__item_telegram">тг: <nuxt-link :to="`https://t.me/${transaction.telegram}`" target="_blank">{{ transaction.telegram }}</nuxt-link> </span>
 
       </div>
     </div>
@@ -53,13 +56,21 @@ import { useExchangerStore } from '~/stores/exchanger'
 import AppButton from '~/components/Buttons/AppButton.vue'
 import { copy } from '~/helpers/copy'
 import { Setter } from '~/helpers/setter'
-import type { IActiveTransaction, IAdmin, Selected } from '~/stores/exchangerTypes'
+import type { IActiveTransaction, IAdmin, Selected, Status } from '~/stores/exchangerTypes'
+import dayjs from 'dayjs'
+
+import utc from 'dayjs/plugin/utc'
+import  timezone from 'dayjs/plugin/timezone'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 const {exchangerSettings} = storeToRefs(useExchangerStore())
 const { $databaseRef } = useNuxtApp()
 
 const inputAdminHash = ref('')
 const search = ref('')
+const pickedDate = ref('')
 
 const filters = [{
   value: 'all',
@@ -88,6 +99,21 @@ const selectedFilter = ref({
   text: 'все',
   name: 'all'
 });
+
+const getStatus = (status: Status) => {
+  switch (status) {
+    case 'created':
+      return 'создано'
+    case 'rejected':
+      return 'отменено'
+    case 'done':
+      return 'ждет оплаты от меня'
+    case 'payed':
+      return 'оплачено'
+    case 'timeout':
+      return 'таймаут'
+  }
+}
 const selectRadio = (value: string) => {
   console.log(value)
   selectedFilter.value = filters.find(item => item.value === value) || filters[0]
@@ -97,6 +123,7 @@ const adminHashes = computed<IAdmin[]>(() => exchangerSettings.value?.adminHashe
 const showAdminPanel = computed(() => adminHashes.value.some(item => item.key === inputAdminHash.value))
 const currentAdmin = computed<IAdmin | null>(() => adminHashes.value.find((item) => item.key === inputAdminHash.value) || null)
 const transactions = ref<Record<string, IActiveTransaction>>({})
+
 const transactionsByRules = computed(() => {
   if (currentAdmin.value?.privileges === 'all') return sortedTransactions.value
   else if (currentAdmin.value?.privileges === 'stars' ) return sortedTransactions.value?.filter(item => item.buy === 'stars')
@@ -106,7 +133,8 @@ const sortedTransactions = computed(() =>
   &&  Object.values(transactions.value)
     ?.sort((a: IActiveTransaction, b: IActiveTransaction) => a.id > b.id ? -1 : 1 )
     .filter(item => selectedFilter.value.value === 'all' ? item : item.status === selectedFilter.value.value)
-    .filter(item => String(item.id).includes(search.value)))
+    .filter(item => String(item.id).includes(search.value))
+    .filter(item => dayjs(item.id).isAfter(dayjs(pickedDate.value || '1977.01.01'))))
 
 const totalValue = computed(() => {
   return Object.values(transactions.value)
@@ -236,6 +264,22 @@ const exit = () => {
   box-shadow: 0 0 5px 2px rgba(128, 128, 128, 0.63);
   overflow: hidden; /* Скрываем переполненный текст */
 
+  &_telegram {
+    margin-top: 20px;
+  }
+
+  &_id {
+    font-weight: 700;
+    font-size: 11px;
+    margin-top: 20px;
+  }
+
+  &_day {
+    font-weight: 500;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+
   h4,
   span {
     white-space: nowrap; /* Запрещаем перенос текста */
@@ -243,10 +287,15 @@ const exit = () => {
     text-overflow: ellipsis; /* Добавляем троеточие */
   }
 
-  &--prices {
+  &_prices {
     display: flex;
     flex-direction: column; /* Для лучшей адаптивности */
-    gap: 10px;
+    margin-top: 20px;
+
+    &_title {
+      font-size: 16px;
+      font-weight: 600;
+    }
   }
 
   &--header {
