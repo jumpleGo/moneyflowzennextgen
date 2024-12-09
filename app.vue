@@ -12,14 +12,6 @@ import { storeToRefs } from 'pinia'
 import { useMainStore } from '~/stores/main'
 
 
-onMounted(() => {
-  window?.Telegram.WebApp?.setHeaderColor('#000')
-  window?.Telegram.WebApp?.requestFullscreen()
-  window?.Telegram.WebApp?.lockOrientation()
-
-
-})
-
 const {showModal} = storeToRefs(useMainStore())
 const route = useRoute()
 const showHeader = computed(() => {
@@ -32,9 +24,7 @@ const showFooter = computed(() => {
 })
 
 useHead({
-  script:[{
-    src: "https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/tg.js?alt=media&token=fc229fac-3f8c-45c6-be5c-7d30dd93c4d9"
-  }],
+
   meta: [{
     name: 'viewport',
     content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'
