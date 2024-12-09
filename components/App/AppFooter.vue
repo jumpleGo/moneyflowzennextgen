@@ -10,21 +10,15 @@
       </div>
       <div class="mfz__footer_right_block">
         <div class="mfz__footer__social_media">
-          <a href="https://t.me/mfz_official" class="mfz__footer_social">
+          <nuxt-link to="https://t.me/mfz_official_crypto" target="_blank" class="mfz__footer_social">
             <img src="/assets/telegram.svg" />
-          </a>
-          <a href="https://www.threads.net/@money_flow_zen" class="mfz__footer_social">
-            <img src="/assets/threads.svg" />
-          </a>
-          <a href="https://pin.it/5zT4pEn6p" class="mfz__footer_social">
-            <img src="/assets/pinterest.svg" />
-          </a>
-          <a href="https://www.instagram.com/money_flow_zen?igsh=MW4xeDR1bDZyb3MzNA%3D%3D&utm_source=qr" class="mfz__footer_social">
+          </nuxt-link>
+          <nuxt-link to="https://www.instagram.com/money_flow_zen?igsh=MW4xeDR1bDZyb3MzNA%3D%3D&utm_source=qr" target="_blank" class="mfz__footer_social">
             <img src="/assets/instagram.svg" />
-          </a>
-          <a href="https://youtube.com/@mfz_official?si=FeM-diAeqe2OKPe8" class="mfz__footer_social">
+          </nuxt-link>
+          <nuxt-link to="https://www.youtube.com/@money_flow_zen" target="_blank" class="mfz__footer_social">
             <img src="/assets/youtube.svg" />
-          </a>
+          </nuxt-link>
         </div>
         <p class="mfz__footer__info">
           для связи с автором <a href="https://t.me/mfz_owner">@mfz_owner</a>

@@ -10,6 +10,7 @@ export class Setter {
     return push(child(ref(getDatabase()), url), data)
   }
 
+
   static async updateToDb (updates: any) {
     return await update(ref(getDatabase()), updates)
   }

@@ -26,7 +26,7 @@
             :error="v$.telegram.$error"
             id="mail"
             placeholder="@user"
-            label="Телеграм ник без '@'" >
+            label="Телеграм ник" >
             <template v-if="v$.telegram.$error" #error>{{ v$.telegram.$error && translates.telegram }}</template>
           </AppInput>
           <AppInput
@@ -246,7 +246,7 @@ const sendForm = async () => {
     id: +new Date(),
     memo: model.memo,
     net: model.net,
-    telegram: model.telegram,
+    telegram: model.telegram.startsWith('@') ? model.telegram.slice(1) : model.telegram,
     status: 'created'
   }
 

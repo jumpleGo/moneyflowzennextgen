@@ -1,9 +1,10 @@
 <template>
   <div class="adminex_wrapper">
-    <div v-if="showAdminPanel" class="adminex_wrapper__header">
+    <div class="adminex_wrapper__header_wrapper" v-if="showAdminPanel">
+    <div class="adminex_wrapper__header">
       <AppInput  v-model="search" placeholder="поиск" />
       ({{ transactionsByRules?.length }})
-      <AppButton title="выход" @click="exit" type="black" class="adminex_wrapper__header-button" />
+      <AppButton size="xs" title="выход" @click="exit" type="black" class="adminex_wrapper__header-button" />
     </div>
     <div v-if="currentAdmin?.privileges === 'all'" class="adminex_wrapper__total">
       <div v-for="[key, value] in Object.entries(totalValue)">
@@ -11,19 +12,21 @@
       </div>
     </div>
 
-    <AppRadioGroup v-if="showAdminPanel">
+    <AppRadioGroup>
       <div class="adminex_wrapper__filters">
         <AppRadioButton v-for="filter in filters" :selected="selectedFilter.value"  :value="filter.value" :name="filter.name" @update-radio="selectRadio">{{ filter.text }}</AppRadioButton>
       </div>
     </AppRadioGroup>
-    <input v-model="pickedDate" type="date">выберите дату</input>
+    <input class="adminex_wrapper__date_filter" v-model="pickedDate" type="date" />
+    </div>
     <div class="transaction__list" v-if="showAdminPanel">
       <div v-for="transaction in transactionsByRules" class="transaction__item">
         <div class="transaction__item--header">
           <h4 class="box-title">
             {{ getStatus(transaction.status) }}
           </h4>
-          <AppButton v-if="transaction.status === 'done'" title="оплачено" class="transaction__item--button" @click="payed(transaction.id)"/>
+          <AppButton v-if="transaction.status === 'done'" size="xs" title="оплачено" class="transaction__item--button" @click="payed(transaction.id)"/>
+          <AppButton size="xs" type="black" title="X" class="transaction__item--button" @click="remove(transaction.id)"/>
         </div>
         <span @click="copy($event, transaction.id)" class="transaction__item_id">#{{ transaction.id }}</span>
         <span class="transaction__item_day">{{ dayjs(transaction.id).tz('Europe/Moscow').format('YYYY-MM-DD HH:mm') }} (MSK)</span>
@@ -61,6 +64,7 @@ import dayjs from 'dayjs'
 
 import utc from 'dayjs/plugin/utc'
 import  timezone from 'dayjs/plugin/timezone'
+import { Remover } from '~/helpers/remover'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -115,7 +119,6 @@ const getStatus = (status: Status) => {
   }
 }
 const selectRadio = (value: string) => {
-  console.log(value)
   selectedFilter.value = filters.find(item => item.value === value) || filters[0]
 }
 
@@ -194,6 +197,19 @@ const payed = (id: number) => {
   }
 }
 
+const remove = (id: number) => {
+  const key = Object.keys(transactions.value).find(key => transactions.value?.[key].id === id)
+  if (key) {
+    try {
+      Remover.removeFromDb(`transactions/${key}`)
+    } catch (err) {
+      console.log(err)
+      return
+    }
+    delete transactions.value[key]
+  }
+}
+
 
 const exit = () => {
   window.localStorage.removeItem('adminHash')
@@ -208,6 +224,12 @@ const exit = () => {
  display: flex;
   flex-direction: column;
   gap: 20px;
+
+  &__header_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px
+  }
 
   &__total {
     display: flex;
@@ -234,6 +256,10 @@ const exit = () => {
   &__filters {
     display: flex;
     gap: 1rem
+  }
+
+  &__date_filter {
+    width: 200px;
   }
 
   &__header-button {
