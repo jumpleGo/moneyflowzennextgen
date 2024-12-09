@@ -2,6 +2,10 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   rootDir: './',
+  devServer: {
+    port: 8080
+  },
+
   alias: {
     "@assets": "/<rootDir>/assets",
   },

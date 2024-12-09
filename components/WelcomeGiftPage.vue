@@ -16,7 +16,7 @@
     </div>
     <app-button :disabled="!existGame" :loading="loading" :title="loading ? 'загрузка...' : 'получить'" class="mfz_welcome-gift--button" @click="emit('openGame')" />
     <div class="mfz_welcome-gif__tip">
-      <p v-if="existGame && !loading" class="mfz_welcome-gift--button_tip">у вас {{ existGame }} попыток</p>
+      <p v-if="existGame && !loading" class="mfz_welcome-gift--button_tip">у вас {{ existGame }} попытка</p>
       <p v-if="!existGame && !loading" class="mfz_welcome-gift--button_tip">пока у вас нет попыток</p>
     </div>
   </div>

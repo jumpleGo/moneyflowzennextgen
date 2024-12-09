@@ -1,7 +1,10 @@
 <template>
   <div class="exchanger__wrapper">
     <NotificationBlock class="exchanger__notification-block" v-if="exchangerSettings?.notificationType && !isLoadingResize && showLeftBlock" :notify-type="exchangerSettings.notificationType" />
-
+<div v-if="window?.Telegram.WebAppUser || window.Telegram.WebApp">
+  {{ window?.Telegram.WebAppUser }}
+  {{ window.Telegram.WebApp }}
+</div>
     <div class="exchanger">
       <div v-if="!isLoadingResize" class="exchanger__content">
         <img v-if="exchangerSettings.showOffer" class="exchanger__content--icon" src="/assets/icons/airdrop.png" @click="showModal = true" />

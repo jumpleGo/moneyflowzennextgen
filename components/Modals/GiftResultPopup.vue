@@ -38,7 +38,7 @@ const {selectedGift} = storeToRefs(useGiftStore())
     height: 140px;
 
     @include not-mobile {
-      width: 20%;
+      height: 100px;
     }
   }
 
