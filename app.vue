@@ -14,9 +14,9 @@ import { useMainStore } from '~/stores/main'
 
 onMounted(() => {
   window.Telegram.WebApp.webAppVersion = '8.0'
-  window.Telegram.WebApp.setHeaderColor('#000')
-  window.Telegram.WebApp.requestFullscreen()
-  window.Telegram.WebApp.lockOrientation()
+  window.Telegram.WebApp?.setHeaderColor('#000')
+  window.Telegram.WebApp?.requestFullscreen()
+  window.Telegram.WebApp?.lockOrientation()
 
 
 })
