@@ -20,33 +20,7 @@
     <input class="adminex_wrapper__date_filter" v-model="pickedDate" type="date" />
     </div>
     <div class="transaction__list" v-if="showAdminPanel">
-      <div v-for="transaction in transactionsByRules" class="transaction__item">
-        <div class="transaction__item--header">
-          <h4 class="box-title">
-            {{ getStatus(transaction.status) }}
-          </h4>
-          <AppButton v-if="transaction.status === 'done'" size="xs" title="оплачено" class="transaction__item--button" @click="payed(transaction.id)"/>
-          <AppButton size="xs" type="black" title="X" class="transaction__item--button" @click="remove(transaction.id)"/>
-        </div>
-        <span @click="copy($event, transaction.id)" class="transaction__item_id">#{{ transaction.id }}</span>
-        <span class="transaction__item_day">{{ dayjs(transaction.id).tz('Europe/Moscow').format('YYYY-MM-DD HH:mm') }} (MSK)</span>
-        <span class="transaction__item_day">{{ dayjs(transaction.id).tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm') }} (BKK)</span>
-        <div class="transaction__item_prices">
-          <span class="transaction__item_prices_title">
-           {{ transaction.sell }} {{ transaction.countSell }}
-          </span>
-
-          <span class="transaction__item_prices_title" @click="copy($event, transaction.countBuy)">
-            в  {{ transaction.buy }} {{ transaction.countBuy }}
-          </span>
-        </div>
-
-        <span v-if="transaction.net">сеть: {{ transaction.net }} </span>
-        <span v-if="transaction.address" @click="copy($event, transaction.address)">адрес: {{ transaction.address }} </span>
-        <span v-if="transaction.memo" @click="copy($event, transaction.memo)">мемо: {{ transaction.memo }} </span>
-        <span class="transaction__item_telegram">тг: <nuxt-link :to="`https://t.me/${transaction.telegram}`" target="_blank">{{ transaction.telegram }}</nuxt-link> </span>
-
-      </div>
+     <TransactionCard v-for="transaction in transactionsByRules" :transaction="transaction" @remove="remove(transaction.id)" @payed="payed(transaction.id)" />
     </div>
     <div class="admin__login" v-else>
       <AppInput v-model="inputAdminHash" label="хэш админа" placeholder="хэш админа" />
@@ -57,24 +31,23 @@
 import { Getter } from '~/helpers/getter'
 import { useExchangerStore } from '~/stores/exchanger'
 import AppButton from '~/components/Buttons/AppButton.vue'
-import { copy } from '~/helpers/copy'
 import { Setter } from '~/helpers/setter'
-import type { IActiveTransaction, IAdmin, Selected, Status } from '~/stores/exchangerTypes'
+import type { IActiveTransaction, IAdmin} from '~/stores/exchangerTypes'
 import dayjs from 'dayjs'
 
-import utc from 'dayjs/plugin/utc'
-import  timezone from 'dayjs/plugin/timezone'
 import { Remover } from '~/helpers/remover'
+import TransactionCard from '~/components/adminex/TransactionCard.vue'
 
-dayjs.extend(utc)
-dayjs.extend(timezone)
+
 
 const {exchangerSettings} = storeToRefs(useExchangerStore())
 const { $databaseRef } = useNuxtApp()
 
 const inputAdminHash = ref('')
 const search = ref('')
-const pickedDate = ref('')
+
+const pickedDate = ref('1977.01.01')
+
 
 const filters = [{
   value: 'all',
@@ -104,20 +77,7 @@ const selectedFilter = ref({
   name: 'all'
 });
 
-const getStatus = (status: Status) => {
-  switch (status) {
-    case 'created':
-      return 'создано'
-    case 'rejected':
-      return 'отменено'
-    case 'done':
-      return 'ждет оплаты от меня'
-    case 'payed':
-      return 'оплачено'
-    case 'timeout':
-      return 'таймаут'
-  }
-}
+
 const selectRadio = (value: string) => {
   selectedFilter.value = filters.find(item => item.value === value) || filters[0]
 }
@@ -137,7 +97,8 @@ const sortedTransactions = computed(() =>
     ?.sort((a: IActiveTransaction, b: IActiveTransaction) => a.id > b.id ? -1 : 1 )
     .filter(item => selectedFilter.value.value === 'all' ? item : item.status === selectedFilter.value.value)
     .filter(item => String(item.id).includes(search.value))
-    .filter(item => dayjs(item.id).isAfter(dayjs(pickedDate.value || '1977.01.01'))))
+    .filter(item => dayjs(item.id).isAfter(dayjs(pickedDate.value))))
+
 
 const totalValue = computed(() => {
   return Object.values(transactions.value)
@@ -282,61 +243,7 @@ const exit = () => {
   width: 100%; /* Растягивание на всю ширину */
 }
 
-.transaction__item {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  background: white;
-  box-shadow: 0 0 5px 2px rgba(128, 128, 128, 0.63);
-  overflow: hidden; /* Скрываем переполненный текст */
 
-  &_telegram {
-    margin-top: 20px;
-  }
-
-  &_id {
-    font-weight: 700;
-    font-size: 11px;
-    margin-top: 20px;
-  }
-
-  &_day {
-    font-weight: 500;
-    font-size: 12px;
-    margin-top: 10px;
-  }
-
-  h4,
-  span {
-    white-space: nowrap; /* Запрещаем перенос текста */
-    overflow: hidden; /* Скрываем переполненный текст */
-    text-overflow: ellipsis; /* Добавляем троеточие */
-  }
-
-  &_prices {
-    display: flex;
-    flex-direction: column; /* Для лучшей адаптивности */
-    margin-top: 20px;
-
-    &_title {
-      font-size: 16px;
-      font-weight: 600;
-    }
-  }
-
-  &--header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-  }
-
-
-  &--button {
-    font-size: 14px;
-    padding: 10px;
-  }
-}
 .analytics-info {
   display: flex;
   align-items: center;

@@ -1,8 +1,9 @@
 <template>
   <div class="exchanger__wrapper">
-    <NotificationBlock class="exchanger__notification-block" v-if="exchangerSettings?.notificationType && !isLoadingResize && showLeftBlock" :notify-type="exchangerSettings.notificationType" />
+    <ErrorNotification v-if="showError" />
+    <NotificationBlock class="exchanger__notification-block" v-if="!showError && !loading && exchangerSettings?.notificationType && !isLoadingResize && showLeftBlock" :notify-type="exchangerSettings.notificationType" />
 
-    <div class="exchanger">
+    <div v-if="!showError && !loading" class="exchanger">
       <div v-if="!isLoadingResize" class="exchanger__content">
         <img v-if="exchangerSettings.showOffer" class="exchanger__content--icon" src="/assets/icons/airdrop.png" @click="showModal = true" />
         <LeftExchangerBlock v-if="showLeftBlock" :class="['exchanger__left', {'--disabled-block': activeTransaction}]"  />
@@ -45,6 +46,7 @@ import { storeToRefs } from 'pinia'
 import { useMainStore } from '~/stores/main'
 import { Getter } from '~/helpers/getter'
 import { binance, rateApi } from '~/api'
+import ErrorNotification from '~/components/Exchanger/ErrorNotification.vue'
 
 const { activeTransaction, isSelectedBothItem, exchangerSettings, vats, pricesList, priceUsd } = storeToRefs(useExchangerStore())
 const hideRightBlock = shallowRef(true)
@@ -54,8 +56,12 @@ definePageMeta({
   middleware:['exchanger']
 })
 
+const loading = shallowRef(false)
+const showError = shallowRef(false)
+
 
 const { refresh, status} = await useAsyncData(async () => {
+  loading.value = true
   try {
     exchangerSettings.value = await Getter.getFromDB('exchangerSettings/')
     vats.value = await Getter.getFromDB('vats/')
@@ -63,11 +69,25 @@ const { refresh, status} = await useAsyncData(async () => {
     return
   }
 
-  const { data: pricesTickers } = await binance.getPriceByTickers()
-  pricesList.value = pricesTickers
+  try {
+    const { data: pricesTickers } = await binance.getPriceByTickers()
+    pricesList.value = pricesTickers
+  } catch {
+    showError.value = true
+  }
 
-  const { data: priceUsdRes } = await rateApi.getPriceByTickers()
-  priceUsd.value = priceUsdRes.data.RUB.value
+  try {
+    const { data: priceUsdRes } = await rateApi.getPriceByTickers()
+    priceUsd.value = priceUsdRes.data.RUB.value
+  } catch {
+    showError.value = true
+  }
+
+  if (priceUsd.value === 0) {
+    showError.value = true
+  }
+
+  loading.value = false
 })
 
 onMounted(() => {
