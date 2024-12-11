@@ -70,7 +70,7 @@ const calculateTime = (date, prefix, suffix) => {
     endTime = timeDiff;
   }
 
-  const timeOut = getNoun(Math.ceil(timeDiff), timeUnit, `${timeUnit}а`, `${timeUnit}ов`);
+  const timeOut = getNoun(Math.ceil(timeDiff), timeUnit, ['дня', 'часа', 'минуты'], ['дней', 'часов', 'минут']);
   return endTime > 0 ? `${prefix} ${Math.ceil(endTime)} ${timeOut} ${suffix}` : false;
 };
 
