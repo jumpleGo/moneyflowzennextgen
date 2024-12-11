@@ -5,7 +5,7 @@
         Курсы криптовалют не прогрузились!
       </span>
       <span class="mfz_error__notification_second_text">
-        Попробуйте перезагрузить приложение
+        Попробуйте перезагрузить приложение или сменить браузер
       </span>
       <AppButton size="xs" title="перезагрузить" @click="reload" />
     </div>

@@ -1,6 +1,7 @@
 <template>
   <div class="exchanger__wrapper">
-    <ErrorNotification v-if="showError" />
+    <ErrorNotification v-if="showError && !loading" />
+    <AppLoader v-if="loading" />
     <NotificationBlock class="exchanger__notification-block" v-if="!showError && !loading && exchangerSettings?.notificationType && !isLoadingResize && showLeftBlock" :notify-type="exchangerSettings.notificationType" />
 
     <div v-if="!showError && !loading" class="exchanger">
@@ -76,16 +77,16 @@ const { refresh, status} = await useAsyncData(async () => {
     showError.value = true
   }
 
-  try {
-    const { data: priceUsdRes } = await rateApi.getPriceByTickers()
-    priceUsd.value = priceUsdRes.data.RUB.value
-  } catch {
-    showError.value = true
-  }
+  // try {
+  //   const { data: priceUsdRes } = await rateApi.getPriceByTickers()
+  //   priceUsd.value = priceUsdRes.data.RUB.value
+  // } catch {
+  //   showError.value = true
+  // }
 
-  if (priceUsd.value === 0) {
-    showError.value = true
-  }
+  // if (priceUsd.value === 0) {
+  //   showError.value = true
+  // }
 
   loading.value = false
 })
