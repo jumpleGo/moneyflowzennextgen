@@ -77,16 +77,16 @@ const { refresh, status} = await useAsyncData(async () => {
     showError.value = true
   }
 
-  // try {
-  //   const { data: priceUsdRes } = await rateApi.getPriceByTickers()
-  //   priceUsd.value = priceUsdRes.data.RUB.value
-  // } catch {
-  //   showError.value = true
-  // }
+  try {
+    const { data: priceUsdRes } = await rateApi.getPriceByTickers()
+    priceUsd.value = priceUsdRes.data.RUB.value
+  } catch {
+    showError.value = true
+  }
 
-  // if (priceUsd.value === 0) {
-  //   showError.value = true
-  // }
+  if (priceUsd.value === 0) {
+    showError.value = true
+  }
 
   loading.value = false
 })
