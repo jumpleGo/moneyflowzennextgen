@@ -62,7 +62,7 @@
                :key="index + 'coin--first'"
                :class="['exchanger__item', {active: selectedBuy?.key && selectedBuy.key === coin.key}, {'--disabled': !isTonForSell && !isValuteForSell}]"
                @click="selectBuy('others', coin)">
-            <NuxtImg :src="coin.image"  preload="high" />
+            <NuxtImg :src="coin.image"  preload="high" loading="eager" decoding="sync" />
             {{ coin.title }}
           </div>
         </div>
