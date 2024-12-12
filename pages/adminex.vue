@@ -8,9 +8,13 @@
     </div>
     <div v-if="currentAdmin?.privileges === 'all'" class="adminex_wrapper__total">
       <div v-for="[key, value] in Object.entries(totalValue)">
-        <span class="adminex_wrapper__total-key">{{key}}</span>: <span class="adminex_wrapper__total-value">{{value}}</span>
+        <span class="adminex_wrapper__total-key">{{key}}</span>: <span class="adminex_wrapper__total-value">{{value.toFixed(3)}}</span>
       </div>
     </div>
+
+      <div>
+        USDT: {{ usdtRate.toFixed(3) }}
+      </div>
 
     <AppRadioGroup>
       <div class="adminex_wrapper__filters">
@@ -37,11 +41,19 @@ import dayjs from 'dayjs'
 
 import { Remover } from '~/helpers/remover'
 import TransactionCard from '~/components/adminex/TransactionCard.vue'
+import { rateApi } from '~/api'
 
 
 
 const {exchangerSettings} = storeToRefs(useExchangerStore())
 const { $databaseRef } = useNuxtApp()
+
+const usdtRate = ref(0)
+
+useAsyncData(async () => {
+    const { data: priceUsdRes } = await rateApi.getPriceByTickers()
+    usdtRate.value = priceUsdRes.data.RUB.value
+})
 
 const inputAdminHash = ref('')
 const search = ref('')
