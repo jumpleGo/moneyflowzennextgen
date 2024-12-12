@@ -59,9 +59,6 @@
         </div>
       </div>
       <AppButton title="создать заявку" :disabled="!enabledButton" @click="validateForm" />
-      <NuxtLink v-if="isStarsBuy" to="https://t.me/notpixel/app?startapp=f5038459873_t" target="_blank"  class="exchanger__right__banner">
-        <nuxt-img preload="high"  class="exchanger__right__banner_img" loading="lazy" src="https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/mfz_banner.png?alt=media&token=e24b712b-d864-4733-96b0-d75f719ce518" />
-      </NuxtLink>
        </div>
   </div>
 </template>
@@ -82,7 +79,6 @@ import {
 import AppBackButton from '~/components/App/AppBackButton.vue'
 import { Setter } from '~/helpers/setter'
 import type { IActiveTransaction } from '~/stores/exchangerTypes'
-
 const mail = useMail()
 
 const emit = defineEmits<{
@@ -266,14 +262,6 @@ const sendForm = async () => {
       subject: 'MFZ-Exchanger',
       text: `Новый обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} от @${activeTransaction.value?.telegram} \n ${payload.sell.toUpperCase()} ${payload.countSell} → ${payload.buy.toUpperCase()} ${payload.countBuy} \n https://moneyflowzen.ru/adminex`
     })
-    // if (isStarsBuy.value) {
-    //   mail.send({
-    //     config: 'managerStars',
-    //     from: `Обмен ЗВЕЗД на MFZ-Exchanger`,
-    //     subject: 'MFZ-Exchanger',
-    //     text: `Новый обмен ЗВЕЗД от @${activeTransaction.value?.telegram}, на ${payload.countBuy} STARS`
-    //   })
-    // }
   }).catch((err) => {
     console.log('err')
   })
