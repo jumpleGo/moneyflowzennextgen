@@ -33,7 +33,9 @@ export const useExchangerStore = defineStore('exchanger', () => {
     maxLimit: 0,
     minLimit: 0,
     notificationType: '',
-    showOffer: false
+    showOffer: false,
+    isSiteEnable: true,
+    disableSiteReason: ''
   })
 
 

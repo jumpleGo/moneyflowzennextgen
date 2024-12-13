@@ -32,6 +32,8 @@ export type IExchangerSettings = {
   starsRate: number,
   notificationType: string,
   showOffer: boolean,
+  isSiteEnable: boolean
+  disableSiteReason: string
 
 }
 

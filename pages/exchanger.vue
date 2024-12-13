@@ -1,10 +1,11 @@
 <template>
   <div class="exchanger__wrapper">
     <ErrorNotification v-if="showError && !loading" />
+    <DisablePage v-if="!exchangerSettings.isSiteEnable && !loading" :reason="exchangerSettings.disableSiteReason"  />
     <AppLoader v-if="loading" />
     <NotificationBlock class="exchanger__notification-block" v-if="!showError && !loading && exchangerSettings?.notificationType && !isLoadingResize && showLeftBlock" :notify-type="exchangerSettings.notificationType" />
 
-    <div v-if="!showError && !loading" class="exchanger">
+    <div v-if="!showError && !loading && exchangerSettings.isSiteEnable " class="exchanger">
       <div v-if="!isLoadingResize" class="exchanger__content">
         <img v-if="exchangerSettings.showOffer" class="exchanger__content--icon" src="/assets/icons/airdrop.png" @click="showModal = true" />
         <LeftExchangerBlock v-if="showLeftBlock" :class="['exchanger__left', {'--disabled-block': activeTransaction}]"  />
@@ -48,6 +49,7 @@ import { useMainStore } from '~/stores/main'
 import { Getter } from '~/helpers/getter'
 import { binance, rateApi } from '~/api'
 import ErrorNotification from '~/components/Exchanger/ErrorNotification.vue'
+import DisablePage from '~/components/Exchanger/DisablePage.vue'
 
 const { activeTransaction, isSelectedBothItem, exchangerSettings, vats, pricesList, priceUsd } = storeToRefs(useExchangerStore())
 const hideRightBlock = shallowRef(true)
@@ -67,6 +69,11 @@ const { refresh, status} = await useAsyncData(async () => {
     exchangerSettings.value = await Getter.getFromDB('exchangerSettings/')
     vats.value = await Getter.getFromDB('vats/')
   } catch {
+    return
+  }
+
+  if (!exchangerSettings.value.isSiteEnable) {
+    loading.value = false
     return
   }
 

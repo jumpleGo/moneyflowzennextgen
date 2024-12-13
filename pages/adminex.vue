@@ -15,6 +15,10 @@
       <div>
         USDT: {{ usdtRate.toFixed(3) }}
       </div>
+      <div class="adminex_wrapper__site_enable">
+        <div>{{ exchangerSettings.isSiteEnable ? 'Выключить сайт' : 'Включить сайт' }}</div>
+        <AppSwitch v-model="isSiteEnable" />
+      </div>
 
     <AppRadioGroup>
       <div class="adminex_wrapper__filters">
@@ -30,6 +34,15 @@
       <AppInput v-model="inputAdminHash" label="хэш админа" placeholder="хэш админа" />
     </div>
   </div>
+  <AppPopup v-if="showReasonDisableModal">
+    <div class="adminex_wrapper__reason_modal">
+      <textarea rows="10" v-model="exchangerSettings.disableSiteReason" />
+      <div  class="adminex_wrapper__reason_modal_buttons">
+        <AppButton size="xs" type="black" title="отменить" @click="showReasonDisableModal = false" />
+        <AppButton size="xs" title="сохранить" @click="disableSite"  />
+      </div>
+    </div>
+  </AppPopup>
 </template>
 <script setup lang="ts">
 import { Getter } from '~/helpers/getter'
@@ -55,10 +68,26 @@ useAsyncData(async () => {
     usdtRate.value = priceUsdRes.data.RUB.value
 })
 
+const showReasonDisableModal  = shallowRef<boolean>(false)
+
 const inputAdminHash = ref('')
 const search = ref('')
 
-const pickedDate = ref('1977.01.01')
+const pickedDate = ref(new Date('01/01/2022').toDateString())
+
+const isSiteEnable = computed({
+  get: () => exchangerSettings.value.isSiteEnable,
+  set: (value) => {
+    if (!value) {
+      showReasonDisableModal.value = true
+    } else {
+      exchangerSettings.value.isSiteEnable = value
+      const updates: Record<string, Object> = {}
+      updates[`exchangerSettings/isSiteEnable`] = value
+      Setter.updateToDb(updates)
+    }
+  }
+})
 
 
 const filters = [{
@@ -183,6 +212,16 @@ const remove = (id: number) => {
   }
 }
 
+const disableSite = () => {
+  exchangerSettings.value.isSiteEnable = false
+  const updates: Record<string, Object> = {}
+  updates[`exchangerSettings/isSiteEnable`] = false
+  updates[`exchangerSettings/disableSiteReason`] = exchangerSettings.value.disableSiteReason
+  Setter.updateToDb(updates)
+
+  showReasonDisableModal.value = false
+}
+
 
 const exit = () => {
   window.localStorage.removeItem('adminHash')
@@ -197,6 +236,29 @@ const exit = () => {
  display: flex;
   flex-direction: column;
   gap: 20px;
+
+  &__site_enable {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__reason_modal {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: white;
+    padding: 30px;
+    position: relative;
+    min-width: 300px;
+
+  }
+
+  &__reason_modal_buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
   &__header_wrapper {
     display: flex;

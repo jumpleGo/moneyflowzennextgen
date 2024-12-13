@@ -17,8 +17,9 @@
           </span>
         </div>
         <div class="transaction__block-payment-action">
-          <h3>Переведите {{ activeTransaction.countSell }} {{ activeTransaction.sell.toUpperCase() }} {{ activeTransaction.sell === 'usdt' ? '(TON)' : '' }} по реквизитам:</h3>
+          <h3>Переведите {{ activeTransaction.countSell }} {{ isValuteForSell ? `RUB ${activeTransaction.sell.toUpperCase()}` : activeTransaction.sell.toUpperCase() }} {{ activeTransaction.sell === 'usdt' ? '(TON)' : '' }} по реквизитам:</h3>
           <span>(копируется нажатием)</span>
+          <span>комментарий к переводу указывать не нужно!</span>
           <div class="transaction__block-payment-wrapper">
             <div v-if="isOkxPayment" class="transaction__block-payment-data">
               <span class="transaction__block-payment-data--address" @click="copy($event, uids['okx'])">OKX UID: {{ uids['okx']}}</span>
@@ -76,6 +77,7 @@
           </span>
         </div>
         <span>Ваши {{ activeTransaction.countBuy }} {{ activeTransaction.buy.toUpperCase() }} уже летят к Вам!</span>
+        <span>Вы можете оставиьт свой отзыв здесь! <nuxt-link target="_blank" to="https://t.me/mfz_exchanger">@mfz_exchanger</nuxt-link></span>
         <AppButton title="начать сначала" @click="back" />
       </div>
     </div>
@@ -115,7 +117,7 @@ import { Setter } from '~/helpers/setter'
 import AppFrame from '~/components/App/AppFrame.vue'
 import { copy } from '~/helpers/copy'
 const exchangerStore = useExchangerStore()
-const {activeTransaction, time, isUSDTSell, isTonForSell} = storeToRefs(exchangerStore)
+const {activeTransaction, time, isUSDTSell, isTonForSell, isValuteForSell} = storeToRefs(exchangerStore)
 
 const timer = ref()
 const isOkxPayment = shallowRef<boolean>(false)
