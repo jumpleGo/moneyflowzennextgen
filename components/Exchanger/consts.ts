@@ -27,9 +27,9 @@ export const countMaskaOptionsStartsFromZero = {
 };
 
 export const countMaskaOptionsNotStartsFromZero = {
-  mask  : '0.2',
+  mask  : '02.2',
   tokens: {
-    0: { pattern : /[1-9]/, optional: true, multiple: true },
+    0: { pattern : /[1-9]/, optional: true, multiple: true},
     2: { pattern : /[0-9]/, optional: true, multiple: true },
   }
 };
