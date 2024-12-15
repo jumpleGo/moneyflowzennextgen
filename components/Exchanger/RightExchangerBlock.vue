@@ -63,7 +63,7 @@
       <NuxtLink v-if="(isTonForSell || isTonForBuy) && !isStarsBuy" to="https://t.me/mfz_official_crypto" target="_blank" class="exchanger__right__banner" >
         <nuxt-img :preload="{fetchPriority: 'high'}" class="exchanger__right__banner_img" src="https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/mfz_crypto.png?alt=media&token=48507781-be93-4815-9a12-11c966cf9fed" />
       </NuxtLink>
-      <NuxtLink v-if="isStarsBuy" to="https://t.me/mfz_official_crypto" target="_blank" class="exchanger__right__banner" >
+      <NuxtLink v-if="isStarsBuy" to="https://t.me/mfz_lostdogs" target="_blank" class="exchanger__right__banner" >
         <nuxt-img :preload="{fetchPriority: 'high'}" class="exchanger__right__banner_img" src="https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/mfz_lostdogs.png?alt=media&token=d1a846da-f5cf-4b65-892c-74c153ba4126" />
       </NuxtLink>
     </div>
