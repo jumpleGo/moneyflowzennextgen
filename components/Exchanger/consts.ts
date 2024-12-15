@@ -18,10 +18,18 @@ export const usdtNet = [
 ]
 
 
-export const countMaskaOptions = {
+export const countMaskaOptionsStartsFromZero = {
   mask  : '0.2',
   tokens: {
     0: { pattern : /[0-9]/, optional: true, multiple: true },
+    2: { pattern : /[0-9]/, optional: true, multiple: true },
+  }
+};
+
+export const countMaskaOptionsNotStartsFromZero = {
+  mask  : '0.2',
+  tokens: {
+    0: { pattern : /[1-9]/, optional: true, multiple: true },
     2: { pattern : /[0-9]/, optional: true, multiple: true },
   }
 };

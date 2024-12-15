@@ -87,15 +87,17 @@ const { refresh, status} = await useAsyncData(async () => {
     showError.value = true
   }
 
-  try {
-    const { data: priceUsdRes } = await rateApi.getPriceByTickers()
-    priceUsd.value = priceUsdRes.data.RUB.value;
-    if (priceUsd.value === 0) {
-      showError.value = true
-    }
-  } catch {
-    showError.value = true
-  }
+ if (!process.dev) {
+   try {
+     const { data: priceUsdRes } = await rateApi.getPriceByTickers()
+     priceUsd.value = priceUsdRes.data.RUB.value;
+     if (priceUsd.value === 0) {
+       showError.value = true
+     }
+   } catch {
+     showError.value = true
+   }
+ }
 
   try {
     const countActive = await Getter.getCountByValue('/transactions', 'status', 'done')

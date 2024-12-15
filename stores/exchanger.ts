@@ -67,6 +67,7 @@ export const useExchangerStore = defineStore('exchanger', () => {
   const isStarsBuy = computed(() => selectedBuy.value?.key === 'stars')
 
   const isTonForSell = computed(() => ['not', 'ton'].includes(selectedSell.value?.key || ''))
+  const isTonForBuy = computed(() => ['not', 'ton'].includes(selectedBuy.value?.key || ''))
 
   const isCryptoForSell = computed(() => {
     return selectedSell.value?.key && Object.values(enabledCoins.value)?.map((i: Selected) => i.key).includes(selectedSell.value?.key)
@@ -81,9 +82,13 @@ export const useExchangerStore = defineStore('exchanger', () => {
     return selectedBuy.value?.key && Object.values(enabledValutes.value)?.map((i: Selected ) => i.key).includes(selectedBuy.value?.key)
   })
 
+  const isZeroAmountStarts = computed(() => {
+    return selectedSell.value?.key && ['btc', 'ton'].includes(selectedSell.value?.key)
+  })
+
   const isSelectedBothItem = computed(() => selectedBuy.value?.key && selectedSell.value?.key)
 
 
 
-  return { clearSelected, others,vats, pricesList, priceUsd, isTonForSell, isStarsBuy, exchangerSettings, time, valutes, coins, selectedSell, selectedBuy, enabledCoins, enabledValutes, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isValuteForBuy, isCryptoForBuy, valutesForSell, valutesForBuy, updateStatus, enabledOthers, isUSDTBuy}
+  return { clearSelected, others,vats, pricesList, priceUsd, isTonForBuy, isTonForSell, isStarsBuy, exchangerSettings, time, valutes, coins, selectedSell, selectedBuy, enabledCoins, enabledValutes, isUSDTSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isValuteForBuy, isCryptoForBuy, valutesForSell, valutesForBuy, updateStatus, enabledOthers, isUSDTBuy, isZeroAmountStarts}
 })
