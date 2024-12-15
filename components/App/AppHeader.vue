@@ -1,5 +1,5 @@
 <template>
-  <header class="mfz_wrapper__header">
+  <header class="mfz_wrapper__header" :style="styles">
     <div class="mfz_wrapper__header-wrapper">
       <img class="mfz_wrapper__header--logo logo" src="/assets/logo.png">
       <nav class="mfz_wrapper__header_navbar">
@@ -21,8 +21,13 @@
   </header>
 </template>
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useUserStore } from '~/stores/user'
+
+const {isUserFilled} = storeToRefs(useUserStore())
+const styles = computed(() => isUserFilled.value ? 'top: 60px' : 'top: 0')
 withDefaults(defineProps<{
-  showTest: boolean
+  showTest?: boolean
 }>(), {
   showTest: true
 })
@@ -30,12 +35,12 @@ withDefaults(defineProps<{
 <style lang="scss" scoped>
 .mfz_wrapper__header {
   position: absolute;
-  top: 0;
   left: 0;
   right: 0;
   display: flex;
   z-index: 2;
   background: transparent;
+  top: 100px;
 
   &-wrapper {
     display: flex;
