@@ -1,4 +1,4 @@
-import { child, get, getDatabase, query, equalTo, onValue, ref } from 'firebase/database'
+import { child, get, getDatabase, query, equalTo, onValue, ref, orderByChild } from 'firebase/database'
 import type { DatabaseReference } from '@firebase/database'
 
 export class Getter {
@@ -27,11 +27,18 @@ export class Getter {
     })
   }
 
+  static async getCountByValue (path: string, key: string, value: string) {
+    const { $databaseRef, $firebase } = useNuxtApp()
+    const request = query(child($databaseRef, path), orderByChild('status'), equalTo(value))
+
+    return get(request).then((snapshot) => snapshot.size)
+
+  }
+
   static async getByValue (path: string, value: string, key?: string) {
     const { $databaseRef, $firebase } = useNuxtApp()
-    console.log(getDatabase(), path, value, key)
 
-    const request = query(child($databaseRef, path), equalTo(value))
+    const request = query(child($databaseRef, path), equalTo(value, key))
 
     return get(request).then((snapshot) => {
       if (snapshot.exists()) {

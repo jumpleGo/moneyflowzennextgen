@@ -35,7 +35,8 @@ export const useExchangerStore = defineStore('exchanger', () => {
     notificationType: '',
     showOffer: false,
     isSiteEnable: true,
-    disableSiteReason: ''
+    disableSiteReason: '',
+    highloadImage: ''
   })
 
 

@@ -14,7 +14,7 @@ interface IDefaultYellowButton {
   type?: 'yellow' | 'black',
   to?: string,
   disabled?: boolean
-  size: 'xs' | 'md' | 'lg'
+  size?: 'xs' | 'md' | 'lg'
 }
 const props = withDefaults(defineProps<IDefaultYellowButton>(), {
   title: 'Открыть',

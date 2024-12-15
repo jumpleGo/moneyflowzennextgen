@@ -34,6 +34,7 @@ export type IExchangerSettings = {
   showOffer: boolean,
   isSiteEnable: boolean
   disableSiteReason: string
+  highloadImage: string
 
 }
 

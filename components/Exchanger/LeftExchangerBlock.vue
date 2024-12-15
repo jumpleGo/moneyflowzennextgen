@@ -9,7 +9,7 @@
                :key="index + 'coin--first'"
                :class="['exchanger__item', {active: selectedSell?.key && selectedSell?.key === coin.key}, {'--disabled': isCryptoForBuy}]"
                @click="selectSell('crypto', coin)">
-            <NuxtImg :src="coin.image"  preload="high" />
+            <NuxtImg :src="coin.image" :preload="{fetchPriority: 'high'}" width="25" height="25" />
             {{ coin.title }}
           </div>
         </div>
@@ -21,7 +21,7 @@
                :key="index + 'valute--first'" class="exchanger__item"
                :class="['exchanger__item', {active: selectedSell?.title && selectedSell.title === valute.title}, {'--disabled': isValuteForBuy}]"
                @click="selectSell('valute', valute)">
-            <NuxtImg :src="valute.image"  preload="high" />
+            <NuxtImg :src="valute.image"  :preload="{fetchPriority: 'high'}" width="25" height="25" />
             {{ valute.title }}
           </div>
         </div>
@@ -38,7 +38,7 @@
             class="exchanger__item"
             :class="['exchanger__item', {active: selectedBuy?.key && selectedBuy.key === valute.key}, {'--disabled': isValuteForSell}]"
             @click="selectBuy('valute', valute)">
-            <NuxtImg :src="valute.image"  preload="high"  />
+            <NuxtImg :src="valute.image"  :preload="{fetchPriority: 'high'}" width="25" height="25" />
             {{ valute.title }}
           </div>
         </div>
@@ -50,7 +50,7 @@
                :key="index + 'coin--first'"
                :class="['exchanger__item', {active: selectedBuy?.key && selectedBuy.key === coin.key}, {'--disabled': isCryptoForSell}]"
                @click="selectBuy('crypto', coin)">
-            <NuxtImg :src="coin.image"  preload="high" />
+            <NuxtImg :src="coin.image"  :preload="{fetchPriority: 'high'}" width="25" height="25" />
             {{ coin.title }}
           </div>
         </div>
@@ -62,7 +62,7 @@
                :key="index + 'coin--first'"
                :class="['exchanger__item', {active: selectedBuy?.key && selectedBuy.key === coin.key}, {'--disabled': !isTonForSell && !isValuteForSell}]"
                @click="selectBuy('others', coin)">
-            <NuxtImg :src="coin.image"  preload="high" loading="eager" decoding="sync" />
+            <NuxtImg :src="coin.image"  :preload="{fetchPriority: 'high'}" loading="eager" decoding="sync" />
             {{ coin.title }}
           </div>
         </div>
