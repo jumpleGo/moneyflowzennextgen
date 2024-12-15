@@ -56,6 +56,7 @@
             id="net"
             placeholder="сеть"
             :options="usdtNet" />
+         <span class="tip">(комиссия оплачивается вами)</span>
         </div>
       </div>
       <AppButton title="создать заявку" :disabled="!enabledButton" @click="validateForm" />
@@ -87,7 +88,6 @@ import AppBackButton from '~/components/App/AppBackButton.vue'
 import { Setter } from '~/helpers/setter'
 import type { IActiveTransaction } from '~/stores/exchangerTypes'
 import { storeToRefs } from 'pinia'
-import { useUserStore } from '~/stores/user'
 const mail = useMail()
 
 const emit = defineEmits<{
@@ -335,6 +335,11 @@ const sendForm = async () => {
       margin-bottom: 40px;
     }
   }
+}
+
+.tip {
+  font-size: 11px;
+  color: gray
 }
 
 </style>
