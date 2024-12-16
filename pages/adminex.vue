@@ -55,11 +55,10 @@ import dayjs from 'dayjs'
 import { Remover } from '~/helpers/remover'
 import TransactionCard from '~/components/adminex/TransactionCard.vue'
 import { rateApi } from '~/api'
-
-
-
+import { ref as dbRef } from '@firebase/database'
+import { onValue } from 'firebase/database'
 const {exchangerSettings} = storeToRefs(useExchangerStore())
-const { $databaseRef } = useNuxtApp()
+const { $databaseRef, $database } = useNuxtApp()
 
 const usdtRate = ref(0)
 
@@ -186,6 +185,12 @@ onMounted(() => {
       window.localStorage.removeItem('adminHash')
     }
   }
+
+  const request = dbRef($database, `transactions`)
+
+  onValue(request, (snapshot) => {
+    transactions.value = snapshot.val()
+  });
 
 })
 
