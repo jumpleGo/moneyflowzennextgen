@@ -9,12 +9,14 @@ export default defineNuxtPlugin((nuxtApp) => {
     const configFirebase: {databaseURL: string} = {databaseURL: config.public.databaseURL}
     const firebase = initializeApp(configFirebase);
     const databaseRef = dbRef(getDatabase(firebase));
+    const database = getDatabase(firebase)
 
 
     return {
       provide: {
         firebase,
-        databaseRef
+        databaseRef,
+        database
       }
     }
 })

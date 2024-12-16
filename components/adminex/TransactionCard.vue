@@ -6,10 +6,10 @@
         </h4>
         <img src="assets/icons/more.png" width="20px" height="20px"  @click="showPopup = true"/>
         <div v-if="showPopup" class="transaction__item_menu" v-click-outside="closePopup" >
-          <div class="transaction__item_menu_item" @click="emit('payed')">
+          <div class="transaction__item_menu_item" @click="emitAction('payed')">
             оплачено
           </div>
-          <div class="transaction__item_menu_item" @click="emit('remove')">
+          <div class="transaction__item_menu_item" @click="emitAction('remove')">
             удалить
           </div>
         </div>
@@ -57,7 +57,16 @@ const showPopup = ref(false)
 
 const closePopup = () => {
   showPopup.value = false
-  console.log('ere')
+}
+
+const emitAction = (status: 'payed' | 'remove') => {
+  showPopup.value = false
+  if (status === 'payed') {
+    emit('payed')
+  }
+  if (status === 'remove') {
+    emit('remove')
+  }
 }
 
 const getStatus = (status: Status) => {

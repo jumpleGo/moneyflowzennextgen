@@ -77,7 +77,7 @@
           </span>
         </div>
         <span>Ваши {{ activeTransaction.countBuy }} {{ activeTransaction.buy.toUpperCase() }} уже летят к Вам!</span>
-        <span>Вы можете оставиьт свой отзыв здесь! <nuxt-link target="_blank" to="https://t.me/mfz_exchanger">@mfz_exchanger</nuxt-link></span>
+        <span>Вы можете оставить свой отзыв здесь! <nuxt-link target="_blank" to="https://t.me/mfz_exchanger">@mfz_exchanger</nuxt-link></span>
         <AppButton title="начать сначала" @click="back" />
       </div>
     </div>
@@ -116,10 +116,13 @@ import AppButton from '~/components/Buttons/AppButton.vue'
 import { Setter } from '~/helpers/setter'
 import AppFrame from '~/components/App/AppFrame.vue'
 import { copy } from '~/helpers/copy'
+import { onValue, ref as dbRef } from 'firebase/database'
+const { $database } = useNuxtApp()
 const exchangerStore = useExchangerStore()
 const {activeTransaction, time, isUSDTSell, isTonForSell, isValuteForSell} = storeToRefs(exchangerStore)
 
 const timer = ref()
+const valueTransaction = ref(null)
 const isOkxPayment = shallowRef<boolean>(false)
 const uids = {
   okx: '268050657901203456',
@@ -134,6 +137,19 @@ onMounted(() => {
   if (activeTransaction.value?.status === 'created') {
     initializeClock()
   } else if (activeTransaction.value?.status === 'payed') {
+    window.localStorage.removeItem('transaction')
+  }
+
+  const request = dbRef($database, `transactions/${activeTransaction.value?.key}`)
+
+  onValue(request, (snapshot) => {
+    valueTransaction.value = snapshot.val()
+  });
+})
+
+watch(valueTransaction, (val) => {
+  if (val.status === 'payed') {
+    activeTransaction.value!.status = 'payed'
     window.localStorage.removeItem('transaction')
   }
 })
