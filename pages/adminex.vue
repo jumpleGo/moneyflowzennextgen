@@ -28,7 +28,7 @@
     <input class="adminex_wrapper__date_filter" v-model="pickedDate" type="date" />
     </div>
     <div class="transaction__list" v-if="showAdminPanel">
-     <TransactionCard v-for="transaction in transactionsByRules" :transaction="transaction" @remove="remove(transaction.id)" @payed="payed(transaction.id)" />
+     <TransactionCard v-for="transaction in transactionsByRules" :key="transaction.key" :transaction="transaction" @remove="remove(transaction.id)" @payed="payed(transaction.id)" />
     </div>
     <div class="admin__login" v-else>
       <AppInput v-model="inputAdminHash" label="хэш админа" placeholder="хэш админа" />
