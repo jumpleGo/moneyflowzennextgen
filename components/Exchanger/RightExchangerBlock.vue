@@ -269,12 +269,14 @@ const sendForm = async () => {
     time.value = currentTime
     activeTransaction.value = { ...payload, key: data.key }
 
-    mail.send({
-      config: 'main',
-      from: `Обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} на MFZ-Exchanger`,
-      subject: 'MFZ-Exchanger',
-      text: `Новый обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} от @${activeTransaction.value?.telegram} \n ${payload.sell.toUpperCase()} ${payload.countSell} → ${payload.buy.toUpperCase()} ${payload.countBuy} \n https://moneyflowzen.ru/adminex`
-    })
+    if (!process.dev) {
+      mail.send({
+        config: 'main',
+        from: `Обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} на MFZ-Exchanger`,
+        subject: 'MFZ-Exchanger',
+        text: `Новый обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} от @${activeTransaction.value?.telegram} \n ${payload.sell.toUpperCase()} ${payload.countSell} → ${payload.buy.toUpperCase()} ${payload.countBuy} \n https://moneyflowzen.ru/adminex`
+      })
+    }
     // if (isStarsBuy.value) {
     //   mail.send({
     //     config: 'managerStars',

@@ -1,5 +1,5 @@
 export type CryptoKeys = 'btc' | 'ton' | 'not' | 'usdt'
-export type ValuteKeys = 'ozon' | 'sber' | 'yandex' | 'tbank'
+export type ValuteKeys = 'ozon' | 'sber' | 'yandex' | 'tbank' | 'sbp'
 export type Others = 'stars'
 export type Selected = {
   title: string,

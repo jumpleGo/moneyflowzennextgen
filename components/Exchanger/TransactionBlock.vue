@@ -18,16 +18,18 @@
         </div>
         <div class="transaction__block-payment-action">
           <h3>Переведите {{ activeTransaction.countSell }} {{ isValuteForSell ? `RUB ${activeTransaction.sell.toUpperCase()}` : activeTransaction.sell.toUpperCase() }} {{ activeTransaction.sell === 'usdt' ? '(TON)' : '' }} по реквизитам:</h3>
-          <span>(копируется нажатием)</span>
           <span>комментарий к переводу указывать не нужно!</span>
+          <i v-if="isSBPSell" class="transaction__block-payment-action_sbp_tip">Перевод должен быть сделать только на банк OZON или Yandex. <br> В ином случае платеж обработан не будет.</i>
           <div class="transaction__block-payment-wrapper">
             <div v-if="isOkxPayment" class="transaction__block-payment-data">
               <span class="transaction__block-payment-data--address" @click="copy($event, uids['okx'])">OKX UID: {{ uids['okx']}}</span>
               <span class="transaction__block-payment-data--address" @click="copy($event, uids['bybit'])">BYBIT UID: {{ uids['bybit'] }}</span>
+              <span>(копируется нажатием)</span>
             </div>
             <div v-else class="transaction__block-payment-data">
               <span v-if="getPayment?.address" class="transaction__block-payment-data--address" @click="copy($event, getPayment.address)">{{ getPayment?.address }}</span>
               <span v-if="getPayment?.memo" @click="copy($event, getPayment.memo)">мемо: <span class="transaction__block-payment-data--memo">{{ getPayment.memo }}</span></span>
+              <span>(копируется нажатием)</span>
             </div>
 
             <div v-if="isTonForSell || isUSDTSell" class="transaction__block-button-okx">
@@ -119,7 +121,7 @@ import { copy } from '~/helpers/copy'
 import { onValue, ref as dbRef } from 'firebase/database'
 const { $database } = useNuxtApp()
 const exchangerStore = useExchangerStore()
-const {activeTransaction, time, isUSDTSell, isTonForSell, isValuteForSell} = storeToRefs(exchangerStore)
+const {activeTransaction, time, isUSDTSell, isTonForSell, isValuteForSell, isSBPSell} = storeToRefs(exchangerStore)
 
 const timer = ref()
 const valueTransaction = ref(null)
@@ -247,8 +249,25 @@ const back = () => {
   &-payment-action {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 16px;
     margin-top: 40px;
+
+    &_sbp_tip {
+      position: relative;
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 7px;
+        height: 7px;
+        left: -15px;
+        top: 5px;
+        border-radius: 50%;
+        background: $error;
+        box-shadow: 0 0 5px 1px $error;
+      }
+    }
 
     h3 {
       font-size: 18px;
@@ -265,7 +284,7 @@ const back = () => {
       }
     }
 
-    span {
+    span, i {
       font-size: 14px;
       @include mobile-xs {
         font-size: 12px;
@@ -284,17 +303,17 @@ const back = () => {
   background: white;
   padding: 20px;
   box-shadow: 0 0 5px 1px rgba(128, 128, 128, 0.42);
+  width: 100%;
   row-gap: 16px;
 }
   &-payment-data {
     display: flex;
     flex-direction: column;
-
     row-gap: 16px;
 
 
     &--address {
-      font-weight: 500;
+      font-weight: 600;
       font-size: 16px;
       word-break: break-all;
     }
