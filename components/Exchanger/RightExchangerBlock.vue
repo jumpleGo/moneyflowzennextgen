@@ -192,11 +192,6 @@ const prices =  computed<IPrices>(() => {
   }
 })
 
-const initialRubCount = computed(() => {
-  if (!selectedSell.value.key) return 1
-  return +model.count * prices.value[selectedSell.value.key]
-})
-
 const factor = ref<number>(0)
 
 const withVat = computed<IPrices>(() => ({
@@ -240,7 +235,7 @@ const validateForm = async () => {
 }
 const calculateFactor = () => {
   if (isValuteForSell.value) {
-    factor.value =  initialRubCount.value < 3000 ? vats.value?.VAT_PLUS_BIG : vats.value?.VAT_PLUS_SMALL
+    factor.value = model.count < 3000 ? vats.value?.VAT_PLUS_BIG : vats.value?.VAT_PLUS_SMALL
   } else {
     factor.value = calculateAmount.value < 3000 ? vats.value?.VAT_MINUS_BIG : vats?.value?.VAT_MINUS_SMALL
   }
