@@ -249,6 +249,7 @@ const sendForm = async () => {
     address: model.address,
     id: +new Date(),
     memo: model.memo,
+    factor: factor.value,
     net: model.net,
     telegram: model.telegram.startsWith('@') ? model.telegram.slice(1) : model.telegram,
     status: 'created'

@@ -6,19 +6,9 @@
       ({{ transactionsByRules?.length }})
       <AppButton size="xs" title="выход" @click="exit" type="black" class="adminex_wrapper__header-button" />
     </div>
-    <div v-if="currentAdmin?.privileges === 'all'" class="adminex_wrapper__total">
-      <div v-for="[key, value] in Object.entries(totalValue)">
-        <span class="adminex_wrapper__total-key">{{key}}</span>: <span class="adminex_wrapper__total-value">{{value.toFixed(3)}}</span>
-      </div>
-    </div>
 
-      <div>
-        USDT: {{ usdtRate.toFixed(3) }}
-      </div>
-      <div class="adminex_wrapper__site_enable">
-        <div>{{ exchangerSettings.isSiteEnable ? 'Выключить сайт' : 'Включить сайт' }}</div>
-        <AppSwitch v-model="isSiteEnable" />
-      </div>
+      <AppButton size="xs" title="открыть настройки" @click="showSettings = true" class="adminex_wrapper__settings_button" />
+      <AdminSettings v-if="showSettings" :transactions="transactions" @close="showSettings = false" />
 
     <AppRadioGroup>
       <div class="adminex_wrapper__filters">
@@ -34,15 +24,6 @@
       <AppInput v-model="inputAdminHash" label="хэш админа" placeholder="хэш админа" />
     </div>
   </div>
-  <AppPopup v-if="showReasonDisableModal">
-    <div class="adminex_wrapper__reason_modal">
-      <textarea rows="10" v-model="exchangerSettings.disableSiteReason" />
-      <div  class="adminex_wrapper__reason_modal_buttons">
-        <AppButton size="xs" type="black" title="отменить" @click="showReasonDisableModal = false" />
-        <AppButton size="xs" title="сохранить" @click="disableSite"  />
-      </div>
-    </div>
-  </AppPopup>
 </template>
 <script setup lang="ts">
 import { Getter } from '~/helpers/getter'
@@ -54,40 +35,19 @@ import dayjs from 'dayjs'
 
 import { Remover } from '~/helpers/remover'
 import TransactionCard from '~/components/adminex/TransactionCard.vue'
-import { rateApi } from '~/api'
 import { ref as dbRef } from '@firebase/database'
 import { onValue } from 'firebase/database'
+import AdminSettings from '~/components/adminex/AdminSettings.vue'
 const {exchangerSettings} = storeToRefs(useExchangerStore())
-const { $databaseRef, $database } = useNuxtApp()
+const { $database } = useNuxtApp()
 
-const usdtRate = ref(0)
 
-useAsyncData(async () => {
-    const { data: priceUsdRes } = await rateApi.getPriceByTickers()
-    usdtRate.value = priceUsdRes.data.RUB.value
-})
-
-const showReasonDisableModal  = shallowRef<boolean>(false)
 
 const inputAdminHash = ref('')
 const search = ref('')
+const showSettings = shallowRef(false)
 
 const pickedDate = ref(new Date('01/01/2022').toDateString())
-
-const isSiteEnable = computed({
-  get: () => exchangerSettings.value.isSiteEnable,
-  set: (value) => {
-    if (!value) {
-      showReasonDisableModal.value = true
-    } else {
-      exchangerSettings.value.isSiteEnable = value
-      const updates: Record<string, Object> = {}
-      updates[`exchangerSettings/isSiteEnable`] = value
-      Setter.updateToDb(updates)
-    }
-  }
-})
-
 
 const filters = [{
   value: 'all',
@@ -136,32 +96,9 @@ const sortedTransactions = computed(() =>
   &&  Object.values(transactions.value)
     ?.sort((a: IActiveTransaction, b: IActiveTransaction) => a.id > b.id ? -1 : 1 )
     .filter(item => selectedFilter.value.value === 'all' ? item : item.status === selectedFilter.value.value)
-    .filter(item => String(item.id).includes(search.value))
+    .filter(item => String(item.id).includes(search.value) || String(item.telegram).includes(search.value))
     .filter(item => dayjs(item.id).isAfter(dayjs(pickedDate.value))))
 
-
-const totalValue = computed(() => {
-  return Object.values(transactions.value)
-    .filter(item => item.status === 'payed')
-    .reduce((acc, item) => {
-      const rate = item.countSell < 3000 ? 1 / 10 : 6 / 100;
-
-      // Условие для stars
-      if (item.buy === 'stars') {
-        acc[item.sell] = (acc[item.sell] || 0) + item.countSell / 10;
-      }
-      // Условие для sber и tbank
-      else if (['sber', 'tbank'].includes(item.sell)) {
-        acc[item.sell] = (acc[item.sell] || 0) + item.countSell * rate;
-      }
-      // Условие для остальных
-      else {
-        acc[item.sell] = (acc[item.sell] || 0) + item.countSell * rate;
-      }
-
-      return acc;
-    }, {});
-})
 
 watch(inputAdminHash, async () => {
   if (showAdminPanel.value && currentAdmin.value) {
@@ -217,16 +154,6 @@ const remove = (id: number) => {
   }
 }
 
-const disableSite = () => {
-  exchangerSettings.value.isSiteEnable = false
-  const updates: Record<string, Object> = {}
-  updates[`exchangerSettings/isSiteEnable`] = false
-  updates[`exchangerSettings/disableSiteReason`] = exchangerSettings.value.disableSiteReason
-  Setter.updateToDb(updates)
-
-  showReasonDisableModal.value = false
-}
-
 
 const exit = () => {
   window.localStorage.removeItem('adminHash')
@@ -242,28 +169,11 @@ const exit = () => {
   flex-direction: column;
   gap: 20px;
 
-  &__site_enable {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+  &__settings_button {
+    width: fit-content;
   }
 
-  &__reason_modal {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    background: white;
-    padding: 30px;
-    position: relative;
-    min-width: 300px;
 
-  }
-
-  &__reason_modal_buttons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
 
   &__header_wrapper {
     display: flex;
@@ -271,19 +181,7 @@ const exit = () => {
     gap: 16px
   }
 
-  &__total {
-    display: flex;
-    gap: 1rem;
-    max-width: 90vw;
-    overflow: scroll;
-    &::-webkit-scrollbar {
-      display: none;
-    }
 
-    &-value {
-      color: green
-    }
-  }
 
   &__header {
     display: flex;
@@ -321,25 +219,4 @@ const exit = () => {
   gap: 20px; /* Отступы между карточками */
   width: 100%; /* Растягивание на всю ширину */
 }
-
-
-.analytics-info {
-  display: flex;
-  align-items: center;
-
-  &:hover {
-    cursor: pointer;
-  }
-
-  h3 {
-    font-size: 22px;
-    margin-right: 15px;
-  }
-
-  img {
-    width: 30px;
-    height: auto;
-  }
-}
-
 </style>

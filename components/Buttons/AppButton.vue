@@ -5,7 +5,6 @@
 </template>
 <script lang="ts" setup>
 import {computed} from "vue";
-import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 
 interface IDefaultYellowButton {
   title: string,

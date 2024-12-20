@@ -19,12 +19,18 @@ export type IActiveTransaction = {
   address: string,
   memo: string,
   net: string,
+  factor: number,
   telegram: string,
   status: Status
 }
 
 export interface IAdmin {key: string, privileges: string}
 
+export interface INotificationObject {
+  message?: string,
+  image?: string,
+  title?: string,
+}
 export type IExchangerSettings = {
   adminHashes: IAdmin[],
   maxLimit: number,
@@ -33,7 +39,9 @@ export type IExchangerSettings = {
   notificationType: string,
   showOffer: boolean,
   isSiteEnable: boolean
+  isNotificationEnable: boolean
   disableSiteReason: string
+  notificationObject: INotificationObject
   highloadImage: string
 
 }
