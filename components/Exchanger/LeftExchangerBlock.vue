@@ -4,8 +4,8 @@
       <p class="exchanger__title">отправляете:</p>
       <div class="exchanger__items">
         <p class="exchanger__subtitle">криптовалюта</p>
-        <div v-if="enabledCoins.length"  class="exchanger__items--list">
-          <div v-for="(coin, index) in enabledCoins"
+        <div v-if="coinsForSell.length"  class="exchanger__items--list">
+          <div v-for="(coin, index) in coinsForSell"
                :key="index + 'coin--first'"
                :class="['exchanger__item', {active: selectedSell?.key && selectedSell?.key === coin.key}, {'--disabled': isCryptoForBuy}]"
                @click="selectSell('crypto', coin)">
@@ -45,8 +45,8 @@
       </div>
       <div class="exchanger__items">
         <p class="exchanger__subtitle">криптовалюта</p>
-        <div v-if="enabledCoins.length" class="exchanger__items--list">
-          <div v-for="(coin, index) in enabledCoins"
+        <div v-if="coinsForBuy.length" class="exchanger__items--list">
+          <div v-for="(coin, index) in coinsForBuy"
                :key="index + 'coin--first'"
                :class="['exchanger__item', {active: selectedBuy?.key && selectedBuy.key === coin.key}, {'--disabled': isCryptoForSell}]"
                @click="selectBuy('crypto', coin)">
@@ -79,7 +79,7 @@ import type { Selected } from '~/stores/exchangerTypes'
 
 const { $databaseRef } = useNuxtApp()
 const {
-  coins, valutes, valutesForSell, valutesForBuy, selectedBuy, selectedSell, enabledCoins, enabledValutes, enabledOthers, isValuteForSell, isCryptoForSell, isCryptoForBuy, isValuteForBuy, others, isTonForSell} = storeToRefs(useExchangerStore())
+  coins, valutes, valutesForSell, valutesForBuy, coinsForSell, coinsForBuy, selectedBuy, selectedSell, enabledCoins, enabledValutes, enabledOthers, isValuteForSell, isCryptoForSell, isCryptoForBuy, isValuteForBuy, others, isTonForSell} = storeToRefs(useExchangerStore())
 
 
 

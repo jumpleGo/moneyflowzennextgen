@@ -61,6 +61,13 @@ export const useExchangerStore = defineStore('exchanger', () => {
     return enabledValutes.value?.filter(item => item.options?.includes('buy')) || []
   })
 
+  const coinsForSell = computed<Selected[]>(() => {
+    return enabledCoins.value?.filter(item => item.options?.includes('sell')) || []
+  })
+  const coinsForBuy = computed<Selected[]>(() => {
+    return enabledCoins.value?.filter(item => item.options?.includes('buy')) || []
+  })
+
 
 
 
@@ -120,6 +127,8 @@ export const useExchangerStore = defineStore('exchanger', () => {
     isCryptoForBuy,
     valutesForSell,
     valutesForBuy,
+    coinsForSell,
+    coinsForBuy,
     updateStatus,
     enabledOthers,
     isUSDTBuy,
