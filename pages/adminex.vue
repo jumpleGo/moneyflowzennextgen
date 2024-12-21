@@ -7,8 +7,8 @@
       <AppButton size="xs" title="выход" @click="exit" type="black" class="adminex_wrapper__header-button" />
     </div>
 
-      <AppButton size="xs" title="открыть настройки" @click="showSettings = true" class="adminex_wrapper__settings_button" />
-      <AdminSettings v-if="showSettings" :transactions="transactions" @close="showSettings = false" />
+    <AppButton size="xs" title="открыть настройки" @click="showSettings = true" class="adminex_wrapper__settings_button" />
+    <AdminSettings v-if="showSettings" :transactions="transactions" @close="showSettings = false" />
 
     <AppRadioGroup>
       <div class="adminex_wrapper__filters">

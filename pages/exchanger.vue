@@ -1,12 +1,15 @@
 <template>
   <div class="exchanger__wrapper">
-    <ErrorNotification v-if="showError && !loading" />
-    <HighLoadNotification v-if="showHightLoad && !loading" :image="exchangerSettings.highloadImage" />
-    <DisablePage v-if="!exchangerSettings.isSiteEnable && !loading" :reason="exchangerSettings.disableSiteReason"  />
+   <ClientOnly>
+     <ErrorNotification v-if="showError && !loading" />
+     <HighLoadNotification v-if="showHightLoad && !loading" :image="exchangerSettings.highloadImage" />
+     <MessageNotification v-if="showNotification && !loading" :notification="exchangerSettings.notificationObject" @close="showNotification = false" />
+     <DisablePage v-if="!exchangerSettings.isSiteEnable && !loading" :reason="exchangerSettings.disableSiteReason"  />
+   </ClientOnly>
     <AppLoader v-if="loading" />
     <NotificationBlock class="exchanger__notification-block" v-if="!showError && !loading && exchangerSettings?.notificationType && !isLoadingResize && showLeftBlock" :notify-type="exchangerSettings.notificationType" />
 
-    <div v-if="!showError && !loading && !showHightLoad && exchangerSettings.isSiteEnable " class="exchanger">
+    <div v-if="!showError && !loading && !showHightLoad && exchangerSettings.isSiteEnable" class="exchanger">
       <div v-if="!isLoadingResize" class="exchanger__content">
         <img v-if="exchangerSettings.showOffer" class="exchanger__content--icon" src="/assets/icons/airdrop.png" @click="showModal = true" />
         <LeftExchangerBlock v-if="showLeftBlock" :class="['exchanger__left', {'--disabled-block': activeTransaction}]"  />
@@ -49,9 +52,12 @@ import { storeToRefs } from 'pinia'
 import { useMainStore } from '~/stores/main'
 import { Getter } from '~/helpers/getter'
 import { binance, rateApi } from '~/api'
-import ErrorNotification from '~/components/Exchanger/ErrorNotification.vue'
-import DisablePage from '~/components/Exchanger/DisablePage.vue'
-import HighLoadNotification from '~/components/Exchanger/HighLoadNotification.vue'
+
+const HighLoadNotification = defineAsyncComponent(() => import('~/components/Exchanger/HighLoadNotification.vue'));
+const ErrorNotification = defineAsyncComponent(() => import('~/components/Exchanger/ErrorNotification.vue'));
+const DisablePage = defineAsyncComponent(() => import('~/components/Exchanger/DisablePage.vue'))
+const MessageNotification = defineAsyncComponent(() => import('~/components/Exchanger/MessageNotification.vue'))
+
 
 const { activeTransaction, isSelectedBothItem, exchangerSettings, vats, pricesList, priceUsd } = storeToRefs(useExchangerStore())
 const hideRightBlock = shallowRef(true)
@@ -63,6 +69,7 @@ definePageMeta({
 
 const loading = shallowRef(false)
 const showError = shallowRef(false)
+const showNotification = shallowRef(false)
 const showHightLoad = shallowRef(false)
 
 
@@ -105,6 +112,8 @@ const { refresh, status} = await useAsyncData(async () => {
   } catch (err) {
     console.log(err)
   }
+
+  if (exchangerSettings.value.isNotificationEnable) showNotification.value = true
 
   loading.value = false
 })

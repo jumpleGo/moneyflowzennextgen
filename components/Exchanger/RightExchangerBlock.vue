@@ -143,15 +143,15 @@ const countValidate = computed(() => model.count > 0 ? isCountValid.value : true
 const isCountValid = computed(() => {
   if (isStarsBuy.value) {
     if (isTonForSell.value) {
-      return (model.count * prices.value[selectedSell.value.key]) > exchangerSettings.value?.minLimit && (model.count * prices.value[selectedSell.value.key]) < exchangerSettings.value?.maxLimit
+      return (model.count * prices.value[selectedSell.value.key]) >= exchangerSettings.value?.minLimit && (model.count * prices.value[selectedSell.value.key]) <= exchangerSettings.value?.maxLimit
     } else if (isValuteForSell.value) {
-      return model.count  > exchangerSettings.value?.minLimit && model.count < exchangerSettings.value?.maxLimit
+      return model.count  >= exchangerSettings.value?.minLimit && model.count <= exchangerSettings.value?.maxLimit
     }
   }
   else if (isCryptoForSell.value) {
-    return rubTransferValue.value > exchangerSettings.value?.minLimit && rubTransferValue.value < exchangerSettings.value?.maxLimit
+    return rubTransferValue.value >= exchangerSettings.value?.minLimit && rubTransferValue.value <= exchangerSettings.value?.maxLimit
   } else if (isValuteForSell.value) {
-   return model.count  > exchangerSettings.value?.minLimit && model.count < exchangerSettings.value?.maxLimit
+   return model.count  >= exchangerSettings.value?.minLimit && model.count <= exchangerSettings.value?.maxLimit
   }
 })
 
