@@ -224,7 +224,7 @@ const calculateAmount: ComputedRef<number> = computed(() => {
 const placeholderAddress = computed(() => selectedBuy.value?.type === 'crypto' ? 'Адрес кошелька' : 'Телефон или номер карты')
 
 const additionalText  = computed<string>(() => `Вы получите: ${new Intl.NumberFormat('ru-RU').format(calculateAmount.value)} ${calculateItem.value}`)
-watch(() => model.count, () => calculateFactor())
+watch(() => [model.count, selectedSell.value, selectedBuy.value], () => calculateFactor())
 onMounted(() => calculateFactor())
 
 const validateForm = async () => {
