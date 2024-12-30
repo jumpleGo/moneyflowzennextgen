@@ -15,10 +15,10 @@
             v-model="v$.count.$model"
             id="sum"
             :maska-options="maskaOptions"
-            :error="!countValidate"
+            :error="v$.count.$dirty && !countValidate"
             placeholder="Сумма обмена"
             :label="sumLabel">
-            <template v-if="!countValidate" #error>{{ (!countValidate && translates.limit(exchangerSettings)) }}</template>
+            <template v-if="v$.count.$dirty && !countValidate" #error>{{ (!countValidate && translates.limit(exchangerSettings)) }}</template>
             <span v-if="selectedBuy?.key && selectedSell?.key"> {{ additionalText }}</span>
           </AppInput>
           <AppInput
@@ -72,127 +72,75 @@
 <script setup lang="ts">
 import AppButton from '~/components/Buttons/AppButton.vue'
 import AppInput from '~/components/App/AppInput.vue'
-import { computed, type ComputedRef } from 'vue'
-import type { IPrices, IVats } from '~/types/pages/exchangerTypes'
-import { decimal, minLength, required } from '@vuelidate/validators'
-import { useVuelidate } from '@vuelidate/core'
+import { computed, type ComputedRef, reactive } from 'vue'
+import type { IPrices } from '~/types/pages/exchangerTypes'
 import { translates } from '../../helpers/i18n'
-import type { IOption } from '~/components/App/types'
 import {
-  countMaskaOptionsNotStartsFromZero,
-  countMaskaOptionsStartsFromZero, memoMaskaOptions,
+  memoMaskaOptions,
   usdtNet
 } from '~/components/Exchanger/consts'
 
 import AppBackButton from '~/components/App/AppBackButton.vue'
 import { Setter } from '~/helpers/setter'
-import type { IActiveTransaction } from '~/stores/exchangerTypes'
+import type { CryptoKeys, IActiveTransaction } from '~/stores/exchangerTypes'
 import { storeToRefs } from 'pinia'
-const mail = useMail()
+import { useFactor } from '~/composables/exchanger/useFactor'
+import { useExchangerSettings } from '~/composables/exchanger/useExchanger'
+import type { IModel } from '~/components/Exchanger/types'
+import { useValidationByRules } from '~/composables/exchanger/useValidationByRules'
+import { calculateExpirationTime } from '~/components/Exchanger/helpers/exchanger'
+import { sendNotification } from '~/components/Exchanger/helpers/notificationSender'
+
 
 const emit = defineEmits<{
   (e: 'back'): void
 }>()
 
-const {exchangerSettings, vats, priceUsd, isTonForBuy, pricesList, time, selectedBuy, selectedSell, isStarsBuy, isTonForSell, isCryptoForSell, isValuteForSell, isSelectedBothItem, activeTransaction, isUSDTBuy, isZeroAmountStarts} = storeToRefs(useExchangerStore())
+const {exchangerSettings, priceUsd, isTonForBuy, pricesList, time, selectedBuy, selectedSell, isStarsBuy, isTonForSell, isCryptoForSell, isSelectedBothItem, activeTransaction} = storeToRefs(useExchangerStore())
 
-
-const model = reactive({
+const model = reactive<IModel>({
   memo: '',
   net: '',
-  count: 0,
+  count: 1,
   telegram: '',
-  address: ''
-})
+  address: '',
+});
 
-const maskaOptions = computed(() => {
-  return isZeroAmountStarts.value ? countMaskaOptionsStartsFromZero : countMaskaOptionsNotStartsFromZero
-})
+const {
+  maskaOptions,
+  netModel,
+  placeholderAddress,
+  calculateItem,
+  isMemoShow,
+  isNetShow,
+  sumLabel,
+  prices
+} = useExchangerSettings(model)
 
-const netModel = computed({
-  get: () => usdtNet.find(item => item.key === model.net) || {name: '', key: ''},
-  set: (item: IOption) => model.net = item.key
-})
+const {v$} = useValidationByRules(model)
 
-const rubTransferValue = computed<number>(() => isCryptoForSell.value ? calculateAmount.value : model.count)
-const rules = computed(() => {
-  const ruleOptions = {
-    memo: {minLength: minLength(6), decimal },
-    count: { required, decimal },
-    telegram: { required,  minLength: minLength(3)  },
-  }
-
-  if (!isStarsBuy.value) {
-    ruleOptions.address ={ minLength: minLength(11), required }
-  }
-
-  if (isUSDTBuy.value) {
-    ruleOptions.net = { required }
-  }
-
-  return ruleOptions
-})
-
-const v$ = useVuelidate(
-  rules,
-  model,
-)
-
-const countValidate = computed(() => model.count > 0 ? isCountValid.value : true )
-
-const isCountValid = computed(() => {
-  if (isStarsBuy.value) {
-    if (isTonForSell.value) {
-      return (model.count * prices.value[selectedSell.value.key]) >= exchangerSettings.value?.minLimit && (model.count * prices.value[selectedSell.value.key]) <= exchangerSettings.value?.maxLimit
-    } else if (isValuteForSell.value) {
-      return model.count  >= exchangerSettings.value?.minLimit && model.count <= exchangerSettings.value?.maxLimit
-    }
-  }
-  else if (isCryptoForSell.value) {
-    return rubTransferValue.value >= exchangerSettings.value?.minLimit && rubTransferValue.value <= exchangerSettings.value?.maxLimit
-  } else if (isValuteForSell.value) {
-   return model.count  >= exchangerSettings.value?.minLimit && model.count <= exchangerSettings.value?.maxLimit
-  }
-})
+const {factor, calculateFactor} = useFactor(model)
 
 
 const enabledButton = computed(() => !v$.value.$errors.length && isCountValid.value && model.telegram)
 
-const calculateItem = computed(() => {
-  return selectedBuy.value?.type === 'valute' ? 'RUB' : selectedBuy.value?.key?.toUpperCase()
-})
+const isCountValid = computed(() => {
+  const cryptoPrice = prices.value[(selectedSell.value.key as CryptoKeys)]
+  const { minLimit = 0, maxLimit = 999 } = exchangerSettings.value
 
-const isMemoShow = computed(() => {
-  if (!selectedBuy.value?.key) return false
-  return ['ton', 'not'].includes(selectedBuy.value?.key)
-})
-const isNetShow = computed(() => {
-  if (!selectedBuy.value?.key) return false
-  return selectedBuy.value?.key === 'usdt'
-})
-
-const sumLabel = computed(() => {
-  if (isCryptoForSell.value || isValuteForSell.value) {
-    return isCryptoForSell.value ? `Сумма (${selectedSell.value.key?.toUpperCase()})` : `Сумма (RUB)`
+  if (isStarsBuy.value && isTonForSell.value) {
+    const tonCount = model.count * cryptoPrice
+    return tonCount >= minLimit && tonCount <= maxLimit
   }
 
-  return 'Сумма'
+  const valueToCheck = isCryptoForSell.value
+    ? calculateAmount.value
+    : model.count;
+
+  return valueToCheck >= minLimit && valueToCheck <= maxLimit;
 })
 
-const prices =  computed<IPrices>(() => {
-  const usdt = priceUsd.value || 0
-  const btc = (pricesList.value.find(item => item.symbol === 'BTCUSDT')?.price || 0) * usdt
-  const ton = (pricesList.value.find(item => item.symbol === 'TONUSDT')?.price || 0) * usdt
-  const not = (pricesList.value.find(item => item.symbol === 'NOTUSDT')?.price || 0) * usdt
-  return {
-    not,
-    ton,
-    usdt,
-    btc,
-  }
-})
-
-const factor = ref<number>(0)
+const countValidate = computed(() => model.count > 0 && isCountValid.value);
 
 const withVat = computed<IPrices>(() => ({
   ton: prices.value.ton*factor.value,
@@ -201,31 +149,35 @@ const withVat = computed<IPrices>(() => ({
   btc: prices.value.btc*factor.value,
 }))
 
-
 const calculateAmount: ComputedRef<number> = computed(() => {
   if (!prices.value?.usdt) return 0
+  const starsRate = exchangerSettings.value?.starsRate || 0.65;
+
   if (isStarsBuy.value) {
-    if (isTonForSell.value) {
-      return (+model.count * (pricesList.value.find(item => item.symbol === `${selectedSell.value.key?.toUpperCase()}USDT`)?.price || 0) / exchangerSettings.value.starsRate).toFixed(0)
-    } else if (isValuteForSell.value) {
-      return Math.floor((+model.count / priceUsd.value / exchangerSettings.value.starsRate))
-    }
-  } else if (isCryptoForSell.value) {
-    if (!selectedSell.value?.key) return 0
-    return +(+model.count * withVat.value[selectedSell.value?.key]).toFixed(2)
-  } else if (isValuteForSell.value) {
-    if (!selectedBuy.value?.key) return 0
-    return +(+model.count / withVat.value[selectedBuy.value?.key]).toFixed(selectedBuy.value.key === 'btc' ? 6 : 2)
+    const symbolPrice = pricesList.value.find(
+      (item) => item.symbol === `${selectedSell.value?.key?.toUpperCase()}USDT`
+    )?.price || 0;
+
+    return isTonForSell.value
+      ? +(model.count * symbolPrice / starsRate).toFixed(0)
+      : Math.floor(model.count / priceUsd.value / starsRate);
   }
+
+  if (!selectedSell.value?.key || !selectedBuy.value?.key) return 0;
+
+  const keyForVat: CryptoKeys = isCryptoForSell.value ? (selectedSell.value?.key as CryptoKeys) : (selectedBuy.value?.key as CryptoKeys)
+  const vatValue = withVat.value[keyForVat] || 1;
+
+  return isCryptoForSell.value
+    ? +(model.count * vatValue).toFixed(2)
+    : +(model.count / vatValue).toFixed(selectedBuy.value?.key === 'btc' ? 6 : 2);
 })
 
 
-
-const placeholderAddress = computed(() => selectedBuy.value?.type === 'crypto' ? 'Адрес кошелька' : 'Телефон или номер карты')
-
 const additionalText  = computed<string>(() => `Вы получите: ${new Intl.NumberFormat('ru-RU').format(calculateAmount.value)} ${calculateItem.value}`)
-watch(() => [model.count, selectedSell.value, selectedBuy.value], () => calculateFactor())
-onMounted(() => calculateFactor())
+
+watch(() => [model.count, selectedSell.value, selectedBuy.value], () => calculateFactor(calculateAmount.value))
+onMounted(() => calculateFactor(calculateAmount.value))
 
 const validateForm = async () => {
   const isValid = await v$.value.$validate()
@@ -233,111 +185,49 @@ const validateForm = async () => {
     await sendForm()
   }
 }
-const calculateFactor = () => {
-  if (isValuteForSell.value) {
-    factor.value = model.count < 3000 ? vats.value?.VAT_PLUS_BIG : vats.value?.VAT_PLUS_SMALL
-  } else {
-    factor.value = calculateAmount.value < 3000 ? vats.value?.VAT_MINUS_BIG : vats?.value?.VAT_MINUS_SMALL
-  }
-}
+
 const sendForm = async () => {
-  const payload: IActiveTransaction = {
-    sell: selectedSell.value?.key,
-    buy: selectedBuy.value?.key,
-    countSell: model.count,
-    countBuy: calculateAmount.value,
-    address: model.address,
-    id: +new Date(),
-    memo: model.memo,
-    factor: factor.value,
-    net: model.net,
-    telegram: model.telegram.startsWith('@') ? model.telegram.slice(1) : model.telegram,
-    status: 'created'
+  const payload = createPayload();
+  const expirationTime = calculateExpirationTime();
+
+  try {
+    await Setter.pushToDb('transactions', payload).then((data) => {
+      handleTransactionSuccess(data, payload, expirationTime);
+    })
+    if (!process.dev) sendNotification(payload);
+  } catch (err) {
+    console.error('Ошибка при отправке формы:', err);
   }
+};
 
-  const currentTime = new Date()
-  currentTime.setMinutes(currentTime.getMinutes() + 15)
+const createPayload = (): IActiveTransaction => ({
+  sell: selectedSell.value?.key,
+  buy: selectedBuy.value?.key,
+  countSell: model.count,
+  countBuy: calculateAmount.value,
+  address: model.address,
+  id: +new Date(),
+  memo: model.memo,
+  factor: factor.value,
+  net: model.net,
+  telegram: model.telegram.startsWith('@') ? model.telegram.slice(1) : model.telegram,
+  status: 'created',
+});
 
-  await Setter.pushToDb('transactions', payload).then((data) => {
-    window.localStorage.setItem('transaction', JSON.stringify({ ...payload, key: data.key }))
-    window.localStorage.setItem('expTime', currentTime.toString())
+const handleTransactionSuccess = (
+  data: Record<string, any>,
+  payload: IActiveTransaction,
+  expirationTime: Date
+) => {
+  const transactionData = { ...payload, key: data.key };
 
-    time.value = currentTime
-    activeTransaction.value = { ...payload, key: data.key }
+  window.localStorage.setItem('transaction', JSON.stringify(transactionData));
+  window.localStorage.setItem('expTime', expirationTime.toString());
 
-    if (!process.dev) {
-      mail.send({
-        config: 'main',
-        from: `Обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} на MFZ-Exchanger`,
-        subject: 'MFZ-Exchanger',
-        text: `Новый обмен ${isStarsBuy.value ? 'ЗВЕЗД' : ''} от @${activeTransaction.value?.telegram} \n ${payload.sell.toUpperCase()} ${payload.countSell} → ${payload.buy.toUpperCase()} ${payload.countBuy} \n https://moneyflowzen.ru/adminex`
-      })
-    }
-    // if (isStarsBuy.value) {
-    //   mail.send({
-    //     config: 'managerStars',
-    //     from: `Обмен ЗВЕЗД на MFZ-Exchanger`,
-    //     subject: 'MFZ-Exchanger',
-    //     text: `Новый обмен ЗВЕЗД от @${activeTransaction.value?.telegram}, на ${payload.countBuy} STARS`
-    //   })
-    // }
-  }).catch((err) => {
-    console.log('err')
-  })
-}
-
+  time.value = expirationTime;
+  activeTransaction.value = transactionData;
+};
 </script>
 <style lang="scss" scoped>
-.exchanger__content--title {
-  div {
-    flex-wrap: nowrap;
-  }
-}
-.exchanger__inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 10px
-}
-.exchanger__right__content-back {
-  top: 47px;
-  left: 20px;
-}
-.exchanger__right__content-wrapper {
-  padding: 0 40px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  @include mobile-all {
-    padding: 0 20px;
-  }
-}
-
-.exchanger__right {
-  &__banner {
-    width: fit-content;
-    margin-top: 20px;
-    &_img {
-      border-radius: 10px;
-      width: 100%
-    }
-  }
-  &__content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-
-    &--header {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 40px;
-    }
-  }
-}
-
-.tip {
-  font-size: 11px;
-  color: gray
-}
-
+@import '../../style/exchanger/rightExchangerBlock.scss';
 </style>

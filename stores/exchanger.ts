@@ -74,6 +74,7 @@ export const useExchangerStore = defineStore('exchanger', () => {
   const isUSDTSell = computed(() => selectedSell.value.key === 'usdt')
   const isSBPSell = computed(() => selectedSell.value.key === 'sbp')
   const isUSDTBuy = computed(() => selectedBuy.value.key === 'usdt')
+  const isBTCBuy = computed(() => selectedBuy.value.key === 'btc')
   const isStarsBuy = computed(() => selectedBuy.value?.key === 'stars')
 
   const isTonForSell = computed(() => ['not', 'ton'].includes(selectedSell.value?.key || ''))
@@ -132,6 +133,7 @@ export const useExchangerStore = defineStore('exchanger', () => {
     updateStatus,
     enabledOthers,
     isUSDTBuy,
+    isBTCBuy,
     isZeroAmountStarts
   }
 })
