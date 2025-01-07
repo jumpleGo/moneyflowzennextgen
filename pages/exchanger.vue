@@ -77,7 +77,7 @@ const { refresh, status} = await useAsyncData(async () => {
   loading.value = true
   try {
     exchangerSettings.value = await Getter.getFromDB('exchangerSettings/')
-    vats.value = await Getter.getFromDB('vats/')
+    vats.value = await Getter.getFromDB('vatsByTokens/')
   } catch {
     return
   }

@@ -1,8 +1,8 @@
 import type { IActiveTransaction } from '~/stores/exchangerTypes'
 import { storeToRefs } from 'pinia'
-const mail = useMail()
 
 export const sendNotification = (payload: IActiveTransaction) => {
+  const mail = useMail()
   const {isStarsBuy} = storeToRefs(useExchangerStore())
 
   const transactionType = isStarsBuy.value ? 'ЗВЕЗД' : '';

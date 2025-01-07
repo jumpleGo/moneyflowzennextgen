@@ -76,12 +76,8 @@ import { useExchangerStore } from '~/stores/exchanger'
 import { Getter } from '~/helpers/getter'
 import { watch } from 'vue'
 import type { Selected } from '~/stores/exchangerTypes'
-
-const { $databaseRef } = useNuxtApp()
 const {
-  coins, valutes, valutesForSell, valutesForBuy, coinsForSell, coinsForBuy, selectedBuy, selectedSell, enabledCoins, enabledValutes, enabledOthers, isValuteForSell, isCryptoForSell, isCryptoForBuy, isValuteForBuy, others, isTonForSell} = storeToRefs(useExchangerStore())
-
-
+  coins, valutes, valutesForSell, valutesForBuy, coinsForSell, coinsForBuy, selectedBuy, selectedSell, enabledOthers, isValuteForSell, isCryptoForSell, isCryptoForBuy, isValuteForBuy, others, isTonForSell} = storeToRefs(useExchangerStore())
 
 const {data} = useAsyncData(async () => {
   const {COINS, VALUTE, OTHERS} =  await Getter.getFromDB('exchangePairs/')

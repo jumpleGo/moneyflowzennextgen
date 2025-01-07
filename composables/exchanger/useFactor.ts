@@ -2,15 +2,20 @@ import { storeToRefs } from 'pinia'
 import type { IModel } from '~/components/Exchanger/types'
 
 export const useFactor = (model: IModel) => {
-  const { vats, isValuteForSell} = storeToRefs(useExchangerStore())
-
+  const { vats, isValuteForSell, selectedSell, selectedBuy} = storeToRefs(useExchangerStore())
+  const defaultValue = {
+    VAT_BIG: 1,
+    VAT_SMALL: 1
+  }
   const factor = ref<number>(1)
 
   const calculateFactor = (calculateAmount: number) => {
     if (isValuteForSell.value) {
-      factor.value = +model.count < 3000 ? vats.value?.VAT_PLUS_BIG : vats.value?.VAT_PLUS_SMALL
+      const {VAT_BIG = 1, VAT_SMALL = 1} = vats.value?.[selectedBuy.value?.key] || defaultValue
+      factor.value = 1 + (+model.count < 3000 ? VAT_BIG/100 : VAT_SMALL/100)
     } else {
-      factor.value = calculateAmount < 3000 ? vats.value?.VAT_MINUS_BIG : vats?.value?.VAT_MINUS_SMALL
+      const {VAT_BIG, VAT_SMALL } = vats.value?.[selectedSell.value?.key] || defaultValue
+      factor.value = 1 - (calculateAmount < 3000 ? VAT_BIG/100 : VAT_SMALL/100)
     }
   }
   return {

@@ -39,6 +39,14 @@
             :label="placeholderAddress">
             <template v-if="v$.address.$error" #error><span>{{ v$.address.$error && translates.address }}</span></template>
           </AppInput>
+         <AppSelector
+           v-if="isNetShow"
+           v-model="netModel"
+           :error="v$.net.$error"
+           id="net"
+           placeholder="сеть"
+           :options="usdtNet" />
+         <span v-if="isNetShow" class="tip">(комиссия оплачивается вами)</span>
           <AppInput
             v-if="isMemoShow"
             v-model="v$.memo.$model"
@@ -49,14 +57,6 @@
             label="memo (необязательно)">
             <template v-if="v$.memo.$error" #error>{{ v$.memo.$error && translates.memo }}</template>
           </AppInput>
-          <AppSelector
-            v-if="isNetShow"
-            v-model="netModel"
-            :error="v$.net.$error"
-            id="net"
-            placeholder="сеть"
-            :options="usdtNet" />
-         <span v-if="isNetShow" class="tip">(комиссия оплачивается вами)</span>
         </div>
       </div>
       <AppButton title="создать заявку" :disabled="!enabledButton" @click="validateForm" />
@@ -146,7 +146,6 @@ const withVat = computed<IPrices>(() => ({
   ton: prices.value.ton*factor.value,
   not: prices.value.not*factor.value,
   usdt: prices.value.usdt*factor.value,
-  btc: prices.value.btc*factor.value,
 }))
 
 const calculateAmount: ComputedRef<number> = computed(() => {

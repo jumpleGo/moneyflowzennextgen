@@ -17,7 +17,8 @@ export const useExchangerSettings = (model: IModel) => {
     isValuteForSell,
     selectedSell,
     priceUsd,
-    pricesList
+    pricesList,
+    isUSDTBuy
   } = storeToRefs(useExchangerStore());
 
 
@@ -49,7 +50,7 @@ export const useExchangerSettings = (model: IModel) => {
 
   const isMemoShow = computed(() => {
     if (!selectedBuy.value?.key) return false
-    return ['ton', 'not'].includes(selectedBuy.value?.key)
+    return ['ton', 'not'].includes(selectedBuy.value?.key) || (isUSDTBuy.value && netModel.value.key === 'ton')
   })
   const isNetShow = computed(() => {
     if (!selectedBuy.value?.key) return false
