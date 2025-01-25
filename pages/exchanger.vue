@@ -155,7 +155,7 @@ const backToPair = () => {
   align-items: center;
   position: relative;
   @include mobile-all {
-    height: auto;
+    height: 100%;
   }
 }
 .exchanger {
@@ -187,7 +187,7 @@ const backToPair = () => {
     flex-direction: column;
     align-items: center;
     margin: unset;
-    height: auto;
+    height: 100%;
     gap: unset;
   }
 

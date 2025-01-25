@@ -221,7 +221,7 @@ const back = () => {
   font-weight: 600;
   text-align: center;
 
-  @include mobile-xs {
+  @include mobile-all {
     margin: 40px 0;
   }
 }

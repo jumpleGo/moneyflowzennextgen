@@ -16,13 +16,15 @@
 
   @include mobile {
     max-width: 95vw;
-    height: calc(100vh - 150px);
+    min-height: calc(100vh - 150px);
+    height: 100%;
     flex: unset;
   }
 
   @include mobile-xs {
     max-width: 95vw;
-    height: 90vh;
+    min-height: 90vh;
+    height: 100%;
     flex: unset;
     padding: 30px 0;
   }
