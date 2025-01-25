@@ -27,18 +27,18 @@ export class Getter {
     })
   }
 
-  static async getCountByValue (path: string, key: string, value: string) {
+  static async getCountByValue (path: string, key: string = 'status', value: string) {
     const { $databaseRef, $firebase } = useNuxtApp()
-    const request = query(child($databaseRef, path), orderByChild('status'), equalTo(value))
+    const request = query(child($databaseRef, path), orderByChild(key), equalTo(value))
 
     return get(request).then((snapshot) => snapshot.size)
 
   }
 
-  static async getByValue (path: string, value: string, key?: string) {
+  static async getByValue (path: string, key: string, value?: string) {
     const { $databaseRef, $firebase } = useNuxtApp()
 
-    const request = query(child($databaseRef, path), equalTo(value, key))
+    const request = query(child($databaseRef, path), orderByChild(key), equalTo(value))
 
     return get(request).then((snapshot) => {
       if (snapshot.exists()) {

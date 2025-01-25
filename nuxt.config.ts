@@ -7,10 +7,6 @@ export default defineNuxtConfig({
   devServer: {
     port: 8080
   },
-
-  alias: {
-    "@assets": "/<rootDir>/assets",
-  },
   vite: {
     css: {
       preprocessorOptions: {

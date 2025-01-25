@@ -56,7 +56,7 @@
             id="net"
             placeholder="сеть"
             :options="usdtNet" />
-         <span class="tip">(комиссия оплачивается вами)</span>
+         <span v-if="isNetShow" class="tip">(комиссия оплачивается вами)</span>
         </div>
       </div>
       <AppButton title="создать заявку" :disabled="!enabledButton" @click="validateForm" />

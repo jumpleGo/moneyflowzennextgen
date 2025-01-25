@@ -1,20 +1,17 @@
 <template>
-  <div class="app-user-telegram" :style="isFullSc ? 'top: 100px' : 'top: 15px'">
+  <div class="app-user-telegram" :style="isFullscreen ? 'top: 160px' : 'top: 15px'">
 
     <nuxt-img :preload="{fetchPriority: 'high'}" loading="eager" :src="user.photo_url"  class="app-user-telegram__photo" />
     <span class="app-user-telegram__name" >{{ user.first_name }}</span>
-    {{ isFullSc }}
+    {{ isFullscreen.toString() }}
   </div>
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '~/stores/user'
 
-const {user} = storeToRefs(useUserStore())
-const isFullSc = ref()
-watchEffect(() => {
-  isFullSc.value = window?.Telegram?.WebApp.isExpanded
-})
+const {user, isFullscreen} = storeToRefs(useUserStore())
+
 </script>
 <style lang="scss" scoped>
 .app-user-telegram {

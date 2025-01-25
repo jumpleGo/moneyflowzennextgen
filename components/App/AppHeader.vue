@@ -24,8 +24,8 @@
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '~/stores/user'
 
-const {isUserFilled} = storeToRefs(useUserStore())
-const styles = computed(() => isUserFilled.value ? 'top: 60px' : 'top: 0')
+const {isUserFilled, isFullscreen} = storeToRefs(useUserStore())
+const styles = computed(() => isFullscreen.value ? 'top: 80px' : 'top: 0')
 withDefaults(defineProps<{
   showTest?: boolean
 }>(), {

@@ -2,7 +2,7 @@
 <!--  <LandscapePrevent />-->
   <AppUserTelegam v-if="isUserFilled && showHeader" />
   <AppHeader v-if="showHeader" />
-  <NuxtLayout name="default">
+  <NuxtLayout name="default" :style="isFullscreen && {height: '100vh', overflow: 'hidden'}">
     <NuxtPage/>
   </NuxtLayout>
   <AppFooter v-if="showFooter" />
@@ -14,26 +14,32 @@ import { useMainStore } from '~/stores/main'
 import { useUserStore } from '~/stores/user'
 import AppUserTelegam from '~/components/App/AppUserTelegam.vue'
 
-const {user, isUserFilled} = storeToRefs(useUserStore())
-
+const {user, isUserFilled, isFullscreen} = storeToRefs(useUserStore())
 
 if (process.client) {
+  const webApp = window.Telegram?.WebApp
+  if (webApp) {
+    webApp?.ready()
+    user.value = webApp?.initDataUnsafe?.user
+    webApp?.lockOrientation()
+    webApp?.disableVerticalSwipes()
+    webApp?.expand()
+    webApp?.requestFullscreen()
 
-  user.value = window.Telegram?.WebApp?.initDataUnsafe?.user
-  window.Telegram?.WebApp?.lockOrientation()
-  window.Telegram?.WebApp?.ready()
+    webApp?.onEvent('fullscreenChanged', () => {
+      isFullscreen.value = window.Telegram?.WebApp.isFullscreen
+    })
+  }
 }
 
 const {showModal} = storeToRefs(useMainStore())
 const route = useRoute()
 const showHeader = computed(() => {
-  const restricted = ['/exchanger', '/adminex']
+  const restricted = ['/exchanger', '/adminex', '/exchanger/history']
   return !restricted.includes(route.path);
 })
 const showFooter = computed(() => {
-
-  const restricted = ['/guideStartToTrading', '/exchanger', '/gift']
-  console.log(route.path, restricted.includes(route.path))
+  const restricted = ['/guideStartToTrading', '/exchanger', '/gift', '/exchanger/history']
   return !restricted.includes(route.path);
 })
 

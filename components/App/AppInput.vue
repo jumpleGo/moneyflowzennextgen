@@ -7,8 +7,10 @@
         :disabled="disabled"
         :id="id"
         v-maska="maskaOptions"
+        enterkeyhint="next"
         :placeholder="placeholder"
         :class="['app_input__input', {'error': error}]"
+        v-click-outside="emit('blur')"
         @blur="emit('blur')"
         autocomplete="off" />
       <span v-if="paste && !modelValue" class="app_input__paste" @click="onPaste">Вставить</span>
