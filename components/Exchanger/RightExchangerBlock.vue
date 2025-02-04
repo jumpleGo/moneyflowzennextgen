@@ -31,16 +31,31 @@
             label="Телеграм ник" >
             <template v-if="v$.telegram.$error" #error>{{ v$.telegram.$error && translates.telegram }}</template>
           </AppInput>
-          <AppInput
-            v-if="!isStarsBuy"
-            v-model="v$.address.$model"
-            paste
-            :error="v$.address.$error"
-            id="address"
-            :placeholder="placeholderAddress"
-            :label="placeholderAddress">
-            <template v-if="v$.address.$error" #error><span>{{ v$.address.$error && translates.address }}</span></template>
-          </AppInput>
+         <div class="exchanger__inputs__address">
+           <AppInput
+             v-if="!isStarsBuy"
+             v-model="v$.address.$model"
+             paste
+             class="exchanger__inputs__address__address-input"
+             :error="v$.address.$error"
+             :isOKAddress="isOKAddress"
+             id="address"
+             :placeholder="placeholderAddress"
+             :label="placeholderAddress">
+             <template v-if="v$.address.$error" #error><span>{{ v$.address.$error && translates.address }}</span></template>
+           </AppInput>
+           <AppInput
+             v-if="isMemoShow"
+             v-model="v$.memo.$model"
+             :maska-options="memoMaskaOptions"
+             class="exchanger__inputs__address__memo"
+             :error="v$.memo.$error"
+             id="memo"
+             placeholder="Memo"
+             label="Memo">
+             <template v-if="v$.memo.$error" #error>{{ v$.memo.$error && translates.memo }}</template>
+           </AppInput>
+         </div>
          <AppSelector
            v-if="isNetShow"
            v-model="netModel"
@@ -49,16 +64,6 @@
            placeholder="сеть"
            :options="usdtNet" />
          <span v-if="isNetShow" class="tip">(комиссия оплачивается вами)</span>
-          <AppInput
-            v-if="isMemoShow"
-            v-model="v$.memo.$model"
-            :maska-options="memoMaskaOptions"
-            :error="v$.memo.$error"
-            id="memo"
-            placeholder="memo"
-            label="memo (необязательно)">
-            <template v-if="v$.memo.$error" #error>{{ v$.memo.$error && translates.memo }}</template>
-          </AppInput>
         </div>
       </div>
       <AppButton title="создать заявку" :disabled="!enabledButton" @click="validateForm" />
@@ -92,6 +97,7 @@ import type { IModel } from '~/components/Exchanger/types'
 import { useValidationByRules } from '~/composables/exchanger/useValidationByRules'
 import { calculateExpirationTime } from '~/components/Exchanger/helpers/exchanger'
 import { sendNotification } from '~/components/Exchanger/helpers/notificationSender'
+import { checkTonAddress } from '~/api/ton'
 
 
 const emit = defineEmits<{
@@ -122,6 +128,7 @@ const {
 const {v$} = useValidationByRules(model)
 
 const {factor, calculateFactor} = useFactor(model)
+const isOKAddress = shallowRef(false)
 
 
 const enabledButton = computed(() => !v$.value.$errors.length && isCountValid.value && model.telegram)
@@ -182,6 +189,22 @@ const calculateAmount: ComputedRef<number> = computed(() => {
 const additionalText  = computed<string>(() => `Вы получите: ${new Intl.NumberFormat('ru-RU').format(calculateAmount.value)} ${calculateItem.value}`)
 
 watch(() => [model.count, selectedSell.value, selectedBuy.value], () => calculateFactor(calculateAmount.value))
+watch(() => model.address, async (address) => {
+  if (!address) {
+    isOKAddress.value = false
+  } else {
+    if(isTonForBuy.value || model.net === 'ton'){
+      isOKAddress.value = await checkTonAddress(address)
+    }
+  }
+})
+watch(() => model.net, async (net) => {
+  if (net === 'ton' && model.address) {
+    isOKAddress.value = await checkTonAddress(model.address)
+  } else {
+    isOKAddress.value = false
+  }
+})
 onMounted(() => calculateFactor(calculateAmount.value))
 
 const validateForm = async () => {

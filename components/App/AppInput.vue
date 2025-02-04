@@ -1,5 +1,16 @@
 <template>
-  <div class="app_input">
+  <div v-if="showAddress" class="app_input">
+    <label :for="id" class="app_input__label">{{ label }}</label>
+    <div :class="['app_input__address__content', {'--valid': isOKAddress}]">
+      <div>
+        {{ formatCryptoAddress(modelValueRef, 5, 5) }}
+      </div>
+      <div>
+        <img src="@/assets/close.png" class="app_input__address__icon" alt="" @click="clearAddress">
+      </div>
+    </div>
+  </div>
+  <div v-else class="app_input">
     <label :for="id" class="app_input__label">{{ label }}</label>
     <div class="app_input__label-wrapper">
       <input
@@ -25,9 +36,12 @@
 </template>
 
 <script lang="ts" setup>
+import { formatCryptoAddress } from '@/components/Exchanger/helpers/exchanger'
+
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | number): void
   (e: 'blur' ): void
+  (e: 'paste' ): void
 }>()
 const props = withDefaults(defineProps<{
   id: string,
@@ -39,6 +53,7 @@ const props = withDefaults(defineProps<{
   disabled?: boolean,
   editable?: boolean
   paste?: boolean,
+  isOKAddress?: boolean,
   maskaOptions?: Record<string, any>
 }>(), {
   editable: true,
@@ -48,15 +63,48 @@ const props = withDefaults(defineProps<{
 
 
 const modelValueRef = useModel(props,  'modelValue')
+const showAddress = shallowRef(false)
 const onPaste = async () => {
   const text = await navigator.clipboard.readText()
   if (text) {
     emit('update:modelValue', text)
   }
+  if (props.id === 'address') {
+    showAddress.value = true
+  }
+}
+
+const clearAddress = async () => {
+  showAddress.value = false
+  emit('update:modelValue', '')
 }
 
 </script>
 <style lang="scss" scoped>
+.app_input__address__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 15px;
+  border-radius: 20px;
+  font-size: 18px;
+  font-weight: 400;
+  outline: unset;
+  border: 1px solid rgba(255, 188, 14, 0.76);
+  background: rgba(255, 213, 103, 0.28);
+
+  @include mobile-all {
+    font-size: 14px;
+  }
+}
+.--valid {
+  border: 1px solid rgba(0, 122, 2, 0.76);
+  background: rgba(183, 255, 170, 0.28);
+}
+.app_input__address__icon {
+  width: 18px;
+}
 .app_input {
   display: flex;
   flex-direction: column;

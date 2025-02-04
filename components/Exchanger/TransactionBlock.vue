@@ -119,6 +119,7 @@ import { Setter } from '~/helpers/setter'
 import AppFrame from '~/components/App/AppFrame.vue'
 import { copy } from '~/helpers/copy'
 import { onValue, ref as dbRef } from 'firebase/database'
+import { formatCryptoAddress } from '~/components/Exchanger/helpers/exchanger'
 const { $database } = useNuxtApp()
 const exchangerStore = useExchangerStore()
 const {activeTransaction, time, isUSDTSell, isTonForSell, isValuteForSell, isSBPSell} = storeToRefs(exchangerStore)
@@ -166,7 +167,7 @@ const {data} = useAsyncData(async () => {
 })
 
 const getPayment = computed(() => data.value?.paymentData[activeTransaction.value!.sell])
-const formatAddress = computed(() => activeTransaction.value?.buy === 'stars' ? '@' + activeTransaction.value.telegram : `${activeTransaction.value?.address.slice(0, 3)}...${activeTransaction.value?.address.slice(activeTransaction.value?.address.length - 3)}`)
+const formatAddress = computed(() => activeTransaction.value?.buy === 'stars' ? '@' + activeTransaction.value.telegram : formatCryptoAddress(activeTransaction.value?.address!))
 
 
 function getTimeRemaining(){

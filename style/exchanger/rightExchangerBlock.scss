@@ -6,7 +6,21 @@
 .exchanger__inputs {
   display: flex;
   flex-direction: column;
-  gap: 10px
+  gap: 10px;
+
+  &__address {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+
+    &__address-input {
+      width: 100%;
+    }
+    &__memo {
+      max-width: 30%;
+    }
+  }
 }
 .exchanger__right__content-back {
   top: 47px;
