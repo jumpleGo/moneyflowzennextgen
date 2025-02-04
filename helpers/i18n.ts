@@ -8,5 +8,5 @@ export const translates = {
   phone: 'Введите корректный телефон',
   memo: 'Введите корректный memo',
   count: 'Поле обязательно для заполнения',
-  limit: (exchangerSettings: IExchangerSettings) => `Лимит транзакций ${exchangerSettings.minLimit} - ${exchangerSettings.maxLimit} руб`,
+  limit: ({min, max}) => `Лимит транзакций ${min} - ${max} руб`,
 }

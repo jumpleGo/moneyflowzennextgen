@@ -18,7 +18,9 @@
             :error="v$.count.$dirty && !countValidate"
             placeholder="Сумма обмена"
             :label="sumLabel">
-            <template v-if="v$.count.$dirty && !countValidate" #error>{{ (!countValidate && translates.limit(exchangerSettings)) }}</template>
+            <template v-if="v$.count.$dirty && !countValidate" #error>
+              {{ (!countValidate && translates.limit(isCryptoForSell ? minmaxLimit[selectedSell.key] : minmaxLimit[selectedBuy.key])) }}
+            </template>
             <span v-if="selectedBuy?.key && selectedSell?.key"> {{ additionalText }}</span>
           </AppInput>
           <AppInput
@@ -96,7 +98,7 @@ const emit = defineEmits<{
   (e: 'back'): void
 }>()
 
-const {exchangerSettings, priceUsd, isTonForBuy, pricesList, time, selectedBuy, selectedSell, isStarsBuy, isTonForSell, isCryptoForSell, isSelectedBothItem, activeTransaction} = storeToRefs(useExchangerStore())
+const {exchangerSettings, minmaxLimit, priceUsd, isTonForBuy, pricesList, time, selectedBuy, selectedSell, isStarsBuy, isTonForSell, isCryptoForSell, isSelectedBothItem, activeTransaction} = storeToRefs(useExchangerStore())
 
 const model = reactive<IModel>({
   memo: '',
@@ -130,14 +132,18 @@ const isCountValid = computed(() => {
 
   if (isStarsBuy.value && isTonForSell.value) {
     const tonCount = model.count * cryptoPrice
-    return tonCount >= minLimit && tonCount <= maxLimit
+    return tonCount >= minmaxLimit.value['stars'].min && tonCount <= minmaxLimit.value['stars'].max
   }
 
   const valueToCheck = isCryptoForSell.value
     ? calculateAmount.value
     : model.count;
 
-  return valueToCheck >= minLimit && valueToCheck <= maxLimit;
+  if (isCryptoForSell.value) {
+    return valueToCheck >= minmaxLimit.value[selectedSell.value?.key]?.min && valueToCheck <= minmaxLimit.value[selectedSell.value?.key]?.max;
+  }
+
+  return valueToCheck >= minmaxLimit.value[selectedBuy.value?.key]?.min && valueToCheck <= minmaxLimit.value[selectedBuy.value?.key]?.max;
 })
 
 const countValidate = computed(() => model.count > 0 && isCountValid.value);

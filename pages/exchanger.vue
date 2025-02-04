@@ -51,7 +51,8 @@ import NotificationBlock from '~/components/Exchanger/NotificationBlock.vue'
 import { storeToRefs } from 'pinia'
 import { useMainStore } from '~/stores/main'
 import { Getter } from '~/helpers/getter'
-import { binance, rateApi } from '~/api'
+import { okx, rateApi } from '~/api'
+import { CreateSymbolPrice } from '~/api/models/SymbolPrice'
 
 const HighLoadNotification = defineAsyncComponent(() => import('~/components/Exchanger/HighLoadNotification.vue'));
 const ErrorNotification = defineAsyncComponent(() => import('~/components/Exchanger/ErrorNotification.vue'));
@@ -59,7 +60,7 @@ const DisablePage = defineAsyncComponent(() => import('~/components/Exchanger/Di
 const MessageNotification = defineAsyncComponent(() => import('~/components/Exchanger/MessageNotification.vue'))
 
 
-const { activeTransaction, isSelectedBothItem, exchangerSettings, vats, pricesList, priceUsd } = storeToRefs(useExchangerStore())
+const { activeTransaction, isSelectedBothItem, exchangerSettings, vats, pricesList, priceUsd, minmaxLimit } = storeToRefs(useExchangerStore())
 const hideRightBlock = shallowRef(true)
 const {isMobile, isLoadingResize} = useResponsive()
 const {showModal} = storeToRefs(useMainStore())
@@ -78,6 +79,8 @@ const { refresh, status} = await useAsyncData(async () => {
   try {
     exchangerSettings.value = await Getter.getFromDB('exchangerSettings/')
     vats.value = await Getter.getFromDB('vatsByTokens/')
+    minmaxLimit.value = await Getter.getFromDB('minmaxLimit/')
+    console.log(minmaxLimit)
   } catch {
     return
   }
@@ -88,8 +91,12 @@ const { refresh, status} = await useAsyncData(async () => {
   }
 
   try {
-    const { data: pricesTickers } = await binance.getPriceByTickers()
-    pricesList.value = pricesTickers
+    const { data: pricesTickers } = await okx.getPriceByTickers()
+    pricesList.value = pricesTickers.data
+      .filter(item => ['TON-USDT-SWAP', 'NOT-USDT-SWAP'].includes(item.instId))
+      .map(item => CreateSymbolPrice.createSymbolPriceByOKX(item))
+
+    console.log(pricesList.value)
   } catch {
     showError.value = true
   }
