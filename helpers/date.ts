@@ -1,7 +1,6 @@
 export const getNoun = (number, one, two, five) => {
     let wordUnitFive = ''
     let wordUnitTwo = ''
-    console.log(one)
     switch (one) {
         case 'день':
             wordUnitFive = five[0]

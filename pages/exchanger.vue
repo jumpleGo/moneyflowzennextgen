@@ -80,7 +80,6 @@ const { refresh, status} = await useAsyncData(async () => {
     exchangerSettings.value = await Getter.getFromDB('exchangerSettings/')
     vats.value = await Getter.getFromDB('vatsByTokens/')
     minmaxLimit.value = await Getter.getFromDB('minmaxLimit/')
-    console.log(minmaxLimit)
   } catch {
     return
   }
@@ -95,8 +94,6 @@ const { refresh, status} = await useAsyncData(async () => {
     pricesList.value = pricesTickers.data
       .filter(item => ['TON-USDT-SWAP', 'NOT-USDT-SWAP'].includes(item.instId))
       .map(item => CreateSymbolPrice.createSymbolPriceByOKX(item))
-
-    console.log(pricesList.value)
   } catch {
     showError.value = true
   }
