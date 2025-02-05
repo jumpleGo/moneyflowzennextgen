@@ -7,14 +7,6 @@ export const usdtNet = [
     name: 'TRC-20',
     key: 'trc20'
   },
-  {
-    name: 'Optimism',
-    key: 'op'
-  },
-  {
-    name: 'SOL',
-    key: 'sol'
-  }
 ]
 
 

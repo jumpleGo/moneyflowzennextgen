@@ -1,7 +1,7 @@
 <template>
   <div v-if="showAddress" class="app_input">
     <label :for="id" class="app_input__label">{{ label }}</label>
-    <div :class="['app_input__address__content', {'--valid': isOKAddress}]">
+    <div :class="['app_input__address__content', {'--valid': isOKAddress && isAddressChecked}, {'--invalid': !isOKAddress && isAddressChecked }]">
       <div>
         {{ formatCryptoAddress(modelValueRef, 5, 5) }}
       </div>
@@ -21,7 +21,8 @@
         :placeholder="placeholder"
         :class="['app_input__input', {'error': error}]"
         @blur="emit('blur')"
-        autocomplete="off" />
+        autocomplete="off"
+        @paste="onPaste"/>
       <span v-if="paste && !modelValue" class="app_input__paste" @click="onPaste">Вставить</span>
     </div>
     <div class="slots">
@@ -54,6 +55,7 @@ const props = withDefaults(defineProps<{
   editable?: boolean
   paste?: boolean,
   isOKAddress?: boolean,
+  isAddressChecked?: boolean,
   maskaOptions?: Record<string, any>
 }>(), {
   editable: true,
@@ -64,6 +66,10 @@ const props = withDefaults(defineProps<{
 
 const modelValueRef = useModel(props,  'modelValue')
 const showAddress = shallowRef(false)
+
+watch(modelValueRef, (address) => {
+  if (!address) showAddress.value = false
+})
 const onPaste = async () => {
   const text = await navigator.clipboard.readText()
   if (text) {
@@ -101,6 +107,10 @@ const clearAddress = async () => {
 .--valid {
   border: 1px solid rgba(0, 122, 2, 0.76);
   background: rgba(183, 255, 170, 0.28);
+}
+.--invalid {
+  border: 1px solid rgba(225, 0, 0, 0.76);
+  background: rgba(255, 98, 98, 0.28);
 }
 .app_input__address__icon {
   width: 18px;

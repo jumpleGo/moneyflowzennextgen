@@ -4,4 +4,5 @@ export interface IModel {
   count: number,
   telegram: string,
   address: string,
+  reset: () => void
 }

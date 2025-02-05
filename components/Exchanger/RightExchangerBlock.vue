@@ -39,6 +39,7 @@
              class="exchanger__inputs__address__address-input"
              :error="v$.address.$error"
              :isOKAddress="isOKAddress"
+             :isAddressChecked="isAddressChecked"
              id="address"
              :placeholder="placeholderAddress"
              :label="placeholderAddress">
@@ -97,7 +98,7 @@ import type { IModel } from '~/components/Exchanger/types'
 import { useValidationByRules } from '~/composables/exchanger/useValidationByRules'
 import { calculateExpirationTime } from '~/components/Exchanger/helpers/exchanger'
 import { sendNotification } from '~/components/Exchanger/helpers/notificationSender'
-import { checkTonAddress } from '~/api/ton'
+import { checkTonAddress, checkTronAddress } from '~/api/checkAddress'
 
 
 const emit = defineEmits<{
@@ -112,6 +113,11 @@ const model = reactive<IModel>({
   count: 1,
   telegram: '',
   address: '',
+  reset: function () {
+    this.address = '';
+    this.memo = '';
+    this.count = 1;
+  }
 });
 
 const {
@@ -129,13 +135,13 @@ const {v$} = useValidationByRules(model)
 
 const {factor, calculateFactor} = useFactor(model)
 const isOKAddress = shallowRef(false)
+const isAddressChecked = shallowRef(false)
 
 
 const enabledButton = computed(() => !v$.value.$errors.length && isCountValid.value && model.telegram)
 
 const isCountValid = computed(() => {
   const cryptoPrice = prices.value[(selectedSell.value.key as CryptoKeys)]
-  const { minLimit = 0, maxLimit = 999 } = exchangerSettings.value
 
   if (isStarsBuy.value && isTonForSell.value) {
     const tonCount = model.count * cryptoPrice
@@ -188,21 +194,38 @@ const calculateAmount: ComputedRef<number> = computed(() => {
 
 const additionalText  = computed<string>(() => `Вы получите: ${new Intl.NumberFormat('ru-RU').format(calculateAmount.value)} ${calculateItem.value}`)
 
-watch(() => [model.count, selectedSell.value, selectedBuy.value], () => calculateFactor(calculateAmount.value))
+watch(() => model.count, () => calculateFactor(calculateAmount.value))
+watch(() => [selectedSell.value, selectedBuy.value], () => {
+  model.reset()
+  isOKAddress.value = false
+  isAddressChecked.value = false
+})
 watch(() => model.address, async (address) => {
   if (!address) {
     isOKAddress.value = false
+    isAddressChecked.value = false
   } else {
     if(isTonForBuy.value || model.net === 'ton'){
       isOKAddress.value = await checkTonAddress(address)
+      isAddressChecked.value = true
+    }
+    if (model.net === 'trc20') {
+      isOKAddress.value = await checkTronAddress(model.address)
+      isAddressChecked.value = true
     }
   }
 })
 watch(() => model.net, async (net) => {
+  if (!model.address) return
   if (net === 'ton' && model.address) {
     isOKAddress.value = await checkTonAddress(model.address)
+    isAddressChecked.value = true
+  } else if (net === 'trc20') {
+    isOKAddress.value = await checkTronAddress(model.address)
+    isAddressChecked.value = true
   } else {
     isOKAddress.value = false
+    isAddressChecked.value = false
   }
 })
 onMounted(() => calculateFactor(calculateAmount.value))
