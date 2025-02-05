@@ -44,6 +44,7 @@
              :placeholder="placeholderAddress"
              :label="placeholderAddress">
              <template v-if="v$.address.$error" #error><span>{{ v$.address.$error && translates.address }}</span></template>
+             <span v-if="isAddressChecked && !v$.address.$error" class="exchanger__inputs__address__slot">{{ isOKAddress ? `корректный адрес ${currentAddressNet}` : `некорректный адрес ${currentAddressNet}`}}</span>
            </AppInput>
            <AppInput
              v-if="isMemoShow"
@@ -193,7 +194,10 @@ const calculateAmount: ComputedRef<number> = computed(() => {
 
 
 const additionalText  = computed<string>(() => `Вы получите: ${new Intl.NumberFormat('ru-RU').format(calculateAmount.value)} ${calculateItem.value}`)
-
+const currentAddressNet = computed(() => {
+  if (isTonForBuy.value || model.net === 'ton') return 'TON'
+  if (model.net === 'trc20') return 'TRC20'
+})
 watch(() => model.count, () => calculateFactor(calculateAmount.value))
 watch(() => [selectedSell.value, selectedBuy.value], () => {
   model.reset()
@@ -205,17 +209,18 @@ watch(() => model.address, async (address) => {
     isOKAddress.value = false
     isAddressChecked.value = false
   } else {
-    if(isTonForBuy.value || model.net === 'ton'){
+    if(currentAddressNet.value === 'TON'){
       isOKAddress.value = await checkTonAddress(address)
       isAddressChecked.value = true
     }
-    if (model.net === 'trc20') {
+    if (currentAddressNet.value === 'TRC20') {
       isOKAddress.value = await checkTronAddress(model.address)
       isAddressChecked.value = true
     }
   }
 })
 watch(() => model.net, async (net) => {
+  isAddressChecked.value = false
   if (!model.address) return
   if (net === 'ton' && model.address) {
     isOKAddress.value = await checkTonAddress(model.address)
@@ -223,9 +228,6 @@ watch(() => model.net, async (net) => {
   } else if (net === 'trc20') {
     isOKAddress.value = await checkTronAddress(model.address)
     isAddressChecked.value = true
-  } else {
-    isOKAddress.value = false
-    isAddressChecked.value = false
   }
 })
 onMounted(() => calculateFactor(calculateAmount.value))

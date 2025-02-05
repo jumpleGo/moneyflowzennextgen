@@ -1,18 +1,13 @@
 <template>
-  <div v-if="showAddress" class="app_input">
+  <div class="app_input">
     <label :for="id" class="app_input__label">{{ label }}</label>
-    <div :class="['app_input__address__content', {'--valid': isOKAddress && isAddressChecked}, {'--invalid': !isOKAddress && isAddressChecked }]">
+    <div v-if="showAddress" :class="['app_input__address__content', {'--valid': isOKAddress && isAddressChecked}, {'--invalid': !isOKAddress && isAddressChecked }]">
       <div>
         {{ formatCryptoAddress(modelValueRef, 5, 5) }}
       </div>
-      <div>
-        <img src="@/assets/close.png" class="app_input__address__icon" alt="" @click="clearAddress">
-      </div>
+      <img src="@/assets/close.png" class="app_input__address__icon" alt="" @click="clearAddress">
     </div>
-  </div>
-  <div v-else class="app_input">
-    <label :for="id" class="app_input__label">{{ label }}</label>
-    <div class="app_input__label-wrapper">
+    <div v-else class="app_input__label-wrapper">
       <input
         v-model="modelValueRef"
         :disabled="disabled"
@@ -74,9 +69,9 @@ const onPaste = async () => {
   const text = await navigator.clipboard.readText()
   if (text) {
     emit('update:modelValue', text)
-  }
-  if (props.id === 'address') {
-    showAddress.value = true
+    if (props.id === 'address') {
+      showAddress.value = true
+    }
   }
 }
 
