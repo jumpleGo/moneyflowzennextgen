@@ -17,11 +17,12 @@
             :maska-options="maskaOptions"
             :error="v$.count.$dirty && !countValidate"
             placeholder="Сумма обмена"
+            class="exchanger__inputs__count"
             :label="sumLabel">
             <template v-if="v$.count.$dirty && !countValidate" #error>
               {{ (!countValidate && translates.limit(isCryptoForSell ? minmaxLimit[selectedSell.key] : minmaxLimit[selectedBuy.key])) }}
             </template>
-            <span v-if="selectedBuy?.key && selectedSell?.key"> {{ additionalText }}</span>
+            <span v-if="selectedBuy?.key && selectedSell?.key" > {{ additionalText }}</span>
           </AppInput>
           <AppInput
             v-model="v$.telegram.$model"
@@ -44,7 +45,7 @@
              :placeholder="placeholderAddress"
              :label="placeholderAddress">
              <template v-if="v$.address.$error" #error><span>{{ v$.address.$error && translates.address }}</span></template>
-             <span v-if="isAddressChecked && !v$.address.$error" class="exchanger__inputs__address__slot">{{ isOKAddress ? `корректный адрес ${currentAddressNet}` : `некорректный адрес ${currentAddressNet}`}}</span>
+             <span v-if="isAddressChecked && !v$.address.$error" :class="['exchanger__inputs__address__slot', {'--slot-error': !isOKAddress}, {'--slot-success': isOKAddress}]">{{ isOKAddress ? `корректный адрес ${currentAddressNet}` : `некорректный адрес ${currentAddressNet}`}}</span>
            </AppInput>
            <AppInput
              v-if="isMemoShow"

@@ -7,6 +7,11 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+ &__count {
+   :deep(.slots) {
+     margin-top: 8px;
+   }
+ }
 
   &__address {
     display: flex;
@@ -22,6 +27,14 @@
     }
     &__slot {
       font-size: 13px;
+      margin-top: -15px;
+    }
+
+    .--slot-error {
+      color: rgba(225, 0, 0, 0.76)
+    }
+    .--slot-success {
+      color: rgba(0, 122, 2, 0.76)
     }
   }
 }

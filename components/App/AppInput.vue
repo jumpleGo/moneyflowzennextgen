@@ -86,7 +86,6 @@ const clearAddress = async () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
   padding: 10px 15px;
   border-radius: 20px;
   font-size: 18px;
@@ -113,8 +112,8 @@ const clearAddress = async () => {
 .app_input {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   &__label {
+    margin-bottom: 8px;
     @include mobile-all {
       font-size: 14px;
     }
