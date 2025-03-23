@@ -6,7 +6,7 @@
     <span class="mfz_welcome-test--level-badge badge show">узнай свой уровень</span>
     <span class="mfz_welcome-test--test-badge badge show">тест</span>
     <span class="mfz_welcome-test--do-badge badge show" >сделай это</span>
-    <img src="../assets/logo.png" class="mfz_welcome-logo logo" />
+    <img src="../assets/logo/logo.png" class="mfz_welcome-logo logo" />
     <img src="../assets/coins.png" class="mfz_welcome-test--coins" />
     <h1 class="mfz_welcome-test--title">проверка<br/>знаний</h1>
     <app-button title="пройти тест" class="mfz_welcome-test--button" @click="emit('openTest')" />

@@ -35,10 +35,11 @@ export class Getter {
 
   }
 
-  static async getByValue (path: string, value: string, key?: string) {
-    const { $databaseRef, $firebase } = useNuxtApp()
+  static async getByValue (path: string, value: string, key: string) {
+    console.log(path, value, key)
+    const { $databaseRef } = useNuxtApp()
 
-    const request = query(child($databaseRef, path), equalTo(value, key))
+    const request = query(child($databaseRef, path), orderByChild(key), equalTo(value))
 
     return get(request).then((snapshot) => {
       if (snapshot.exists()) {

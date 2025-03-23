@@ -6,8 +6,14 @@
   border-radius: 50%;
 }
 
-.yellow {
+.yellow, .yellow-text {
   color: $brand_yellow
+}
+.blue-text {
+  color: $blue
+}
+.purple-text {
+  color: $purple
 }
 
 .wrapper {
@@ -15,7 +21,6 @@
   touch-action: manipulation;
   cursor: default;
   min-height: 100vh;
-  overflow: hidden;
   position: relative;
   width: 100%;
   @include mobile {

@@ -1,4 +1,5 @@
 export const getNoun = (number, one, two, five) => {
+    console.log(number)
     let wordUnitFive = ''
     let wordUnitTwo = ''
     switch (one) {

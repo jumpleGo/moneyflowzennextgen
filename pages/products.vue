@@ -82,8 +82,7 @@ const {data} = useAsyncData(async () => {
   overflow: hidden;
   align-items: center;
   position: relative;
-  padding: 200px 0 60px;
-  min-height: calc(100vh - 200px);
+  min-height: 100vh;
 
   @include desktop {
     justify-content: center;

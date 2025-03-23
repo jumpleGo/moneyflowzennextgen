@@ -12,6 +12,7 @@
   "dependencies": {
     "@lottiefiles/dotlottie-vue": "^0.5.3",
     "@nuxt/image": "^1.8.1",
+    "@nuxtjs/seo": "^3.0.1",
     "@nuxtjs/style-resources": "^1.2.2",
     "@pinia/nuxt": "^0.9.0",
     "@vuelidate/core": "^2.0.3",
@@ -25,7 +26,6 @@
     "nuxt-mail": "^5.0.1",
     "pinia": "^2.2.2",
     "vue": "latest",
-    "vue-router": "^4.5.0",
     "yandex-metrika-module-nuxt3": "^1.5.3",
     "yup": "^1.6.1"
   },

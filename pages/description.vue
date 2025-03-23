@@ -4,7 +4,7 @@
     <div class="detail-information-page__header">
       <h1 v-if="currentProduct?.title" class="detail-information-page__title">
         <span v-html="currentProduct.title"></span>
-        <nuxt-img loading="lazy" class="detail-information-page__image" :src="currentProduct.image" />
+        <nuxt-img class="detail-information-page__image" :src="currentProduct.image" />
       </h1>
       <h1 v-if="!currentProduct?.title" class="detail-information-page__title--sceleton" />
       <div class="detail-information-page__moln-wrapper">

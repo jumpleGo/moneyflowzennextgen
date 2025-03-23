@@ -1,6 +1,6 @@
 <template>
   <div class="app_loader">
-    <img src="/assets/logo.png" class="app_loader__image" />
+    <img src="/assets/logo/logo.png" class="app_loader__image" />
   </div>
 </template>
 <style lang="scss" scoped>

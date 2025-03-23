@@ -1,0 +1,1 @@
+export const logoSrc = 'https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/logo%2Flogo.png?alt=media&token=ddc4786b-b91b-418e-9f92-5e67171b7468'

@@ -1,25 +1,25 @@
 <template>
+  <AppHeader v-if="showHeader" />
   <div class="mfz_wrapper wrapper">
     <slot />
   </div>
+  <AppFooter v-if="showFooter" />
 </template>
 <script setup lang="ts">
-definePageMeta({
-  layout: 'default'
+const route = useRoute()
+const showHeader = computed(() => {
+  const restricted = ['/exchanger', '/adminex']
+  return !restricted.includes(route.path);
+})
+const showFooter = computed(() => {
+  const restricted = ['/guideStartToTrading', '/exchanger', '/gift']
+  return !restricted.includes(route.path);
 })
 </script>
 <style lang="scss" scoped>
 .mfz_wrapper {
-  display: flex;
   width: 100vw;
-  flex-direction: column;
-}
-.mfz_wrapper__footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  flex: 1;
+  padding: 100px 0 0;
 }
 
 </style>

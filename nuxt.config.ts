@@ -28,7 +28,6 @@ export default defineNuxtConfig({
   }], ['nuxt-mail', {
     message: [
       { name: 'main', to: 'rrotatew@gmail.com', },
-      { name: 'managerStars', to: 'yakushevnikita0501@gmail.com', }
     ],
     smtp: {
       host: "smtp.timeweb.ru",
@@ -38,7 +37,7 @@ export default defineNuxtConfig({
         pass: '>g!A<44\\gswHAK'
       }
     }
-  }], '@nuxt/image'],
+  }], '@nuxt/image', '@nuxtjs/seo'],
 
   runtimeConfig: {
     public: {

@@ -2,11 +2,16 @@
   <div class="mfz__footer">
     <div class="mfz__footer-wrapper">
       <div class="mfz__footer_left_block">
-        <img class="mfz__footer__logo logo" src="/assets/logo.png" />
+        <nuxt-img class="mfz__footer__logo logo" :src="logoSrc" />
         <div class="mfz__footer__text">
           <h1>mfz</h1>
           <h3>money flow zen</h3>
         </div>
+      </div>
+      <div class="mfz__footer__links">
+        <nuxt-link to="/" class="mfz__footer__link">Главная</nuxt-link>
+        <nuxt-link to="/products" class="mfz__footer__link">Обучения</nuxt-link>
+        <nuxt-link to="/blog" class="mfz__footer__link">Блог</nuxt-link>
       </div>
       <div class="mfz__footer_right_block">
         <div class="mfz__footer__social_media">
@@ -30,6 +35,7 @@
 
 <script lang="ts" setup>
 
+import { logoSrc } from 'assets/imagesSrc'
 </script>
 <style lang="scss" scoped>
 .mfz__footer {
@@ -45,12 +51,14 @@
       padding: 30px 15px;
       flex-direction: column;
       width: 100%;
+      gap: 40px;
     }
 
     @include mobile {
       padding: 30px 15px;
       flex-direction: column;
       width: 100%;
+      gap: 40px;
     }
 
     @include tablet {
@@ -60,13 +68,26 @@
     }
 
     @include desktop {
-      padding: 32px 40px;
+      padding: 60px 40px;
       justify-content: space-between;
     }
 
     @include desktop-lg {
-      padding: 32px 40px;
+      padding: 60px 40px;
       justify-content: space-between;
+    }
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  &__link {
+    color: white;
+    text-decoration: none;
+    &:hover {
+      color: $brand_yellow;
     }
   }
 }
@@ -87,22 +108,20 @@
     font-size: 25px;
     line-height: 25px;
     font-weight: 700;
+    margin: unset;
   }
   h3 {
     font-size: 18px;
     line-height: 20px;
+    margin: unset;
   }
 }
 
-.mfz__footer_right_block {
-  margin-top: 40px
-}
 .mfz__footer__social_media {
   display: flex;
   column-gap: 5px;
 }
 .mfz__footer_social {
-
   height: auto;
   padding: unset;
   text-decoration: unset;

@@ -1,7 +1,7 @@
 <template>
   <header class="mfz_wrapper__header">
     <div class="mfz_wrapper__header-wrapper">
-      <img class="mfz_wrapper__header--logo logo" src="/assets/logo.png">
+      <img class="mfz_wrapper__header--logo logo" src="/assets/logo/logo.png">
       <nav class="mfz_wrapper__header_navbar">
         <nuxt-link class="mfz_wrapper__header_navbar--link" to="/">
           главная
@@ -15,7 +15,9 @@
         <nuxt-link class="mfz_wrapper__header_navbar--link" to="/products">
           продукты
         </nuxt-link>
-
+        <nuxt-link class="mfz_wrapper__header_navbar--link" to="/blog">
+          блог
+        </nuxt-link>
       </nav>
     </div>
   </header>
@@ -76,15 +78,15 @@ withDefaults(defineProps<{
   }
 
   @include tablet {
-    width: 60px;
+    width: 40px;
   }
 
   @include desktop {
-    width: 80px;
+    width: 60px;
   }
 
   @include desktop-lg {
-    width: 120px;
+    width: 100px;
   }
 
 }
