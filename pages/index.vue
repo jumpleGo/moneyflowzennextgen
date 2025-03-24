@@ -16,13 +16,35 @@
 <!--    <img class="mfz-main__union bounce" src="../assets/union.svg">-->
     <p class="mfz-main__left_text">твое место изобилия</p>
     <p class="mfz-main__right_text">гармонии и силы</p>
-    <router-link to="/guideStartToTrading" class="mfz-main__floating_button bounce">
+    <nuxt-link to="/guideStartToTrading" class="mfz-main__floating_button bounce">
       <img class="mfz-main__floating_button__img" src="~/assets/QuestionCoin.png" />
-      <span class="mfz-main__floating_button__text">гайд старт в трейдинг</span>
-    </router-link>
+      <span class="mfz-main__floating_button__text">гайд "старт в трейдинг"</span>
+    </nuxt-link>
   </div>
 <!--  <MfzRoadMap />-->
 </template>
+<script lang="ts" setup>
+useHead({
+  meta: [
+    {
+      name: 'title',
+      content: 'Money Flow Zen'
+    },
+    {
+      name: 'description',
+      content: 'Место, в котором знания финансовой грамотности и глубина понимания финансовых рынков выйдут на новый уровень'
+    },
+    {
+      property: 'og:title',
+      content: 'Money Flow Zen'
+    },
+    {
+      property: 'og:description',
+      content: 'Место, в котором знания финансовой грамотности и глубина понимания финансовых рынков выйдут на новый уровень'
+    }
+  ]
+})
+</script>
 <style lang="scss" scoped>
 .mfz-main {
   display: flex;
@@ -30,15 +52,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 100vw;
-  height: calc(100vh - 144px);
+  height: calc(100vh - 100px);
   color: $brand_yellow;
-  padding-top: 144px;
   overflow: hidden;
 
   @include mobile-all {
     padding-top: unset;
-    height: 100vh;
+    height: calc(100vh - 70px);
   }
   @include desktop-lg {
     overflow: unset
@@ -80,8 +100,6 @@
     }
   }
   .mfz-main__title--z {
-
-
     @include mobile-xs {
       margin-left: 5px;
     }
@@ -307,42 +325,42 @@
 
   @include desktop {
     bottom: 0;
-    left: -30vh;
+    left: -20vh;
+    width: 500px;
     transform: rotate(-25deg);
   }
 
   @include desktop-lg {
     bottom: 0;
-    left: -30vh;
+    left: -20vh;
+    width: 500px;
     transform: rotate(-25deg);
   }
 }
 
 .mfz-main__left_text, .mfz-main__right_text {
   color: white;
-
   font-weight: 600;
   position: absolute;
   bottom: 0;
-
   text-transform: uppercase;
+  margin: unset;
 
   @include mobile {
     padding: 20px 15px;
     font-size: 13px;
-    margin-bottom: 70px;
+    bottom: 10vh
   }
 
   @include mobile-xs {
     padding: 6px 9px;
     font-size: 12px;
-    bottom: 10vh
+    bottom: 5vh
   }
 
   @include tablet {
     padding: 6px 9px;
     font-size: 22px;
-    margin-bottom: 70px;
   }
 
   @include desktop {
@@ -381,6 +399,7 @@
   justify-content: center;
   row-gap: 1vh;
   bottom: 20%;
+  text-decoration: none;
   &:hover {
     background: unset;
   }

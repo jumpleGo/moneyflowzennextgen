@@ -28,3 +28,23 @@ export const getNoun = (number, one, two, five) => {
     }
     return wordUnitFive;
 }
+
+export const getNumberWithWordEnding = (number: number, wordForms: [string, string, string]): string => {
+    const lastDigit = number % 10;
+    const lastTwoDigits = number % 100;
+
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+        return `${number} ${wordForms[2]}`; // 11-14 всегда множественное родительное
+    }
+
+    switch (lastDigit) {
+        case 1:
+            return `${number} ${wordForms[0]}`; // единственное число
+        case 2:
+        case 3:
+        case 4:
+            return `${number} ${wordForms[1]}`; // множественное число (2,3,4)
+        default:
+            return `${number} ${wordForms[2]}`; // множественное родительное (5-9, 0)
+    }
+}

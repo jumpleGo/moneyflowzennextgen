@@ -42,6 +42,9 @@ const componentButton = computed(() => props.to ? props.to.startsWith('http') ? 
 const buttonClass = computed(() => classByType[props.type])
 </script>
 <style lang="scss" scoped>
+.app__button {
+  text-decoration: none;
+}
 .button__main {
   display: flex;
   align-items: center;
@@ -72,7 +75,7 @@ const buttonClass = computed(() => classByType[props.type])
 }
 
 .button__xs {
-  padding: 10px 14px;
+  padding: 8px 10px;
   font-size: 12px;
   @include mobile-all {
     font-size: 10px;

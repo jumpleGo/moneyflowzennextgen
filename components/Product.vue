@@ -11,7 +11,7 @@
       }}</span>
     </div>
     <div class="product__content">
-      <img v-if="props.image" :src="props.image" class="product__image" />
+      <nuxt-img v-if="props.image" :src="props.image" class="product__image" />
 
       <h3 v-if="props.title" class="product__title" v-html="props.title" />
       <client-only>
@@ -19,7 +19,7 @@
       </client-only>
     </div>
     <div @click="openLink" class="product__footer">
-      <span class="product__more" @click="isOpenHint = !isOpenHint">Подробнее</span>
+      <span class="product__more">Подробнее</span>
       <img class="product__arrow" src="../assets/union.svg" />
     </div>
   </div>
@@ -34,9 +34,9 @@ import { getNoun } from '@/helpers/date'
 const router = useRouter()
 const props = withDefaults(
   defineProps<{
-    title: string
-    image: string
-    description: string
+    title?: string
+    image?: string
+    description?: string
     link?: string
     start?: string
     nextGroup?: string
@@ -49,7 +49,7 @@ const props = withDefaults(
 )
 
 const openLink = () => {
-  router.push(props.link)
+  router.push(`/products/${props.link}`)
 }
 const calculateTime = (date, prefix, suffix) => {
   if (!date) return undefined;
@@ -86,7 +86,6 @@ const outDate = computed(() => {
     : `конец курса сегодня`;
 });
 const nextGroup = computed(() => calculateTime(props.nextGroup, 'следующий поток через', ''));
-const isOpenHint = ref(false)
 </script>
 <style lang="scss" scoped>
 .product {
@@ -117,7 +116,7 @@ const isOpenHint = ref(false)
   text-overflow: ellipsis;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 100px;
+  max-height: 70px;
 }
 .product__attention--list {
   position: absolute;
@@ -129,12 +128,7 @@ const isOpenHint = ref(false)
   row-gap: 8px;
 }
 .product__attention {
-  width: fit-content;
-  color: white;
-  font-size: 12px;
   background: #9f9222;
-  padding: 5px 10px;
-  border-radius: 10px;
 }
 
 .product__end {

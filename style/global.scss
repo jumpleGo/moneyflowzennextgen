@@ -3,7 +3,7 @@
 @import "./ui";
 @import "./animation";
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 @font-face {
   font-family: 'DUERRA';
@@ -26,9 +26,7 @@ iframe {
   user-select: none;
   -webkit-user-select: none;
 }
-p {
-  margin: 0;
-}
+
 .copied {
   font-size: 16px;
   font-weight: 600;
@@ -71,6 +69,14 @@ p {
     align-items: center;
     font-size: 2vh !important;
   }
+}
+
+.product__attention {
+  padding: 5px 10px;
+  border-radius: 10px;
+  width: fit-content;
+  color: white;
+  font-size: 12px;
 }
 
 .show {

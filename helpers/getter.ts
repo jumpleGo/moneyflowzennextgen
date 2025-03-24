@@ -1,5 +1,17 @@
-import { child, get, getDatabase, query, equalTo, onValue, ref, orderByChild } from 'firebase/database'
+import {
+  child,
+  get,
+  getDatabase,
+  query,
+  equalTo,
+  onValue,
+  ref,
+  orderByChild,
+  orderByValue,
+  orderByPriority, orderByKey
+} from 'firebase/database'
 import type { DatabaseReference } from '@firebase/database'
+import type { IBlogItem } from '~/types/pages/blog'
 
 export class Getter {
   static getFromDB (url: string) {
@@ -13,6 +25,35 @@ export class Getter {
     }).catch((error) => {
      return error
     });
+  }
+
+  static async getBlog (): Promise<IBlogItem[]> {
+    const { $databaseRef, $firebase } = useNuxtApp()
+    const request = query(child($databaseRef, 'blog'), orderByChild('updatedAt'))
+
+    try {
+      const snapshot = await get(request)
+
+      if (!snapshot.exists()) {
+        console.log('No data available')
+        return []
+      }
+
+      const dataArr: IBlogItem[] = []
+
+      snapshot.forEach((childSnapshot) => {
+        dataArr.push({
+          id: childSnapshot.key,
+          ...childSnapshot.val()
+        })
+      })
+
+      return dataArr
+
+    } catch (error) {
+      console.error('Ошибка получения данных:', error)
+      return []
+    }
   }
 
   static getByKey (db: string, key: string) {
@@ -35,10 +76,10 @@ export class Getter {
 
   }
 
-  static async getByValue (path: string, value: string, key?: string) {
-    const { $databaseRef, $firebase } = useNuxtApp()
+  static async getByValue (path: string, value: string, key: string) {
+    const { $databaseRef } = useNuxtApp()
 
-    const request = query(child($databaseRef, path), equalTo(value, key))
+    const request = query(child($databaseRef, path), orderByChild(key), equalTo(value))
 
     return get(request).then((snapshot) => {
       if (snapshot.exists()) {

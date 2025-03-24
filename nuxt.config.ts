@@ -28,7 +28,6 @@ export default defineNuxtConfig({
   }], ['nuxt-mail', {
     message: [
       { name: 'main', to: 'rrotatew@gmail.com', },
-      { name: 'managerStars', to: 'yakushevnikita0501@gmail.com', }
     ],
     smtp: {
       host: "smtp.timeweb.ru",
@@ -38,8 +37,22 @@ export default defineNuxtConfig({
         pass: '>g!A<44\\gswHAK'
       }
     }
-  }], '@nuxt/image'],
+  }], '@nuxt/image', '@nuxtjs/seo'],
 
+  robots: {
+    rules: [
+      { UserAgent: '*', Allow: '/' },
+    ],
+    sitemap: 'https://moneyflowzen.ru/sitemap.xml'
+  },
+
+
+  site: {
+    url: 'https://moneyflowzen.ru',
+    name: 'Money Flow Zen',
+    description: 'Место, в котором финансовая грамотность и уровень понимания финансовых рынков выйдут на новый уровень.',
+    defaultLocale: 'ru',
+  },
   runtimeConfig: {
     public: {
       databaseURL: process.env.databaseURL
