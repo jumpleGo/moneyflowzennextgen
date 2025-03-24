@@ -10,7 +10,6 @@
 .mfz-blog-header {
   display: flex;
   align-items: center;
-  width: 100%;
   @include mobile {
     padding: 30px 15px;
   }
