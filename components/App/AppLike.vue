@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div :class="['app-like', {'app-like--visible': showBlock}, {'app-like--active': isLiked}]" @click="like">
-      <nuxt-img v-show="isLiked" :preload="{fetchPriority: 'high'}" :src="activeLikeUrl" class="app-like__image" @load="showBlock = true"/>
-      <nuxt-img v-show="!isLiked" :src="likeUrl" :preload="{fetchPriority: 'high'}" class="app-like__image" @load="showBlock = true"/>
+    <div :class="['app-like', {'app-like--visible': showBlock}, {'app-like--active': liked}]" @click="like">
+      <nuxt-img v-show="liked" :preload="{fetchPriority: 'high'}" :src="activeLikeUrl" class="app-like__image" @load="showBlock = true"/>
+      <nuxt-img v-show="!liked" :src="likeUrl" :preload="{fetchPriority: 'high'}" class="app-like__image" @load="showBlock = true"/>
       <span class="app-like__count">{{ count }}</span>
     </div>
   </div>
@@ -16,20 +16,17 @@ const emit = defineEmits<{
 const props = withDefaults(defineProps<{
   count?: number,
   unique: string,
-  uKey: string
+  uKey: string,
+  liked: boolean
 }>(), {
   count: 0
 })
 
 const showBlock = shallowRef(false)
 
-const likeCookie = useCookie('like')
-const currentKey = `${props.uKey}-${props.unique}`
-const isLiked = computed(() => likeCookie.value === currentKey)
 
 const like = () => {
-  if (isLiked.value) return
-  likeCookie.value = currentKey
+  if (props.liked) return
   emit('like')
 }
 </script>

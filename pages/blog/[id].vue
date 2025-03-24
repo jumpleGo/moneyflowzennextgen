@@ -16,7 +16,7 @@
         <article v-html="data?.text" class="article-wrapper__body-article" />
       </div>
       <ClientOnly>
-        <AppLike :count="data.likes" u-key="article"  :unique="postId" @like="incrementLike" />
+        <AppLike :count="data?.likes" :liked="isArticleLiked" @like="incrementLike" />
       </ClientOnly>
     </div>
   </div>
@@ -41,11 +41,19 @@ const viewedArticles = useCookie<string[]>('viewedArticles', {
 const readArticles = useCookie<string[]>('readArticles', {
   default: () => []
 })
-const isArticleViewed = computed(() => viewedArticles.value.some(item => item === postId))
-const isArticleRead = computed(() => readArticles.value.some(item => item === postId))
+const likedArticles = useCookie<string[]>('likedArticles', {
+  default: () => []
+})
+
+const isArticleViewed = computed(() => viewedArticles.value?.some(item => item === postId))
+const isArticleRead = computed(() => readArticles.value?.some(item => item === postId))
+const isArticleLiked = computed(() => likedArticles.value?.some(item => item === postId))
+
+
 const postId = route.params.id as string;
 
 const { data } = await useFetch(`/api/blog/${postId}`)
+
 
 onMounted(() => {
   if (!isArticleViewed.value) {
@@ -72,19 +80,21 @@ const incrementViews = () => {
   if (!data.value) return
   incrementDBStats('views')
 
-  if (!viewedArticles.value.find(item => item === postId)) {
+  if (!isArticleViewed.value) {
     viewedArticles.value.push(postId)
   }
 }
-const incrementDBStats = (type: 'views' | 'reads' | 'likes') => {
+const incrementDBStats = async (type: 'views' | 'reads' | 'likes') => {
   if (!data.value) return
   const objectUrl = `blog/${data.value?.index}`
-  const updatedView = {...data.value, [type]: (data.value?.[type] || 0)+1}
-  const updates = {
-    [objectUrl]: updatedView
+  const currentPost = await Getter.getByValue('/blog', postId, 'key')
+  const post: IBlogItem = Object.values(currentPost)?.[0]
+  if (post) {
+    const updates = {
+      [objectUrl]: {...post, [type]: post[type] + 1}
+    }
+    await Setter.updateToDb(updates)
   }
-
-  Setter.updateToDb(updates)
 }
 
 const incrementLike = () => {
@@ -92,20 +102,23 @@ const incrementLike = () => {
   incrementDBStats('likes')
   if (!data.value.likes) data.value.likes = 1
   else data.value.likes+=1
+
+  if (!isArticleLiked.value) {
+    likedArticles.value.push(postId)
+  }
 }
 
 const incrementRead = () => {
   if (!data.value) return
   incrementDBStats('reads')
 
-  if (!readArticles.value.find(item => item === postId)) {
+  if (!isArticleRead.value) {
     readArticles.value.push(postId)
   }
 }
 
 const markAsRead = () => {
-  if (isArticleRead.value) return
-  incrementRead()
+  if (!isArticleRead.value) incrementRead()
 }
 </script>
 <style lang="scss" scoped>
