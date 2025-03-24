@@ -58,9 +58,9 @@ useHead(computed(() => ({
   title: data.value?.title,
   description: data.value?.description,
   meta: [
-    { property: 'og:title', content: data.value?.title },
+    { property: 'og:title', content: data.value?.ogtitle },
     { name: 'title', content: data.value?.title },
-    { property: 'og:description', content: data.value?.description },
+    { property: 'og:description', content: data.value?.ogdescription },
     { name: 'description', content: data.value?.description },
     { property: 'og:image', content: data.value?.image },
     { property: 'og:type', content: 'article' },
