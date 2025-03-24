@@ -56,8 +56,12 @@ onMounted(() => {
 
 useHead(computed(() => ({
   title: data.value?.title,
+  description: data.value?.description,
   meta: [
     { property: 'og:title', content: data.value?.title },
+    { name: 'title', content: data.value?.title },
+    { property: 'og:description', content: data.value?.description },
+    { name: 'description', content: data.value?.description },
     { property: 'og:image', content: data.value?.image },
     { property: 'og:type', content: 'article' },
     { property: 'og:url', content: `https://moneyflowzen.ru/blog/${postId}` },
