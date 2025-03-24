@@ -1,6 +1,6 @@
 <template>
   <AppScrollProgress v-if="article" read-block="article" @read80percent="markAsRead" />
-  <div class="article-wrapper">
+  <div class="article-wrapper" :key="postId">
     <div class="article-wrapper__body">
       <BlogAuthor />
       <div id="article" class="article-wrapper__article-body" ref="article">
@@ -53,33 +53,21 @@ onMounted(() => {
   }
 })
 
-onBeforeUnmount(() => data.value = {})
 
-useHead({
-  title: data.value?.title,
-  meta: [
-    {
-      name: 'title',
-      content: data.value?.title,
-    },
-    {
-      property: 'og:title',
-      content: data.value?.title,
-    },
-    {
-      property: 'og:image',
-      content: data.value?.image,
-    },
-    {
-      property: 'og:type',
-      content: 'article',
-    },
-    {
-      property: 'og:url',
-      content: `moneyflowzen.ru/blog/${postId}`
-    }
-  ]
-})
+watch(data, (newData) => {
+  if (newData && newData.title) {
+    useHead({
+      title: newData.title,
+      meta: [
+        { name: 'title', content: newData.title },
+        { property: 'og:title', content: newData.title },
+        { property: 'og:image', content: newData.image },
+        { property: 'og:type', content: 'article' },
+        { property: 'og:url', content: `https://moneyflowzen.ru/blog/${postId}` }
+      ]
+    })
+  }
+}, { immediate: true })
 
 const incrementViews = () => {
   if (!data.value) return
@@ -90,7 +78,7 @@ const incrementViews = () => {
   }
 }
 const incrementDBStats = (type: 'views' | 'reads' | 'likes') => {
-  if (!data.value?.index) return
+  if (!data.value) return
   const objectUrl = `blog/${data.value?.index}`
   const updatedView = {...data.value, [type]: (data.value?.[type] || 0)+1}
   const updates = {
@@ -98,8 +86,6 @@ const incrementDBStats = (type: 'views' | 'reads' | 'likes') => {
   }
 
   Setter.updateToDb(updates)
-  if (!data.value[type]) data.value[type] = 1
-  else data.value[type]+=1
 }
 
 const incrementLike = () => {
