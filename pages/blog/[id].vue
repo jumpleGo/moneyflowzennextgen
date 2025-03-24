@@ -41,10 +41,12 @@ const isArticleViewed = computed(() => viewedArticles.value.some(item => item ==
 const isArticleRead = computed(() => readArticles.value.some(item => item === postId))
 const postId = route.params.id as string;
 
-const { data } = useAsyncData(async () => {
+const { data } = useAsyncData(`post-${postId}`, async () => {
   const fetchedArticle = await Getter.getByValue('/blog', String(postId), 'key')
 
   return Object.values(fetchedArticle)?.[0] as IBlogItem || {}
+}, {
+  server: true
 })
 
 onMounted(() => {
@@ -54,20 +56,15 @@ onMounted(() => {
 })
 
 
-watch(data, (newData) => {
-  if (newData && newData.title) {
-    useHead({
-      title: newData.title,
-      meta: [
-        { name: 'title', content: newData.title },
-        { property: 'og:title', content: newData.title },
-        { property: 'og:image', content: newData.image },
-        { property: 'og:type', content: 'article' },
-        { property: 'og:url', content: `https://moneyflowzen.ru/blog/${postId}` }
-      ]
-    })
-  }
-}, { immediate: true })
+useHead(computed(() => ({
+  title: data.value?.title,
+  meta: [
+    { property: 'og:title', content: data.value?.title },
+    { property: 'og:image', content: data.value?.image },
+    { property: 'og:type', content: 'article' },
+    { property: 'og:url', content: `https://moneyflowzen.ru/blog/${postId}` },
+  ]
+})))
 
 const incrementViews = () => {
   if (!data.value) return
