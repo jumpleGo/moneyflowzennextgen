@@ -15,6 +15,10 @@ const readArticles = useCookie<string[]>('readArticles', {
 const getRead = (key: string) => {
   return readArticles.value.some(item => item === key)
 }
+
+useHead({
+  title: 'Блог | Money Flow Zen'
+})
 </script>
 <style lang="scss" scoped>
 .blog-wrapper {

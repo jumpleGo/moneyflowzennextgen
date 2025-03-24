@@ -25,6 +25,7 @@
 </template>
 <script lang="ts" setup>
 useHead({
+  title: 'Money Flow Zen',
   meta: [
     {
       name: 'title',
