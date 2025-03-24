@@ -1,19 +1,23 @@
 <template>
   <AppScrollProgress v-if="article" read-block="article" @read80percent="markAsRead" />
-  <div class="article-wrapper" :key="postId">
+  <div v-if="data" class="article-wrapper" :key="postId">
     <div class="article-wrapper__body">
       <BlogAuthor />
       <div id="article" class="article-wrapper__article-body" ref="article">
         <div class="article-wrapper__body-header">
           <h2 class="article-wrapper__body-title">{{ data?.title }}</h2>
-          <span v-if="data?.updatedAt" class="article-wrapper__body-date">{{ new Date(data?.updatedAt * 1000).toLocaleDateString() }}</span>
+          <ClientOnly>
+            <span v-if="data?.updatedAt" class="article-wrapper__body-date">{{ new Date(data?.updatedAt * 1000).toLocaleDateString() }}</span>
+          </ClientOnly>
           <span v-if="data?.views" class="article-wrapper__body-view">{{ getNumberWithWordEnding(data?.views, ['просмотр', 'просмотра', 'просмотров']) }}</span>
           <span v-if="data?.views" class="article-wrapper__body-view">{{ getNumberWithWordEnding(data?.reads, ['дочитывание', 'дочитывания', 'дочитываний']) }}</span>
         </div>
-        <nuxt-img v-if="data?.image" preload="high" :src="data.image" class="article-wrapper__body-image" />
+        <nuxt-img v-if="data?.image" :preload="{fetchPriority: 'high'}" :src="data.image" class="article-wrapper__body-image" />
         <article v-html="data?.text" class="article-wrapper__body-article" />
       </div>
-      <AppLike :count="data?.likes" u-key="article"  :unique="postId" @like="incrementLike" />
+      <ClientOnly>
+        <AppLike :count="data.likes" u-key="article"  :unique="postId" @like="incrementLike" />
+      </ClientOnly>
     </div>
   </div>
 </template>
@@ -41,13 +45,7 @@ const isArticleViewed = computed(() => viewedArticles.value.some(item => item ==
 const isArticleRead = computed(() => readArticles.value.some(item => item === postId))
 const postId = route.params.id as string;
 
-const { data } = useAsyncData(`post-${postId}`, async () => {
-  const fetchedArticle = await Getter.getByValue('/blog', String(postId), 'key')
-
-  return Object.values(fetchedArticle)?.[0] as IBlogItem || {}
-}, {
-  server: true
-})
+const { data } = await useFetch(`/api/blog/${postId}`)
 
 onMounted(() => {
   if (!isArticleViewed.value) {

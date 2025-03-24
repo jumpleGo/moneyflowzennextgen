@@ -1,8 +1,8 @@
 <template>
   <div>
     <div :class="['app-like', {'app-like--visible': showBlock}, {'app-like--active': isLiked}]" @click="like">
-      <nuxt-img v-show="isLiked" preload="high" :src="activeLikeUrl" class="app-like__image" @load="showBlock = true"/>
-      <nuxt-img v-show="!isLiked" :src="likeUrl" preload="high" class="app-like__image" @load="showBlock = true"/>
+      <nuxt-img v-show="isLiked" :preload="{fetchPriority: 'high'}" :src="activeLikeUrl" class="app-like__image" @load="showBlock = true"/>
+      <nuxt-img v-show="!isLiked" :src="likeUrl" :preload="{fetchPriority: 'high'}" class="app-like__image" @load="showBlock = true"/>
       <span class="app-like__count">{{ count }}</span>
     </div>
   </div>
