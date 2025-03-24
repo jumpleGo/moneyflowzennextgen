@@ -34,9 +34,9 @@ import { getNoun } from '@/helpers/date'
 const router = useRouter()
 const props = withDefaults(
   defineProps<{
-    title: string
-    image: string
-    description: string
+    title?: string
+    image?: string
+    description?: string
     link?: string
     start?: string
     nextGroup?: string
@@ -49,7 +49,7 @@ const props = withDefaults(
 )
 
 const openLink = () => {
-  router.push(props.link)
+  router.push(`/products/${props.link}`)
 }
 const calculateTime = (date, prefix, suffix) => {
   if (!date) return undefined;

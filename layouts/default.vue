@@ -1,7 +1,9 @@
 <template>
   <AppHeader v-if="showHeader" />
   <div class="mfz_wrapper wrapper">
-    <slot />
+    <KeepAlive>
+      <slot />
+    </KeepAlive>
   </div>
   <AppFooter v-if="showFooter" />
 </template>

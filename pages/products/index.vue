@@ -1,16 +1,16 @@
 <template>
   <div class="list-products">
-    <img class="list-products__euro" src="../assets/euro.png">
+    <img class="list-products__euro" src="../../assets/euro.png">
     <div class="interactive_block-2">
-      <img class="list-products__light" src="../assets/light.svg">
-      <img class="list-products__ellipse-1" src="../assets/ellipse1.png">
-      <img class="list-products__ellipse-2" src="../assets/ellipse3.png">
-      <img class="list-products__ellipse-3" src="../assets/ellipse3.png">
+      <img class="list-products__light" src="../../assets/light.svg">
+      <img class="list-products__ellipse-1" src="../../assets/ellipse1.png">
+      <img class="list-products__ellipse-2" src="../../assets/ellipse3.png">
+      <img class="list-products__ellipse-3" src="../../assets/ellipse3.png">
     </div>
 
     <div class="round" />
     <div class="list-products__content">
-      <img v-if="productsActive?.length" src="../assets/moln.svg" class="list-products__moln">
+      <img v-if="productsActive?.length" src="../../assets/moln.svg" class="list-products__moln">
       <div v-if="productsActive.length" class="list-products--list">
         <Product  v-for="item in productsActive" :key="item.link" v-bind="item" class="product-item" />
       </div>
@@ -20,27 +20,25 @@
     </div>
 
     <div class="interactive_block">
-      <img class="list-products__light--bottom" src="../assets/light.svg">
-      <img class="list-products__guru" src="../assets/guru.png">
-      <img class="list-products__ellipse-1--bottom" src="../assets/ellipse1.png">
-      <img class="list-products__ellipse-2--bottom" src="../assets/ellipse3.png">
-      <img class="list-products__ellipse-3--bottom" src="../assets/ellipse3.png">
+      <img class="list-products__light--bottom" src="../../assets/light.svg">
+      <img class="list-products__guru" src="../../assets/guru.png">
+      <img class="list-products__ellipse-1--bottom" src="../../assets/ellipse1.png">
+      <img class="list-products__ellipse-2--bottom" src="../../assets/ellipse3.png">
+      <img class="list-products__ellipse-3--bottom" src="../../assets/ellipse3.png">
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 
-import Product from "@/components/Product.vue";
-import ProductSceleton from "@/components/ProductSceleton.vue";
-import {useDetailInfoStore} from "@/stores/detail";
+import Product from "~/components/Product.vue";
+import ProductSceleton from "~/components/ProductSceleton.vue";
+import {useDetailInfoStore} from "~/stores/detail";
 import {storeToRefs} from "pinia";
 import { Getter } from '~/helpers/getter'
-const {productsActive, products, tariffs } = storeToRefs(useDetailInfoStore())
-const { $databaseRef } = useNuxtApp()
+const {productsActive, products } = storeToRefs(useDetailInfoStore())
 
 const {data} = useAsyncData(async () => {
   products.value = await Getter.getFromDB( 'products/')
-  tariffs.value = await Getter.getFromDB('tariffs/')
 })
 
 </script>
@@ -82,7 +80,8 @@ const {data} = useAsyncData(async () => {
   overflow: hidden;
   align-items: center;
   position: relative;
-  min-height: 100vh;
+  min-height: calc(100vh - 100px);
+  padding: 100px 0;
 
   @include desktop {
     justify-content: center;

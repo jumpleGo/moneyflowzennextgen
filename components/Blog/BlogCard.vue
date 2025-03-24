@@ -1,33 +1,38 @@
 <template>
-  <div class="blog-card">
-    <span class="blog-card--read product__attention">прочитано</span>
-    <nuxt-img height="150px" fit src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" />
+  <nuxt-link  class="blog-card" :to="`blog/${item.key}`">
+    <span v-if="read" class="blog-card--read product__attention">прочитано</span>
+    <div :style="{backgroundImage: `url(${item.image})`}" class="blog-card__image" />
     <div class="blog-card__content">
-      <nuxt-link :to="`blog/${item.key}`" class="blog-card__title">{{ item.title }}</nuxt-link>
+      <h3 class="blog-card__title">{{ item.title }}</h3>
       <div class="blog-card__footer">
         <div class="blog-card__time">
-          <nuxt-img src="https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/ui%2Fclock.png?alt=media&token=4e7d5657-245e-4e05-b834-4ce03a6db797" />
+          <nuxt-img :src="grayClock" />
           {{ item.time }}
           мин.
         </div>
-        <div :class="['blog-card__level', level.className]">{{ level.text }}</div>
+        <div v-if="level" :class="['blog-card__level', level.className]">
+          <div v-for="circle in item.level" class="blog-card__level-circle" />
+          <span class="blog-card__level-text">ур. {{ level.text }}</span>
+        </div>
       </div>
     </div>
-  </div>
+  </nuxt-link>
 </template>
 <script setup lang="ts">
+import { grayClock } from 'assets/imagesSrc'
+
 const levelObject: {[key: number]: Record<string, string>;} = {
   1: {
-    text: 'базовый',
-    className: 'yellow-text'
+    className: 'yellow',
+    text: 'новичок'
   },
   2: {
-    text: 'продвинутый',
-    className: 'blue-text'
+    className: 'blue',
+    text: 'средний'
   },
   3: {
-    text: 'опытный',
-    className: 'purple-text'
+    className: 'purple',
+    text: 'высокий'
   }
 }
 interface IBlogItem {
@@ -39,7 +44,8 @@ interface IBlogItem {
   private: boolean
 }
 const props = defineProps<{
-  item: IBlogItem
+  item: IBlogItem,
+  read?: Boolean
 }>()
 
 const level = computed(() => {
@@ -54,7 +60,8 @@ const level = computed(() => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  max-width: 300px;
+  min-width: 300px;
+  text-decoration: none;
 
   &--read {
     background-color: rgba(0,0,0, 0.4);
@@ -70,8 +77,20 @@ const level = computed(() => {
     flex-direction: column;
   }
 
-  &__title {
+  &__image {
+    background-size: cover;
+    background-position: top;
+    height: 150px;
+  }
 
+  &__title {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+    margin: 0;
+    &:hover {
+      color: $brand_yellow
+    }
   }
 
   &__footer {
@@ -84,10 +103,45 @@ const level = computed(() => {
     display: flex;
     align-items: center;
     color: #6A6A6A;
+    font-size: 12px;
     gap: 3px
   }
   &__level {
-
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  &__level-text {
+    font-size: 14px;
+  }
+  &__level-circle {
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+  }
+  .yellow {
+    .blog-card__level-circle {
+      background-color: $brand_yellow;
+    }
+    .blog-card__level-text {
+      color: $brand_yellow;
+    }
+  }
+  .blue {
+    .blog-card__level-circle {
+      background-color: $blue;
+    }
+    .blog-card__level-text {
+      color: $blue;
+    }
+  }
+  .purple {
+    .blog-card__level-circle {
+      background-color: $purple;
+    }
+    .blog-card__level-text {
+      color: $purple;
+    }
   }
 }
 </style>

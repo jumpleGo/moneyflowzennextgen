@@ -23,6 +23,28 @@
   </div>
 <!--  <MfzRoadMap />-->
 </template>
+<script lang="ts" setup>
+useHead({
+  meta: [
+    {
+      name: 'title',
+      content: 'Money Flow Zen'
+    },
+    {
+      name: 'description',
+      content: 'Место, в котором знания финансовой грамотности и глубина понимания финансовых рынков выйдут на новый уровень'
+    },
+    {
+      property: 'og:title',
+      content: 'Money Flow Zen'
+    },
+    {
+      property: 'og:description',
+      content: 'Место, в котором знания финансовой грамотности и глубина понимания финансовых рынков выйдут на новый уровень'
+    }
+  ]
+})
+</script>
 <style lang="scss" scoped>
 .mfz-main {
   display: flex;

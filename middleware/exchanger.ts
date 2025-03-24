@@ -1,6 +1,7 @@
 import { Getter } from '~/helpers/getter'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
+  if (process.server) return
   const {activeTransaction} = storeToRefs(useExchangerStore())
   const transaction = window.localStorage.getItem('transaction')
   if (transaction) {

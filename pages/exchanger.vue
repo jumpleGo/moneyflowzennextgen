@@ -65,7 +65,17 @@ const hideRightBlock = shallowRef(true)
 const {isMobile, isLoadingResize} = useResponsive()
 const {showModal} = storeToRefs(useMainStore())
 definePageMeta({
-  middleware:['exchanger']
+  layout: 'exchanger',
+  middleware: 'exchanger'
+})
+
+useHead({
+  meta: [
+    {
+      name: 'robots',
+      content: 'noindex,nofollow'
+    }
+  ]
 })
 
 const loading = shallowRef(false)

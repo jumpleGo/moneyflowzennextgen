@@ -2,36 +2,36 @@
   <div class="detail-information-page">
     <div class="detail-information-page__light" />
     <div class="detail-information-page__header">
-      <h1 v-if="currentProduct?.title" class="detail-information-page__title">
-        <span v-html="currentProduct.title"></span>
-        <nuxt-img class="detail-information-page__image" :src="currentProduct.image" />
+      <h1 v-if="data?.product?.title" class="detail-information-page__title">
+        <span v-html="data.product.title"></span>
+        <nuxt-img class="detail-information-page__image" :src="data.product.image" />
       </h1>
-      <h1 v-if="!currentProduct?.title" class="detail-information-page__title--sceleton" />
+      <h1 v-if="!data?.product?.title" class="detail-information-page__title--sceleton" />
       <div class="detail-information-page__moln-wrapper">
-        <img class="detail-information-page__moln" src="../assets/molnBig.svg" />
+        <nuxt-img class="detail-information-page__moln" :src="molnBig" />
       </div>
     </div>
-    <div v-if="currentProduct?.description" class="detail-information-page__content">
-      <div class="detail-information-page__text" v-html="currentProduct.description" />
+    <div v-if="data?.product?.description" class="detail-information-page__content">
+      <div class="detail-information-page__text" v-html="data?.product.description" />
     </div>
-    <div v-if="!currentProduct?.description" class="detail-information-page__content--sceleton" />
-    <div v-if="currentTariff.length" class="detail-information-page__tariffs">
-      <div v-for="(item, index) in currentTariff" :key="`item--${index}`" class="detail-information__tariff">
-        <p class="detail-information__tariff__price">{{ formatPrice(item.price) }} ₽</p>
-        <p class="detail-information__tariff__title">({{ item.title }})</p>
-        <img src="/assets/dollar_big.svg" class="detail-information__tariff__image tariff-dollar-image" />
-        <img src="/assets/bsll.svg" class="detail-information__tariff__image tariff-ball-image" />
+    <div v-if="!data?.product?.description" class="detail-information-page__content--sceleton" />
+    <div v-if="data?.tariff" class="detail-information-page__tariffs">
+      <div v-for="(item, index) in data.tariff" :key="`item--${index}`" class="detail-information__tariff">
+        <p class="detail-information__tariff__price">{{ formatPrice(item?.price) }} ₽</p>
+        <p class="detail-information__tariff__title">({{ item?.title }})</p>
+        <nuxt-img :src="dollarBig" class="detail-information__tariff__image tariff-dollar-image" />
+        <nuxt-img :src="ball" class="detail-information__tariff__image tariff-ball-image" />
       </div>
     </div>
 
     <div class="call-to-action">
-      <img class="call-to-action__ball" src="../assets/bsll.svg" />
-      <img class="call-to-action__ball-2" src="../assets/bsll.svg" />
-      <img class="call-to-action__ball-3" src="../assets/bsll.svg" />
-      <img class="call-to-action__ball-4" src="../assets/bsll.svg" />
-      <img class="call-to-action__moln" src="../assets/moln.svg" />
-      <img class="call-to-action__dollar" src="../assets/dollar_big.svg" />
-      <img class="call-to-action__guru" src="../assets/guru.png" />
+      <nuxt-img class="call-to-action__ball" :src="ball" />
+      <nuxt-img class="call-to-action__ball-2" :src="ball" />
+      <nuxt-img class="call-to-action__ball-3" :src="ball" />
+      <nuxt-img class="call-to-action__ball-4" :src="ball" />
+      <nuxt-img class="call-to-action__moln" :src="moln" />
+      <nuxt-img class="call-to-action__dollar" :src="dollarBig" />
+      <nuxt-img class="call-to-action__guru" :src="guru" />
       <div class="call-to-action__wrapper">
         <div class="call-to-action__light" />
         <AppButton title="стать гуру" class="call-to-action__button" to="https://t.me/mfz_owner" />
@@ -41,11 +41,24 @@
 </template>
 
 <script lang="ts" setup>
-import {useDetailInfoStore} from "@/stores/detail";
 import AppButton from "@/components/Buttons/AppButton.vue";
-import {storeToRefs} from "pinia";
 import { formatPrice } from '@/helpers/formatPrice'
-const {currentProduct, currentTariff} = storeToRefs(useDetailInfoStore())
+import { Getter } from '~/helpers/getter'
+import { ball, dollarBig, guru, moln, molnBig } from 'assets/imagesSrc'
+
+const route = useRoute()
+const productId = route.params.id as string
+
+const {data} = useAsyncData(async () => {
+  const productPromise = Getter.getByValue('/products', productId, 'link')
+  const tariffPromise = Getter.getByKey('tariffs', productId)
+
+  const [productData, tariffData] = await Promise.allSettled([productPromise, tariffPromise])
+
+  const product = Object.values(productData.value)?.[0] || {}
+
+  return {product, tariff: tariffData.value}
+})
 </script>
 <style lang="scss">
 li {

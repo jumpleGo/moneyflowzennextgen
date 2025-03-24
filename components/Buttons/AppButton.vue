@@ -42,6 +42,9 @@ const componentButton = computed(() => props.to ? props.to.startsWith('http') ? 
 const buttonClass = computed(() => classByType[props.type])
 </script>
 <style lang="scss" scoped>
+.app__button {
+  text-decoration: none;
+}
 .button__main {
   display: flex;
   align-items: center;

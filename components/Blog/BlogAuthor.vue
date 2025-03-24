@@ -4,7 +4,7 @@
         <nuxt-img width="30" height="30" class="logo" :src="logoSrc" />
         <span>Money Flow Zen</span>
       </div>
-    <AppButton size="xs" title="подписаться" />
+    <AppButton size="xs" title="подписаться" to="https://t.me/mfz_official_crypto" />
   </div>
 </template>
 <style lang="scss" scoped>
