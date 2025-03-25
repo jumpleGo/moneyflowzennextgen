@@ -1,4 +1,4 @@
-import { child, get, push, set, ref, getDatabase, update } from 'firebase/database'
+import { child, get, push, set, ref, getDatabase, update, increment } from 'firebase/database'
 import type { DatabaseReference } from '@firebase/database'
 
 export class Setter {
@@ -13,5 +13,11 @@ export class Setter {
 
   static async updateToDb (updates: any) {
     return await update(ref(getDatabase()), updates)
+  }
+
+  static async incrementByKey (path: string, id: number | string, key: string) {
+    return await update(ref(getDatabase(), `${path}/${id}`), {
+      [key]: increment(1)
+    } )
   }
 }

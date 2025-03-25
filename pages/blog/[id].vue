@@ -86,15 +86,7 @@ const incrementViews = () => {
 }
 const incrementDBStats = async (type: 'views' | 'reads' | 'likes') => {
   if (!data.value) return
-  const objectUrl = `blog/${data.value?.index}`
-  const currentPost = await Getter.getByValue('/blog', postId, 'key')
-  const post: IBlogItem = Object.values(currentPost)?.[0]
-  if (post) {
-    const updates = {
-      [objectUrl]: {...post, [type]: post[type] + 1}
-    }
-    await Setter.updateToDb(updates)
-  }
+  await Setter.incrementByKey('blog', data.value?.index, type)
 }
 
 const incrementLike = () => {
