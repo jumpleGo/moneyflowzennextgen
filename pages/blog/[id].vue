@@ -2,7 +2,7 @@
   <AppScrollProgress v-if="article" read-block="article" @read80percent="markAsRead" />
   <div v-if="data" class="article-wrapper" :key="postId">
     <div class="article-wrapper__body">
-      <BlogAuthor />
+      <BlogAuthor @open-tg-list="showTgList = true" />
       <div id="article" class="article-wrapper__article-body" ref="article">
         <div class="article-wrapper__body-header">
           <h2 class="article-wrapper__body-title">{{ data?.title }}</h2>
@@ -20,19 +20,20 @@
       </ClientOnly>
     </div>
   </div>
+  <AppFunctionalModal v-show="showTgList" @close="showTgList = false" />
 </template>
 
 <script lang="ts" setup>
-import { Getter } from '~/helpers/getter'
 import BlogAuthor from '~/components/Blog/BlogAuthor.vue'
 import { Setter } from '~/helpers/setter'
 import AppScrollProgress from '~/components/App/AppScrollProgress.vue'
 import { getNumberWithWordEnding } from '~/helpers/date'
-import type { IBlogItem } from '~/types/pages/blog'
-import { post } from 'axios'
+
 definePageMeta({
   layout: 'blog'
 })
+
+const showTgList = shallowRef(false)
 const route = useRoute()
 const article = ref()
 const viewedArticles = useCookie<string[]>('viewedArticles', {

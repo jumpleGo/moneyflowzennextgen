@@ -4,7 +4,9 @@
         <nuxt-img width="30" height="30" class="logo" :src="logoSrc" />
         <span>Money Flow Zen</span>
       </div>
-    <AppButton size="xs" title="подписаться" to="https://t.me/mfz_official_crypto" />
+    <div class="blog-author__buttons">
+      <AppButton size="xs" title="подписаться" @click="emit('openTgList')" />
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -20,9 +22,20 @@
     align-items: center;
     gap: 8px;
   }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    gap: 20px
+  }
 }
 </style>
 <script setup lang="ts">
 import AppButton from '~/components/Buttons/AppButton.vue'
 import { logoSrc } from 'assets/imagesSrc'
+
+
+const emit = defineEmits<{
+  (e: 'openTgList'): void
+}>()
 </script>

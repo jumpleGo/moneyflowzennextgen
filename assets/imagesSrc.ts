@@ -5,4 +5,5 @@ export const moln = 'https://firebasestorage.googleapis.com/v0/b/moneyflowzen.ap
 export const ball = 'https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/ui%2Fbsll.svg?alt=media&token=281f77c4-85d4-484f-9ab1-409cd859aabd'
 export const guru = 'https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/ui%2Fguru.png?alt=media&token=d331155b-2f98-4371-864e-7b1ce7d9a139'
 export const grayClock = 'https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/ui%2Fclock.png?alt=media&token=39fe2c09-d9d8-411d-a383-f62cac8a3c08'
-
+export const logoCryptoTg = 'https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/logo%2Flogo-crypto-tg.jpeg?alt=media&token=7bd68668-318a-42bd-a9d5-3b1dae01ed3e'
+export const logoStocksTg = 'https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/logo%2Flogo-stocks-ts.jpeg?alt=media&token=87b2447a-3fdc-4df9-a007-7ceb78e6824d'
