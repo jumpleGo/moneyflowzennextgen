@@ -37,22 +37,17 @@ export default defineNuxtConfig({
         pass: '>g!A<44\\gswHAK'
       }
     }
-  }], '@nuxt/image', '@nuxtjs/seo'],
+  }], '@nuxt/image', '@nuxtjs/sitemap'],
 
-  robots: {
-    rules: [
-      { UserAgent: '*', Allow: '/' },
+  sitemap: {
+    exclude: [
+      '/test', '/exchanger', '/adminex', '/gift', '/guideStartToTrading', '/guideStartToCrypto',
     ],
-    sitemap: 'https://moneyflowzen.ru/sitemap.xml'
+    urls: [
+      '/blog/futures', '/blog/longshort', '/blog/stocks', '/blog/bonds'
+    ]
   },
 
-
-  site: {
-    url: 'https://moneyflowzen.ru',
-    name: 'Money Flow Zen',
-    description: 'Место, в котором финансовая грамотность и уровень понимания финансовых рынков выйдут на новый уровень.',
-    defaultLocale: 'ru',
-  },
   runtimeConfig: {
     public: {
       databaseURL: process.env.databaseURL

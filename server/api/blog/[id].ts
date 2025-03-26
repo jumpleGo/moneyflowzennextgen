@@ -3,7 +3,6 @@ import { useServerDatabase } from '~/server/utils/firebase'
 import { child, equalTo, get, orderByChild, query } from 'firebase/database'
 
 export default defineEventHandler(async (event) => {
-  console.log('SERVAR', event.context, event)
   const id = event.context.params?.id
   const {databaseRef} = useServerDatabase()
 

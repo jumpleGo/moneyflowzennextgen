@@ -41,7 +41,14 @@ import AdminSettings from '~/components/adminex/AdminSettings.vue'
 const {exchangerSettings} = storeToRefs(useExchangerStore())
 const { $database } = useNuxtApp()
 
-
+useHead({
+  meta: [
+    {
+      name: 'robots',
+      content: 'noindex,nofollow'
+    }
+  ]
+})
 
 const inputAdminHash = ref('')
 const search = ref('')
