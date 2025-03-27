@@ -1,7 +1,7 @@
 <template>
   <nuxt-link  class="blog-card" :to="`blog/${item.key}`">
     <span v-if="read" class="blog-card--read product__attention">прочитано</span>
-    <div :style="{backgroundImage: `url(${item.image})`}" class="blog-card__image" />
+    <div src="" :style="{backgroundImage: `url(${item.image})`}" class="blog-card__image" />
     <div class="blog-card__content">
       <h3 class="blog-card__title">{{ item.title }}</h3>
       <div class="blog-card__footer">
@@ -54,13 +54,13 @@ const level = computed(() => {
 </script>
 <style lang="scss" scoped>
 .blog-card {
-  border-radius: 20px;
+  border-radius: 10px;
   background-color: white;
   position: relative;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-width: 300px;
+  width: 400px;
   text-decoration: none;
 
   &--read {
@@ -80,7 +80,10 @@ const level = computed(() => {
   &__image {
     background-size: cover;
     background-position: top;
-    height: 150px;
+    max-width: 400px;
+    height: auto;
+    max-height: 220px;
+    aspect-ratio: 400 / 220;
   }
 
   &__title {

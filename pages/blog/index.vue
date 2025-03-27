@@ -24,10 +24,10 @@ useHead({
 .blog-wrapper {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 16px;
   padding: 100px 40px;
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
 
   @include mobile-all {
@@ -37,15 +37,5 @@ useHead({
   @include tablet {
 
   }
-
-  &__card {
-    flex: 0 0 calc(33.333% - 10.66px);
-
-    @include mobile-all {
-      flex: 0 0 100%;
-    }
-  }
-
-
 }
 </style>
