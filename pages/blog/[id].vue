@@ -73,7 +73,7 @@ useHead(computed(() => ({
     { name: 'title', content: data.value?.title },
     { property: 'og:description', content: data.value?.ogdescription },
     { name: 'description', content: data.value?.description },
-    { property: 'og:image', content: data.value?.image },
+    { property: 'og:image', content: data.value?.preview },
     { property: 'og:type', content: 'article' },
     { property: 'og:url', content: `https://moneyflowzen.ru/blog/${postId}` },
   ]
