@@ -7,3 +7,4 @@ export const guru = 'https://firebasestorage.googleapis.com/v0/b/moneyflowzen.ap
 export const grayClock = 'https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/ui%2Fclock.png?alt=media&token=39fe2c09-d9d8-411d-a383-f62cac8a3c08'
 export const logoCryptoTg = 'https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/logo%2Flogo-crypto-tg.jpeg?alt=media&token=7bd68668-318a-42bd-a9d5-3b1dae01ed3e'
 export const logoStocksTg = 'https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/logo%2Flogo-stocks-ts.jpeg?alt=media&token=87b2447a-3fdc-4df9-a007-7ceb78e6824d'
+export const chevron = 'https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/ui%2Fchevron.png?alt=media&token=45f3418e-7dfc-4ab3-b381-cb68a9fff6af'

@@ -18,6 +18,7 @@
       <ClientOnly>
         <AppLike :count="data?.likes" :liked="isArticleLiked" @like="incrementLike" />
       </ClientOnly>
+      <PrevNextArticle v-if="data.nextArticle || data.prevArticle" :next-article="data.nextArticle" :prev-article="data.prevArticle" />
     </div>
   </div>
   <AppFunctionalModal v-show="showTgList" @close="showTgList = false" />
@@ -28,6 +29,7 @@ import BlogAuthor from '~/components/Blog/BlogAuthor.vue'
 import { Setter } from '~/helpers/setter'
 import AppScrollProgress from '~/components/App/AppScrollProgress.vue'
 import { getNumberWithWordEnding } from '~/helpers/date'
+import PrevNextArticle from '~/components/Blog/PrevNextArticle.vue'
 
 definePageMeta({
   layout: 'blog'

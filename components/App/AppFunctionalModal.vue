@@ -7,11 +7,17 @@
         <div class="functional_modal__blocks">
           <nuxt-link target="_blank" to="https://t.me/mfz_official_crypto" class="functional_modal__block">
             <nuxt-img :src="logoCryptoTg" class="functional_modal__image"/>
-            <p>MFZ-CRYPTO</p>
+            <div class="functional_modal__text-block">
+              <p>MFZ-CRYPTO</p>
+              <span>Разбираю рынок крипты в лайве</span>
+            </div>
           </nuxt-link>
           <nuxt-link target="_blank" to="https://t.me/mfz_official" class="functional_modal__block">
             <nuxt-img :src="logoStocksTg" class="functional_modal__image" />
-            <p>MFZ-STOCKS</p>
+            <div class="functional_modal__text-block">
+              <p>MFZ-STOCKS</p>
+              <span>Разбираю рынок фонды в ключевых точках</span>
+            </div>
           </nuxt-link>
         </div>
       </div>
@@ -58,8 +64,15 @@ const emit = defineEmits<{
   &__description {
     font-size: 14px;
   }
-  &__content {
-
+  &__text-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    span {
+      font-size: 12px;
+      color: #3b3b3b
+    }
   }
 
   &__blocks {
@@ -74,7 +87,11 @@ const emit = defineEmits<{
     display: flex;
     gap: 8px;
     text-decoration: none;
-    color: black
+    color: black;
+
+    p {
+      margin: unset
+    }
   }
 
   &__image {

@@ -5,16 +5,30 @@ import { child, equalTo, get, orderByChild, query } from 'firebase/database'
 export default defineEventHandler(async (event) => {
   const id = event.context.params?.id
   const {databaseRef} = useServerDatabase()
+  let article = {}
 
   const request = query(child(databaseRef, 'blog'), orderByChild('key'), equalTo(id))
 
-  const fetchedArticle = await  get(request).then((snapshot) => {
-    if (snapshot.exists()) {
-      return snapshot.val()
-    } else {
-      console.log("No data available");
-    }
-  })
+  const snapshotFetchedArticle = await get(request)
+  if (snapshotFetchedArticle.exists()) {
+    article = Object.values(snapshotFetchedArticle.val())?.[0] || {}
+  }
 
-  return Object.values(fetchedArticle)?.[0] || {}
+  if (typeof(article.next) === 'number') {
+    const snapshotFetchedArticleNext = await get(query(child(databaseRef, 'blog'), orderByChild('index'), equalTo(article.next)))
+    if (snapshotFetchedArticleNext.exists()) {
+      article.nextArticle = Object.values(snapshotFetchedArticleNext.val())?.[0] || {}
+    }
+  }
+
+  if (typeof(article.prev) === 'number') {
+    const snapshotFetchedArticlePrev = await get(query(child(databaseRef, 'blog'), orderByChild('index'), equalTo(article.prev)))
+    if (snapshotFetchedArticlePrev.exists()) {
+      article.prevArticle = Object.values(snapshotFetchedArticlePrev.val())?.[0] || {}
+    }
+  }
+
+
+
+  return article
 })
