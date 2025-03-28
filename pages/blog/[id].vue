@@ -12,7 +12,7 @@
           <span v-if="data?.views" class="article-wrapper__body-view">{{ getNumberWithWordEnding(data?.views, ['просмотр', 'просмотра', 'просмотров']) }}</span>
           <span v-if="data?.views" class="article-wrapper__body-view">{{ getNumberWithWordEnding(data?.reads, ['дочитывание', 'дочитывания', 'дочитываний']) }}</span>
         </div>
-        <nuxt-img v-if="data?.image" :preload="{fetchPriority: 'high'}" :src="data.image" class="article-wrapper__body-image" />
+        <nuxt-img v-if="data?.image" preload :src="data.image" class="article-wrapper__body-image" />
         <article v-html="data?.text" class="article-wrapper__body-article" />
       </div>
       <ClientOnly>

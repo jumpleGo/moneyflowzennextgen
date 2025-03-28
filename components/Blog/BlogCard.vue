@@ -1,7 +1,7 @@
 <template>
   <nuxt-link  class="blog-card" :to="`blog/${item.key}`">
     <span v-if="read" class="blog-card--read product__attention">прочитано</span>
-    <div src="" :style="{backgroundImage: `url(${item.preview || item.image})`}" class="blog-card__image" />
+    <nuxt-img :src="item.preview" preload class="blog-card__image" />
     <div class="blog-card__content">
       <h3 class="blog-card__title">{{ item.title }}</h3>
       <div class="blog-card__footer">

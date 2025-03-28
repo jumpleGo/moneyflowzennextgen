@@ -4,11 +4,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { Getter } from '~/helpers/getter'
-
-const {data} = useAsyncData(async () => {
-  return await Getter.getFromDB('/blog')
-})
+const { data } = await useFetch('/api/blog')
 const readArticles = useCookie<string[]>('readArticles', {
   default: () => []
 })
