@@ -13,7 +13,7 @@
           <span v-if="data?.views" class="article-wrapper__body-view">{{ getNumberWithWordEnding(data?.reads, ['дочитывание', 'дочитывания', 'дочитываний']) }}</span>
         </div>
         <nuxt-img v-if="data?.image" preload :src="data.image" class="article-wrapper__body-image" />
-        <article v-html="data?.text" class="article-wrapper__body-article" />
+        <HtmlWithComponents :content="data?.text" class="article-wrapper__body-article"/>
       </div>
       <ClientOnly>
         <AppLike :count="data?.likes" :liked="isArticleLiked" @like="incrementLike" />
@@ -30,6 +30,7 @@ import { Setter } from '~/helpers/setter'
 import AppScrollProgress from '~/components/App/AppScrollProgress.vue'
 import { getNumberWithWordEnding } from '~/helpers/date'
 import PrevNextArticle from '~/components/Blog/PrevNextArticle.vue'
+import HtmlWithComponents from '~/components/Blog/HtmlWithComponents.vue'
 
 definePageMeta({
   layout: 'blog'
