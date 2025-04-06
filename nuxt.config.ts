@@ -44,7 +44,7 @@ export default defineNuxtConfig({
       '/test', '/exchanger', '/adminex', '/gift', '/guideStartToTrading', '/guideStartToCrypto',
     ],
     urls: [
-      '/blog/futures', '/blog/longshort', '/blog/stocks', '/blog/bonds', '/blog/bondsexample'
+      '/blog/futures', '/blog/longshort', '/blog/stocks', '/blog/bonds', '/blog/bondsexample', '/blog/indicators', '/blog/konver-diver'
     ]
   },
 
