@@ -1,5 +1,8 @@
 .article-wrapper {
   font-family: Inter,Helvetica Neue,Helvetica,sans-serif;
+  a {
+    color: $brand_yellow
+  }
   hr {
     border-color: $brand_yellow;
     margin: 40px 0;
