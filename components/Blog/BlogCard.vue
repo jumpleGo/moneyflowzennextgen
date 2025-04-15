@@ -62,6 +62,9 @@ const level = computed(() => {
   overflow: hidden;
   width: 400px;
   text-decoration: none;
+  @include mobile-all {
+    width: 100%;
+  }
 
   &--read {
     background-color: rgba(0,0,0, 0.4);
@@ -84,6 +87,9 @@ const level = computed(() => {
     height: auto;
     max-height: 220px;
     aspect-ratio: 400 / 220;
+    @include mobile-all {
+      width: 100%;
+    }
   }
 
   &__title {

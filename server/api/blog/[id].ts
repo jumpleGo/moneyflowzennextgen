@@ -1,9 +1,12 @@
 // /server/api/blog/[id].ts
 import { useServerDatabase } from '~/server/utils/firebase'
 import { child, equalTo, get, orderByChild, query } from 'firebase/database'
+import { defineEventHandler, getQuery } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params?.id
+
+
   const {databaseRef} = useServerDatabase()
   let article = {}
 

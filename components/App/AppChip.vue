@@ -1,5 +1,5 @@
 <template>
-  <div class="app-chip" @click="emit('select', item.key)">
+  <div :class="['app-chip', {'--active': selected}]" @click="emit('select', item.key)">
     <AppImage v-if="item.image" :image="item.image" width="16" height="16"/>
     <p class="app-chip__text">{{ item.text }}</p>
   </div>
@@ -13,6 +13,7 @@ interface IChip {
 
 const props = defineProps<{
   item: IChip,
+  selected?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -28,9 +29,15 @@ const emit = defineEmits<{
   color: black;
   background-color: white;
   border-radius: 8px;
+  border: 1px solid white;
 
   &__text {
     margin: unset;
   }
+}
+.--active {
+  border: 1px solid $brand_yellow;
+  background-color: rgba(255, 194, 37, 0.86);
+  color: black;
 }
 </style>
