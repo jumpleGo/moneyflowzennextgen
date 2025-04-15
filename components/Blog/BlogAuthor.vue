@@ -1,7 +1,7 @@
 <template>
   <div class="blog-author">
       <div class="blog-author__author">
-        <nuxt-img width="30" height="30" class="logo" :src="logoSrc" />
+        <AppImage width="30" height="30" class="logo" :image="logoSrc" />
         <span>Money Flow Zen</span>
       </div>
     <div class="blog-author__buttons">

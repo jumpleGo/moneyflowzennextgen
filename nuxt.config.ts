@@ -50,7 +50,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      databaseURL: process.env.databaseURL
+      databaseURL: process.env.databaseURL,
+      ASSETS_IMAGE_BUCKET: process.env.ASSETS_IMAGE_BUCKET,
     }
   }
 })

@@ -2,7 +2,7 @@
   <div class="mfz__footer">
     <div class="mfz__footer-wrapper">
       <div class="mfz__footer_left_block">
-        <nuxt-img class="mfz__footer__logo logo" :src="logoSrc" />
+        <AppImage class="mfz__footer__logo logo" :image="logoSrc" />
         <div class="mfz__footer__text">
           <h1>mfz</h1>
           <h3>money flow zen</h3>

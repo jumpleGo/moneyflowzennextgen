@@ -47,17 +47,6 @@
              <template v-if="v$.address.$error" #error><span>{{ v$.address.$error && translates.address }}</span></template>
              <span v-if="isAddressChecked && !v$.address.$error" :class="['exchanger__inputs__address__slot', {'--slot-error': !isOKAddress}, {'--slot-success': isOKAddress}]">{{ isOKAddress ? `корректный адрес ${currentAddressNet}` : `некорректный адрес ${currentAddressNet}`}}</span>
            </AppInput>
-           <AppInput
-             v-if="isMemoShow"
-             v-model="v$.memo.$model"
-             :maska-options="memoMaskaOptions"
-             class="exchanger__inputs__address__memo"
-             :error="v$.memo.$error"
-             id="memo"
-             placeholder="Memo"
-             label="Memo">
-             <template v-if="v$.memo.$error" #error>{{ v$.memo.$error && translates.memo }}</template>
-           </AppInput>
          </div>
          <AppSelector
            v-if="isNetShow"
@@ -71,10 +60,10 @@
       </div>
       <AppButton title="создать заявку" :disabled="!enabledButton" @click="validateForm" />
       <NuxtLink v-if="(isTonForSell || isTonForBuy) && !isStarsBuy" to="https://t.me/mfz_official_crypto" target="_blank" class="exchanger__right__banner" >
-        <nuxt-img :preload="{fetchPriority: 'high'}" class="exchanger__right__banner_img" src="https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/mfz_crypto.png?alt=media&token=48507781-be93-4815-9a12-11c966cf9fed" />
+        <AppImage :preload="{fetchPriority: 'high'}" class="exchanger__right__banner_img" image="banners/mfz_crypto.png" />
       </NuxtLink>
       <NuxtLink v-if="isStarsBuy" to="https://t.me/mfz_lostdogs" target="_blank" class="exchanger__right__banner" >
-        <nuxt-img :preload="{fetchPriority: 'high'}" class="exchanger__right__banner_img" src="https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/mfz_lostdogs.png?alt=media&token=d1a846da-f5cf-4b65-892c-74c153ba4126" />
+        <AppImage :preload="{fetchPriority: 'high'}" class="exchanger__right__banner_img" image="banners/mfz_lostdogs.png" />
       </NuxtLink>
     </div>
   </div>
@@ -86,7 +75,6 @@ import { computed, type ComputedRef, reactive } from 'vue'
 import type { IPrices } from '~/types/pages/exchangerTypes'
 import { translates } from '../../helpers/i18n'
 import {
-  memoMaskaOptions,
   usdtNet
 } from '~/components/Exchanger/consts'
 
@@ -110,14 +98,12 @@ const emit = defineEmits<{
 const {exchangerSettings, minmaxLimit, priceUsd, isTonForBuy, pricesList, time, selectedBuy, selectedSell, isStarsBuy, isTonForSell, isCryptoForSell, isSelectedBothItem, activeTransaction} = storeToRefs(useExchangerStore())
 
 const model = reactive<IModel>({
-  memo: '',
   net: '',
   count: 1,
   telegram: '',
   address: '',
   reset: function () {
     this.address = '';
-    this.memo = '';
     this.count = 1;
   }
 });
@@ -127,7 +113,6 @@ const {
   netModel,
   placeholderAddress,
   calculateItem,
-  isMemoShow,
   isNetShow,
   sumLabel,
   prices
@@ -261,7 +246,6 @@ const createPayload = (): IActiveTransaction => ({
   countBuy: calculateAmount.value,
   address: model.address,
   id: +new Date(),
-  memo: model.memo,
   factor: factor.value,
   net: model.net,
   telegram: model.telegram.startsWith('@') ? model.telegram.slice(1) : model.telegram,

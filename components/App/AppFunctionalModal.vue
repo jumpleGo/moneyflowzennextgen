@@ -6,14 +6,14 @@
         <p class="functional_modal__description">Подпишись, чтобы получить больше информации о рынке</p>
         <div class="functional_modal__blocks">
           <nuxt-link target="_blank" to="https://t.me/mfz_official_crypto" class="functional_modal__block">
-            <nuxt-img :src="logoCryptoTg" class="functional_modal__image"/>
+            <AppImage :image="logoCryptoTg" class="functional_modal__image"/>
             <div class="functional_modal__text-block">
               <p>MFZ-CRYPTO</p>
               <span>Разбираю рынок крипты в лайве</span>
             </div>
           </nuxt-link>
           <nuxt-link target="_blank" to="https://t.me/mfz_official" class="functional_modal__block">
-            <nuxt-img :src="logoStocksTg" class="functional_modal__image" />
+            <AppImage :image="logoStocksTg" class="functional_modal__image" />
             <div class="functional_modal__text-block">
               <p>MFZ-STOCKS</p>
               <span>Разбираю рынок фонды в ключевых точках</span>

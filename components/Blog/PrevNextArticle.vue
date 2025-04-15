@@ -3,7 +3,7 @@
     <h3>Читать далее:</h3>
     <div :class="['prev-next-article__body', classByArticles]">
       <nuxt-link v-if="prevArticle" :to="`/blog/${prevArticle.key}`" class="prev-next-article__prev">
-        <nuxt-img :src="chevron" class="prev-next-article__image prev-next-article__image-prev" />
+        <AppImage :image="chevron" class="prev-next-article__image prev-next-article__image-prev" />
         <div class="prev-next-article__prev-title">
           {{ prevArticle.title }}
         </div>
@@ -12,7 +12,7 @@
         <div class="prev-next-article__next-title">
           {{ nextArticle.title }}
         </div>
-        <nuxt-img :src="chevron" class="prev-next-article__image" />
+        <AppImage :image="chevron" class="prev-next-article__image" />
       </nuxt-link>
     </div>
   </div>

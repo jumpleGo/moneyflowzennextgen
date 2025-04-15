@@ -1,7 +1,7 @@
 <template>
   <header class="mfz-blog-header">
     <div class="mfz-blog-header__block">
-      <nuxt-img class="mfz-blog-header__logo logo" width="50" height="50" src="https://firebasestorage.googleapis.com/v0/b/moneyflowzen.appspot.com/o/logo%2Fknowledges.jpeg?alt=media&token=b05e38d2-d03c-48c6-9264-9ea8a6d3834b" />
+      <AppImage class="mfz-blog-header__logo logo" width="50" height="50" image="logos/knowledges.jpeg" />
       <span class="mfz-blog-header__title">mfz-знания</span>
     </div>
   </header>

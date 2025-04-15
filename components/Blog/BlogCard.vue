@@ -6,7 +6,7 @@
       <h3 class="blog-card__title">{{ item.title }}</h3>
       <div class="blog-card__footer">
         <div class="blog-card__time">
-          <nuxt-img :src="grayClock" />
+          <AppImage :image="grayClock" />
           {{ item.time }}
           мин.
         </div>
