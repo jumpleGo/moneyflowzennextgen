@@ -9,8 +9,7 @@
           <ClientOnly>
             <span v-if="data?.updatedAt" class="article-wrapper__body-date">{{ new Date(data?.updatedAt * 1000).toLocaleDateString() }}</span>
           </ClientOnly>
-          <span v-if="data?.views" class="article-wrapper__body-view">{{ getNumberWithWordEnding(data?.views, ['просмотр', 'просмотра', 'просмотров']) }}</span>
-          <span v-if="data?.views" class="article-wrapper__body-view">{{ getNumberWithWordEnding(data?.reads, ['дочитывание', 'дочитывания', 'дочитываний']) }}</span>
+          <span v-if="data?.views" class="article-wrapper__body-view"><AppImage image="ui/visible.png" /> {{ data?.views }}</span>
         </div>
         <nuxt-img v-if="data?.image" preload :src="data.image" class="article-wrapper__body-image" />
         <HtmlWithComponents :content="data?.text" class="article-wrapper__body-article"/>
@@ -157,6 +156,10 @@ const markAsRead = () => {
   }
   &__body-view {
     color: gray;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
   }
 
 }

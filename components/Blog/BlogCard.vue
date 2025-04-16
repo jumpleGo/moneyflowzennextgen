@@ -10,6 +10,7 @@
           {{ item.time }}
           мин.
         </div>
+        <div v-if="item?.views" class="blog-card__views"><AppImage image="ui/visible.png" /> {{ item?.views }}</div>
         <div v-if="level" :class="['blog-card__level', level.className]">
           <div v-for="circle in item.level" class="blog-card__level-circle" />
           <span class="blog-card__level-text">ур. {{ level.text }}</span>
@@ -122,6 +123,14 @@ const level = computed(() => {
   }
   &__level-text {
     font-size: 14px;
+  }
+  &__views {
+    color: gray;
+    display: flex;
+    align-items: center;
+    color: #6A6A6A;
+    gap: 3px;
+    font-size: 12px;
   }
   &__level-circle {
     height: 5px;

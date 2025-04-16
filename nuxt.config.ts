@@ -10,12 +10,14 @@ export default defineNuxtConfig({
 
   alias: {
     "@assets": "/<rootDir>/assets",
+    "@css": "/<rootDir>/style",
   },
+  css: ['~/style/global.scss'],
   vite: {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: '@use "style/global.scss" as *;'
+          additionalData: '@use "style/variables.scss" as *;'
         }
       }
     }
