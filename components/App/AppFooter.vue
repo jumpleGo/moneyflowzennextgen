@@ -16,13 +16,10 @@
       <div class="mfz__footer_right_block">
         <div class="mfz__footer__social_media">
           <nuxt-link to="https://t.me/mfz_official_crypto" target="_blank" class="mfz__footer_social">
-            <img src="/assets/telegram.svg" />
-          </nuxt-link>
-          <nuxt-link to="https://www.instagram.com/money_flow_zen?igsh=MW4xeDR1bDZyb3MzNA%3D%3D&utm_source=qr" target="_blank" class="mfz__footer_social">
-            <img src="/assets/instagram.svg" />
+            <AppImage image="socials/telegram.svg" />
           </nuxt-link>
           <nuxt-link to="https://www.youtube.com/@money_flow_zen" target="_blank" class="mfz__footer_social">
-            <img src="/assets/youtube.svg" />
+            <AppImage image="socials/youtube.svg" />
           </nuxt-link>
         </div>
         <p class="mfz__footer__info">

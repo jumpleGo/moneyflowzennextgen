@@ -41,13 +41,11 @@ const { data, refresh } = await useFetch('/api/blog', {
   query: payloadQuery
 })
 
-const levelFiltersActive = computed(() => levelFilters.map(level => data.value?.some(item => item.level === level.key) && level).filter(Boolean))
 const readArticles = useCookie<string[]>('readArticles', {
   default: () => []
 })
 
 watch(selectedLevel, () => {
-  console.log(payloadQuery.value)
   refresh()
 })
 
