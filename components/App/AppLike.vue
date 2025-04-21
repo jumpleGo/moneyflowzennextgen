@@ -15,8 +15,6 @@ const emit = defineEmits<{
 }>()
 const props = withDefaults(defineProps<{
   count?: number,
-  unique: string,
-  uKey: string,
   liked: boolean
 }>(), {
   count: 0

@@ -27,7 +27,6 @@
 import BlogAuthor from '~/components/Blog/BlogAuthor.vue'
 import { Setter } from '~/helpers/setter'
 import AppScrollProgress from '~/components/App/AppScrollProgress.vue'
-import { getNumberWithWordEnding } from '~/helpers/date'
 import PrevNextArticle from '~/components/Blog/PrevNextArticle.vue'
 import HtmlWithComponents from '~/components/Blog/HtmlWithComponents.vue'
 
@@ -39,13 +38,17 @@ const showTgList = shallowRef(false)
 const route = useRoute()
 const article = ref()
 const viewedArticles = useCookie<string[]>('viewedArticles', {
-  default: () => []
+  default: () => [],
+  maxAge: 60 * 60 * 24 * 365 * 10
+
 })
 const readArticles = useCookie<string[]>('readArticles', {
-  default: () => []
+  default: () => [],
+  maxAge: 60 * 60 * 24 * 365 * 10
 })
 const likedArticles = useCookie<string[]>('likedArticles', {
-  default: () => []
+  default: () => [],
+  maxAge: 60 * 60 * 24 * 365 * 10
 })
 
 const isArticleViewed = computed(() => viewedArticles.value?.some(item => item === postId))

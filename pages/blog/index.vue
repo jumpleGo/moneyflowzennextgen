@@ -41,16 +41,14 @@ const { data, refresh } = await useFetch('/api/blog', {
   query: payloadQuery
 })
 
-const readArticles = useCookie<string[]>('readArticles', {
-  default: () => []
-})
+const readArticles = useCookie<string[]>('readArticles')
 
 watch(selectedLevel, () => {
   refresh()
 })
 
 const getRead = (key: string) => {
-  return readArticles.value.some(item => item === key)
+  return readArticles.value?.some(item => item === key)
 }
 
 useHead({

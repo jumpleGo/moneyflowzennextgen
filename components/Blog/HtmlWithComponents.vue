@@ -15,13 +15,15 @@
 <script setup lang="ts">
 import {  computed } from 'vue'
 import AppHorizontalBanner from '@/components/App/AppHorizontalBanner.vue'
+import FlatBlogBanner from '~/components/Blog/banners/FlatBlogBanner.vue'
 
 const props = defineProps<{ content: string }>()
 
 // Регистрируем компоненты, которые будем вставлять
 const dynamicComponents = {
   // добавляй сюда другие компоненты
-  AppHorizontalBanner
+  AppHorizontalBanner,
+  FlatBlogBanner
 }
 
 // Парсинг контента и пропсов
@@ -33,7 +35,7 @@ const parsedContent = computed(() => {
 
 
 
-  while ((match = regex.exec(props.content)) !== null) {git
+  while ((match = regex.exec(props.content)) !== null) {
     const before = props.content.substring(lastIndex, match.index)
     if (before) result.push({ type: 'html', content: before })
 
