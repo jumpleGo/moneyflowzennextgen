@@ -5,5 +5,6 @@
     "module": "esnext", // или "es2020", "es2022"
     "target": "esnext", // или "es2020", "es2022"
     "moduleResolution": "node",
+    "types": ["@nuxtjs/sitemap"]
   }
 }

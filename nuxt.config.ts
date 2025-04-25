@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: true,
 
-  rootDir: './',
+  rootDir: '.',
   devServer: {
     port: 8080
   },
@@ -12,16 +12,16 @@ export default defineNuxtConfig({
     "@assets": "/<rootDir>/assets",
     "@css": "/<rootDir>/style",
   },
-  css: ['~/style/global.scss'],
   vite: {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: '@use "style/variables.scss" as *;'
+          additionalData: '@use "~/style/variables.scss" as *;'
         }
       }
     }
   },
+  css: ['~/style/global.scss'],
 
   compatibilityDate: '2024-09-08',
   modules: ['@pinia/nuxt', ['yandex-metrika-module-nuxt3', {
@@ -43,11 +43,10 @@ export default defineNuxtConfig({
 
   sitemap: {
     exclude: [
-      '/test', '/exchanger', '/adminex', '/gift', '/guideStartToTrading', '/guideStartToCrypto',
+      '/test', '/exchanger', '/adminex',
+      '/gift', '/guideStartToTrading', '/guideStartToCrypto'
     ],
-    urls: [
-      '/blog/futures', '/blog/longshort', '/blog/stocks', '/blog/bonds', '/blog/bondsexample', '/blog/indicators', '/blog/konver-diver'
-    ]
+    sources: ['/api/sitemap']
   },
 
   runtimeConfig: {

@@ -12,7 +12,7 @@
           <span v-if="data?.views" class="article-wrapper__body-view"><AppImage image="ui/visible.png" /> {{ data?.views }}</span>
         </div>
         <nuxt-img v-if="data?.image" preload :src="data.image" class="article-wrapper__body-image" />
-        <HtmlWithComponents :content="data?.text" class="article-wrapper__body-article"/>
+        <HtmlWithComponents id="article-body" :content="data?.text" class="article-wrapper__body-article"/>
       </div>
       <ClientOnly>
         <AppLike :count="data?.likes" :liked="isArticleLiked" @like="incrementLike" />
@@ -29,6 +29,9 @@ import { Setter } from '~/helpers/setter'
 import AppScrollProgress from '~/components/App/AppScrollProgress.vue'
 import PrevNextArticle from '~/components/Blog/PrevNextArticle.vue'
 import HtmlWithComponents from '~/components/Blog/HtmlWithComponents.vue'
+import { useSchemaOrg } from '@unhead/schema-org/vue'
+
+
 
 definePageMeta({
   layout: 'blog'
@@ -81,6 +84,52 @@ useHead(computed(() => ({
     { property: 'og:url', content: `https://moneyflowzen.ru/blog/${postId}` },
   ]
 })))
+
+useSchemaOrg({
+  '@type': 'Article',
+  headline: data.value?.ogtitle,
+  description: data.value?.ogdescription,
+  datePublished: new Date(data.value?.createdAt).toISOString(),
+  dateModified: new Date(data.value?.updatedAt).toISOString(),
+  author: {
+    '@type': 'Person',
+    name: 'Emil Latypov',
+    jobTitle: 'Профессиональный трейдер',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'MoneyFlowZen',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://cdn.moneyflowzen.ru/logos/logo.png',
+      width: '60',
+      height: '60'
+    }
+  },
+  image: {
+    '@type': 'ImageObject',
+    url: data.value?.preview ,
+    width: '1280',
+    height: '720'
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': `https://moneyflowzen.ru/blog/${data.value?.key}`
+  },
+  articleSection: 'Трейдинг',
+  articleBody: data.value?.text,
+  speakable: {
+    '@type': 'SpeakableSpecification',
+    cssSelector: ['#article-body']
+  },
+  interactionStatistic: {
+    '@type': 'InteractionCounter',
+    interactionType: {
+      "@type": "LikeAction"
+    },
+    userInteractionCount: data?.value?.likes
+  }
+})
 
 const incrementViews = () => {
   if (!data.value) return
@@ -166,7 +215,4 @@ const markAsRead = () => {
   }
 
 }
-</style>
-<style>
-@import '../../style/blog.scss';
 </style>

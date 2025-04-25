@@ -62,9 +62,11 @@ const level = computed(() => {
   flex-direction: column;
   overflow: hidden;
   width: 400px;
+  max-width: 400px;
   text-decoration: none;
   @include mobile-all {
     width: 100%;
+
   }
 
   &--read {
