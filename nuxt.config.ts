@@ -46,7 +46,7 @@ export default defineNuxtConfig({
       '/test', '/exchanger', '/adminex',
       '/gift', '/guideStartToTrading', '/guideStartToCrypto'
     ],
-    sources: ['/api/sitemap']
+    sources: ['/api/sitemap/sitemap']
   },
 
   runtimeConfig: {
