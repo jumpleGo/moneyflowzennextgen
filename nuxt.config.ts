@@ -34,7 +34,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-09-08',
   modules: ['@pinia/nuxt', ['yandex-metrika-module-nuxt3', {
     id: 99093121,
-    webvisor: true
+    webvisor: true,
+    defer: true
   }], ['nuxt-mail', {
     message: [
       { name: 'main', to: 'rrotatew@gmail.com', },

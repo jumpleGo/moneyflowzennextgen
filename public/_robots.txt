@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /adminex
+Disallow: /exchanger
+Disallow: /test
+Disallow: /gift
+Disallow: /guideStartToTrading
+Disallow: /guideStartToCrypto
+
+Allow: /
+
+Sitemap: https://moneyflowzen.ru/api/sitemap/sitemap
