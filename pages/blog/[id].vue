@@ -82,6 +82,12 @@ useHead(computed(() => ({
     { property: 'og:image', content: data.value?.preview },
     { property: 'og:type', content: 'article' },
     { property: 'og:url', content: `https://moneyflowzen.ru/blog/${postId}` },
+  ],
+  link: [
+    {
+      rel: 'canonical',
+      href: `https://moneyflowzen.ru/blog/${postId}`
+    }
   ]
 })))
 

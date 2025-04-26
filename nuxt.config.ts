@@ -8,6 +8,14 @@ export default defineNuxtConfig({
     port: 8080
   },
 
+  app: {
+    head: {
+      htmlAttrs: {
+        lang: 'ru'
+      }
+    }
+  },
+
   alias: {
     "@assets": "/<rootDir>/assets",
     "@css": "/<rootDir>/style",
@@ -39,7 +47,7 @@ export default defineNuxtConfig({
         pass: '>g!A<44\\gswHAK'
       }
     }
-  }], '@nuxt/image', '@nuxtjs/sitemap'],
+  }], '@nuxt/image', '@nuxtjs/sitemap', '@nuxtjs/robots'],
 
   sitemap: {
     exclude: [
@@ -47,6 +55,10 @@ export default defineNuxtConfig({
       '/gift', '/guideStartToTrading', '/guideStartToCrypto'
     ],
     sources: ['/api/sitemap/sitemap']
+  },
+
+  robots: {
+    disallow: ['/test', '/exchanger', '/adminex', '/gift', '/guideStartToTrading', '/guideStartToCrypto'],
   },
 
   runtimeConfig: {
