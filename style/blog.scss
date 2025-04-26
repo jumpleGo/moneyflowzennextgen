@@ -8,10 +8,17 @@
     margin: 40px 0;
   }
 
-  h2 {
+  h1 {
     font-size: 48px;
     @include mobile-all {
       font-size: 36px;
+    }
+  }
+  h2 {
+    font-size: 40px;
+    margin: 15px 0;
+    @include mobile-all {
+      font-size: 28px;
     }
   }
   h3 {

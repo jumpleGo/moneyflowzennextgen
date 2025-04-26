@@ -5,7 +5,7 @@
         <AppImage class="mfz__footer__logo logo" :image="logoSrc" />
         <div class="mfz__footer__text">
           <h1>mfz</h1>
-          <h3>money flow zen</h3>
+          <h5>money flow zen</h5>
         </div>
       </div>
       <div class="mfz__footer__links">
@@ -107,7 +107,7 @@ import { logoSrc } from 'assets/imagesSrc'
     font-weight: 700;
     margin: unset;
   }
-  h3 {
+  h5 {
     font-size: 18px;
     line-height: 20px;
     margin: unset;
