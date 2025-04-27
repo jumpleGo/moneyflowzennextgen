@@ -95,8 +95,8 @@ useSchemaOrg({
   '@type': 'Article',
   headline: data.value?.ogtitle,
   description: data.value?.ogdescription,
-  datePublished: new Date(data.value?.createdAt).toISOString(),
-  dateModified: new Date(data.value?.updatedAt).toISOString(),
+  datePublished: new Date(data.value?.createdAt * 1000).toISOString(),
+  dateModified: new Date(data.value?.updatedAt * 1000).toISOString(),
   author: {
     '@type': 'Person',
     name: 'Emil Latypov',
