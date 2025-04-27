@@ -207,6 +207,7 @@ const markAsRead = () => {
   &__body-title {
     margin-bottom: 10px;
     margin-top: unset;
+    font-size: 40px;
   }
 
   &__body-date {
