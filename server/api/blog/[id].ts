@@ -17,17 +17,20 @@ export default defineEventHandler(async (event) => {
     article = Object.values(snapshotFetchedArticle.val())?.[0] || {}
   }
 
-  const snapshotFetchedArticleNext = await get(query(child(databaseRef, 'blog'), orderByChild('index'), equalTo(article.index+1)))
-  if (snapshotFetchedArticleNext.exists()) {
-    article.nextArticle = Object.values(snapshotFetchedArticleNext.val())?.[0] || {}
+  if (article.next) {
+    const snapshotFetchedArticleNext = await get(query(child(databaseRef, 'blog'), orderByChild('key'), equalTo(article.next)))
+    if (snapshotFetchedArticleNext.exists()) {
+      article.nextArticle = Object.values(snapshotFetchedArticleNext.val())?.[0] || {}
+    }
   }
 
-  if (!(article.index-1<0)) {
-    const snapshotFetchedArticlePrev = await get(query(child(databaseRef, 'blog'), orderByChild('index'), equalTo(article.index-1)))
+  if (article.prev) {
+    const snapshotFetchedArticlePrev = await get(query(child(databaseRef, 'blog'), orderByChild('key'), equalTo(article.prev)))
     if (snapshotFetchedArticlePrev.exists()) {
       article.prevArticle = Object.values(snapshotFetchedArticlePrev.val())?.[0] || {}
     }
   }
+
 
 
 
