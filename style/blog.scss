@@ -46,7 +46,12 @@
     margin: 0;
   }
 }
-
+.banner {
+  margin: 40px 0;
+  @include mobile-all {
+    margin: 20px 0;
+  }
+}
 .article-wrapper__body-article {
   img {
     margin: 20px 0;

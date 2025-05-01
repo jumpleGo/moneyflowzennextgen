@@ -23,6 +23,7 @@
     "dayjs": "^1.11.13",
     "firebase": "^11.6.1",
     "lodash.debounce": "^4.0.8",
+    "luxon": "^3.6.1",
     "maska": "^3.0.4",
     "nuxt": "^3.14.1592",
     "nuxt-mail": "^5.0.1",
@@ -33,6 +34,7 @@
     "yup": "^1.6.1"
   },
   "devDependencies": {
+    "@types/luxon": "^3.6.2",
     "sass": "^1.78.0",
     "sass-embedded": "^1.78.0"
   }

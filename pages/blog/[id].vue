@@ -30,6 +30,7 @@ import AppScrollProgress from '~/components/App/AppScrollProgress.vue'
 import PrevNextArticle from '~/components/Blog/PrevNextArticle.vue'
 import HtmlWithComponents from '~/components/Blog/HtmlWithComponents.vue'
 import { useSchemaOrg } from '@unhead/schema-org/vue'
+import Countdown from '~/components/Blog/banners/Countdown.vue'
 
 
 
