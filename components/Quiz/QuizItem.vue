@@ -92,6 +92,7 @@ const next = (): void => {
   background-color: #FEBE16;
   flex: 1 1 calc(50% - 15px);
   border: 1px solid black;
+  color: black;
   padding: 10px 20px;
   font-size: 14px;
   font-weight: bold;
