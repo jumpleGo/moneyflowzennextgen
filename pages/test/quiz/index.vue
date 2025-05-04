@@ -14,7 +14,7 @@
       </div>
       <QuizItem :item="currentQuestion" :index="currentQuestionIndex" @next="next"/>
     </div>
-    <ResultTestTemplate v-else class="question__result" :result="calculatedResult" :count-questions="countQuestions" :count-right-answers="countRightAnswers" />
+    <ResultTestTemplate v-else :imageName="imageName" class="question__result" :result="calculatedResult" :count-questions="countQuestions" :count-right-answers="countRightAnswers" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -31,6 +31,7 @@ const {data} = useAsyncData(async () => {
 const countQuestions = computed(() => Object.keys(data.value?.quizQuestions || {}).length)
 const currentQuestionIndex = shallowRef(0)
 const showFinish = shallowRef(false)
+const imageName = shallowRef('')
 
 
 const currentQuestion = computed<IQuiz>(() => Object.values(data.value?.quizQuestions || {})?.[currentQuestionIndex.value])
@@ -40,10 +41,13 @@ const countRightAnswers = computed(() => selectedAnswers.value.filter(item => it
 const resultData = ref<IQuizResult>()
 const calculatedResult = computed<IQuizResultData | undefined>(() => {
   if (countRightAnswers.value <= 3) {
+    imageName.value = 'step1'
     return resultData.value?.junior
   } else if (countRightAnswers.value > 3 && countRightAnswers.value < 8) {
+    imageName.value = 'step2'
     return resultData.value?.middle
   } else {
+    imageName.value = 'step3'
     return resultData.value?.senior
   }
 })

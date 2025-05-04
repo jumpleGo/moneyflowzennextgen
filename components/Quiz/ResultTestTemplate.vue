@@ -5,7 +5,7 @@
     </h2>
     <div class="quiz-result__description-block">
       <h3 class="quiz-result__description-block-title">{{ result?.title }}</h3>
-      <nuxt-img src="https://cdn.moneyflowzen.ru/turtle-step/step1.png" class="quiz-result__description-block-image" preload />
+      <nuxt-img :src="`https://cdn.moneyflowzen.ru/turtle-step/${imageName}.png`" class="quiz-result__description-block-image" preload />
       <p v-html="result?.description" />
       <hr />
       <div class="quiz-result__promo">
@@ -54,7 +54,8 @@ import type { IQuizResultData } from '~/types/pages/quiz'
 defineProps<{
   result: IQuizResultData | undefined,
   countRightAnswers: number,
-  countQuestions: number
+  countQuestions: number,
+  imageName: string,
 }>()
 
 const {timer} = useCountdown('08.05.2025 18:00')
