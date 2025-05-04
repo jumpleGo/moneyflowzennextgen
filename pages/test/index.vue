@@ -1,23 +1,23 @@
 <template>
   <div class="mfz_welcome-test">
     <p class="mfz_welcome-test--text">вселенная mfz</p>
-    <img src="../assets/saturn.png" class="mfz_welcome-test--saturn" />
-    <img src="../assets/light.svg" class="mfz_welcome-test--light" />
+    <img src="../../assets/saturn.png" class="mfz_welcome-test--saturn" />
+    <img src="../../assets/light.svg" class="mfz_welcome-test--light" />
     <span class="mfz_welcome-test--level-badge badge show">узнай свой уровень</span>
     <span class="mfz_welcome-test--test-badge badge show">тест</span>
     <span class="mfz_welcome-test--do-badge badge show" >сделай это</span>
-    <img src="../assets/logo/logo.png" class="mfz_welcome-logo logo" />
-    <img src="../assets/coins.png" class="mfz_welcome-test--coins" />
+    <img src="../../assets/logo/logo.png" class="mfz_welcome-logo logo" />
     <h1 class="mfz_welcome-test--title">проверка<br/>знаний</h1>
-    <app-button title="пройти тест" class="mfz_welcome-test--button" @click="emit('openTest')" />
+    <AppButton  title="пройти тест" class="mfz_welcome-test--button" @click="openQuiz" />
   </div>
 </template>
 <script lang="ts" setup>
-import AppButton from "@/components/Buttons/AppButton.vue";
+import AppButton from "~/components/Buttons/AppButton.vue";
+const router = useRouter()
 
-const emit = defineEmits<{
-  (e: 'openTest')
-}>()
+const openQuiz = () => {
+  router.push('test/quiz?type=baza')
+}
 </script>
 <style lang="scss" scoped>
 .mfz_welcome-test {
@@ -25,8 +25,12 @@ const emit = defineEmits<{
   flex-direction: column;
   align-items: center;
   padding: 30px;
-  height: 100%;
+  height: calc(100vh - 125px);
   position: relative;
+  font-family: inherit;
+  @include mobile-all {
+    padding-top: 0;
+  }
 }
 .mfz_welcome-test--light {
   position: absolute;
@@ -44,28 +48,43 @@ const emit = defineEmits<{
 }
 .mfz_welcome-test--title {
   font-weight: 600;
-  font-size: 80px;
+  font-size: 50px;
   text-align: center;
   text-transform: uppercase;
-  color: white;
-  margin-top: 8vh;
+  color: #FEBE16;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   z-index: 3;
+  margin-top: 8vh;
+  font-family: inherit;
   @include tablet {
-    font-size: 80px;
+    font-size: 60px;
   }
-
+  @include mobile-all {
+    font-size: 50px;
+    margin-top: 12vh;
+  }
 }
 .mfz_welcome-test--button {
-  bottom: 20vh;
+  bottom: 10vh;
   z-index: 2;
   position: absolute;
-  scale: 1.5;
+
+  @include mobile-all {
+    bottom: 20vh;
+  }
 }
 
-
 .mfz_welcome-test--level-badge {
-  margin-top: 45vh;
-  margin-left: 30vw;
+  top: 45vh;
+  right: 10vw;
+  @include tablet {
+    right: 5vw;
+    top: 30vh;
+  }
+  @include mobile-all {
+    right: 5vw;
+    top: 30vh;
+  }
 }
 .mfz_welcome-test--test-badge {
   right: 10vw;
@@ -76,12 +95,7 @@ const emit = defineEmits<{
   left: 10vw;
   top: 20vh;
 }
-.mfz_welcome-test--coins {
-  position: absolute;
-  width: 100px;
-  bottom: 0;
-  margin-left: 30%;
-}
+
 .mfz_welcome-logo {
   width: 50px;
   transform: rotate(-25deg);
@@ -96,6 +110,5 @@ const emit = defineEmits<{
   @include mobile-all {
     padding: 1.2vh 20px;
   }
-
 }
 </style>

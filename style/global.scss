@@ -25,6 +25,7 @@ iframe {
   -webkit-touch-callout: unset;
   user-select: none;
   -webkit-user-select: none;
+  box-sizing: border-box;
 }
 
 .copied {
@@ -61,13 +62,22 @@ iframe {
   font-weight: 700;
   opacity: 0;
   transition: 0.5s;
-  @include mobile-all {
+  @include mobile {
     padding: 0 15px !important;
     height: 5vh;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 2vh !important;
+  }
+
+  @include mobile-xs {
+    padding: 0 10px !important;
+    height: 3vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1vh !important;
   }
 }
 

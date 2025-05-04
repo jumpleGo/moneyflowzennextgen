@@ -44,6 +44,9 @@ const buttonClass = computed(() => classByType[props.type])
 <style lang="scss" scoped>
 .app__button {
   text-decoration: none;
+  &:hover {
+    cursor: pointer
+  }
 }
 .button__main {
   display: flex;
@@ -51,11 +54,21 @@ const buttonClass = computed(() => classByType[props.type])
   justify-content: center;
   color: black;
   background: $brand_yellow;
-  box-shadow: 0 4px 11px 0 rgba(0, 0, 0, 0.31);
+  box-shadow:
+    0 4px 5.4px 0 rgba(0, 0, 0, 0.42);
   text-transform: uppercase;
   border-radius: 20px;
   font-weight: 700;
   border: unset;
+  transition: 0.3s;
+
+  &:not(.--disabled) {
+    &:hover {
+      box-shadow:
+        0 4px 5.4px 0 rgba(0, 0, 0, 0.42),
+        inset 0 4px 4px 0 rgba(0, 0, 0, 0.49);
+    }
+  }
 }
 
 .button__lg {
@@ -86,9 +99,9 @@ const buttonClass = computed(() => classByType[props.type])
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: $brand_yellow;
   background: black;
-  box-shadow: 0 4px 11px 0 rgba(0, 0, 0, 0.31);
+  box-shadow: 0 4px 5.4px 0 rgba(255, 255, 255, 0.42);
   text-transform: uppercase;
   border-radius: 20px;
   font-weight: 700;
@@ -103,6 +116,9 @@ const buttonClass = computed(() => classByType[props.type])
   opacity: 0.5;
   background-color: $brand_yellow;
   backdrop-filter: grayscale(5px);
+  &:hover {
+    cursor: not-allowed;
+  }
 
 }
 </style>

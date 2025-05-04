@@ -80,7 +80,7 @@ useHead({
   flex-wrap: wrap;
   justify-content: center;
   gap: 16px;
-  padding: 100px 40px;
+  padding: 100px 0;
   max-width: 1240px;
   margin: 0 auto;
 

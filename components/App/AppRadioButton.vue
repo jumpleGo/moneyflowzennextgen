@@ -2,14 +2,14 @@
   <div class="radio-button">
     <input
       type="radio"
-      :id="value"
+      :id="String(value)"
       :value="value"
       :name="name"
       :checked="selected === value"
-      @change="$emit('updateRadio', value)"
+      @change="emit('updateRadio', value)"
       hidden
     />
-    <label :for="value" :class="{ 'radio-selected': selected === value }">
+    <label :for="String(value)" :class="{ 'radio-selected': selected === value }">
       <slot></slot>
     </label>
   </div>
@@ -18,13 +18,13 @@
 <script lang="ts" setup>
 
 const props = defineProps<{
-  selected: string,
-  value: string,
+  selected: string | number,
+  value: string | number,
   name: string
 }>()
 
 const emit = defineEmits<{
-  (e: 'updateRadio', value: string) : void
+  (e: 'updateRadio', value: string | number) : void
 }>()
 
 </script>

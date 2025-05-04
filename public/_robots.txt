@@ -5,6 +5,7 @@ Disallow: /test
 Disallow: /gift
 Disallow: /guideStartToTrading
 Disallow: /guideStartToCrypto
+Disallow: /admin
 
 Allow: /
 

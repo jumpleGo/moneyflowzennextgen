@@ -6,9 +6,9 @@
         <nuxt-link class="mfz_wrapper__header_navbar--link" to="/">
           главная
         </nuxt-link>
-        <!--      <nuxt-link v-if="showTest" class="mfz_wrapper__header_navbar&#45;&#45;link deactive" to="/test">-->
-        <!--        проверка знаний-->
-        <!--      </nuxt-link>-->
+        <nuxt-link  class="mfz_wrapper__header_navbar--link" to="/test">
+          проверка знаний
+        </nuxt-link>
         <nuxt-link class="mfz_wrapper__header_navbar--link" to="/exchanger">
           обменник
         </nuxt-link>
@@ -24,7 +24,7 @@
 </template>
 <script setup lang="ts">
 withDefaults(defineProps<{
-  showTest: boolean
+  showTest?: boolean
 }>(), {
   showTest: true
 })
@@ -96,6 +96,11 @@ withDefaults(defineProps<{
   justify-content: space-around;
   width: 100%;
   z-index: 10;
+  @include mobile-all {
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: flex-start;
+  }
 }
 
 .mfz_wrapper__header_navbar--link {

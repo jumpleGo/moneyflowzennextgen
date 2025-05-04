@@ -39,11 +39,9 @@ const emit = defineEmits<{
 .mfz_welcome-gift {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 150px);
   position: relative;
-  padding: 80px 0 0;
 }
 .mfz_welcome-content {
   display: flex;

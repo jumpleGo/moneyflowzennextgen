@@ -16,6 +16,7 @@
 import {  computed } from 'vue'
 import AppHorizontalBanner from '@/components/App/AppHorizontalBanner.vue'
 import FlatBlogBanner from '~/components/Blog/banners/FlatBlogBanner.vue'
+import Countdown from '~/components/Blog/banners/Countdown.vue'
 
 const props = defineProps<{ content: string }>()
 
@@ -23,7 +24,9 @@ const props = defineProps<{ content: string }>()
 const dynamicComponents = {
   // добавляй сюда другие компоненты
   AppHorizontalBanner,
-  FlatBlogBanner
+  FlatBlogBanner,
+  Countdown
+
 }
 
 // Парсинг контента и пропсов

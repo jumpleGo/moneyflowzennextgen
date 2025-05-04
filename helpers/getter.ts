@@ -27,34 +27,6 @@ export class Getter {
     });
   }
 
-  static async getBlog (): Promise<IBlogItem[]> {
-    const { $databaseRef, $firebase } = useNuxtApp()
-    const request = query(child($databaseRef, 'blog'), orderByChild('updatedAt'))
-
-    try {
-      const snapshot = await get(request)
-
-      if (!snapshot.exists()) {
-        console.log('No data available')
-        return []
-      }
-
-      const dataArr: IBlogItem[] = []
-
-      snapshot.forEach((childSnapshot) => {
-        dataArr.push({
-          id: childSnapshot.key,
-          ...childSnapshot.val()
-        })
-      })
-
-      return dataArr
-
-    } catch (error) {
-      console.error('Ошибка получения данных:', error)
-      return []
-    }
-  }
 
   static getByKey (db: string, key: string) {
     const { $databaseRef, $firebase } = useNuxtApp()
