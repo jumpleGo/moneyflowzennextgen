@@ -30,6 +30,7 @@ const openQuiz = () => {
   font-family: inherit;
   @include mobile-all {
     padding-top: 0;
+    height: 100%;
   }
 }
 .mfz_welcome-test--light {
@@ -60,7 +61,7 @@ const openQuiz = () => {
     font-size: 60px;
   }
   @include mobile-all {
-    font-size: 50px;
+    font-size: 40px;
     margin-top: 12vh;
   }
 }
@@ -70,7 +71,8 @@ const openQuiz = () => {
   position: absolute;
 
   @include mobile-all {
-    bottom: 20vh;
+    position: relative;
+    bottom: unset;
   }
 }
 

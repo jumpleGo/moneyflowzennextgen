@@ -89,7 +89,7 @@ const next = (): void => {
 
 /* Кнопки ответа */
 .question__answer-btn {
-  background-color: #FEBE16;
+
   flex: 1 1 calc(50% - 15px);
   border: 1px solid black;
   color: black;
@@ -115,7 +115,9 @@ const next = (): void => {
 }
 
 .--active {
-  box-shadow: 0 2px 2px 0px #6c6c6c;
+  background-color: $brand_yellow;
+  color: black;
+
 }
 
 @include mobile-all {
