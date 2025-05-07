@@ -16,7 +16,7 @@ import AppButton from "~/components/Buttons/AppButton.vue";
 const router = useRouter()
 
 const openQuiz = () => {
-  router.push('test/quiz?type=baza')
+  router.push('test/quiz')
 }
 </script>
 <style lang="scss" scoped>

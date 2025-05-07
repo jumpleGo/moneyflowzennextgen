@@ -13,6 +13,8 @@
     <AppButton size="xs" title="добавить ответ" @click="createAnswerForm" />
     <hr>
     <AppButton :type="'black'" title="сохранить вопрос" @click="saveAnswer" />
+
+    <AppButton @click="move">переместить</AppButton>
   </div>
 </template>
 <script lang="ts" setup>
@@ -21,8 +23,6 @@ import AppButton from '~/components/Buttons/AppButton.vue'
 import AppCheckbox from '~/components/App/AppCheckbox.vue'
 import { Setter } from '~/helpers/setter'
 import { Getter } from '~/helpers/getter'
-
-
 
 const form = reactive<Partial<IQuiz>>({
   index: 0,
@@ -41,9 +41,15 @@ const createAnswerForm = () => {
 }
 
 const getCurrentQuiz = async () => {
-  return await Getter.getByKey('quiz', key.value)
+  return await Getter.getByKey('quiz', key.value+'/questions')
 }
 
+const move =  async () => {
+  const res = await Getter.getByKey('quiz', key.value)
+  Object.values(res).forEach((i) => {
+    Setter.pushToDb(`/quiz/${key.value}/questions`, i)
+  })
+}
 const saveAnswer = async () => {
   if (!key.value) return
 
@@ -53,7 +59,7 @@ const saveAnswer = async () => {
     index: Object.keys(currentQuiz).length,
     answers: answers.value
   }
-  await Setter.pushToDb(`/quiz/${key.value}`, payload)
+  await Setter.pushToDb(`/quiz/${key.value}/questions`, payload)
   answers.value = []
   form.question = ''
 }

@@ -18,13 +18,13 @@
   <AppButton class="question__next-step-button" fluid title="далее" @click="next" :disabled="!selectedAnswer" />
 </template>
 <script setup lang="ts">
-import type { IAnswer, IQuiz } from '~/types/pages/quiz'
+import type { IAnswer, IQuestion } from '~/types/pages/quiz'
 import AppButton from '~/components/Buttons/AppButton.vue'
 const emit = defineEmits<{
   (e: 'next', answer: IAnswer): void
 }>()
 defineProps<{
-  item: IQuiz,
+  item: IQuestion,
   index: number
 }>()
 

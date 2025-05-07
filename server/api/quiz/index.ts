@@ -2,6 +2,7 @@ import { useServerDatabase } from '~/server/utils/firebase'
 import { child, equalTo, get, orderByChild, query } from 'firebase/database'
 import type { IBlogItem } from '~/types/pages/blog'
 import { getQuery, getRouterParams, defineEventHandler } from 'h3'
+import { QueryValue } from 'ufo'
 
 export default defineEventHandler(async (event) => {
 
@@ -15,18 +16,18 @@ export default defineEventHandler(async (event) => {
   }
 
 
-  const request = query(child(databaseRef, 'blog'), orderByChild('level'), ...queryArgs)
+  const request = query(child(databaseRef, 'quiz'))
 
-  const snapshotFetchedArticles = await get(request)
+  const quizListFetched = await get(request)
 
-  if (!snapshotFetchedArticles.exists()) {
+  if (!quizListFetched.exists()) {
     console.log('No data available')
     return []
   }
 
   const dataArr: IBlogItem[] = []
 
-  snapshotFetchedArticles.forEach((childSnapshot) => {
+  quizListFetched.forEach((childSnapshot) => {
     dataArr.push({
       id: childSnapshot.key,
       ...childSnapshot.val()
