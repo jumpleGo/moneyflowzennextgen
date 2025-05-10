@@ -14,18 +14,26 @@
     <hr>
     <AppButton :type="'black'" title="сохранить вопрос" @click="saveAnswer" />
 
-    <AppButton @click="move">переместить</AppButton>
+<!--    <AppButton @click="move">переместить</AppButton>-->
   </div>
 </template>
 <script lang="ts" setup>
-import type { IAnswer, IQuiz } from '~/types/pages/quiz'
+import type { IAnswer, IQuestion, IQuiz, IQuizItem } from '~/types/pages/quiz'
 import AppButton from '~/components/Buttons/AppButton.vue'
 import AppCheckbox from '~/components/App/AppCheckbox.vue'
 import { Setter } from '~/helpers/setter'
 import { Getter } from '~/helpers/getter'
 
-const form = reactive<Partial<IQuiz>>({
-  index: 0,
+useHead({
+  meta: [
+    {
+      name: 'robots',
+      content: 'noindex,nofollow'
+    }
+  ]
+})
+
+const form = reactive<Partial<IQuestion>>({
   question: '',
 })
 

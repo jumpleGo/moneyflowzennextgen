@@ -12,6 +12,7 @@
         <nuxt-link to="/" class="mfz__footer__link">Главная</nuxt-link>
         <nuxt-link to="/products" class="mfz__footer__link">Обучения</nuxt-link>
         <nuxt-link to="/blog" class="mfz__footer__link">Блог</nuxt-link>
+        <nuxt-link to="/test" class="mfz__footer__link">Проверка знаний</nuxt-link>
       </div>
       <div class="mfz__footer_right_block">
         <div class="mfz__footer__social_media">
@@ -24,6 +25,9 @@
         </div>
         <p class="mfz__footer__info">
           для связи с автором <a href="https://t.me/mfz_owner">@mfz_owner</a>
+        </p>
+        <p class="mfz__footer__oferta">
+          <a href="https://t.me/mfz_owner">публичная оферта</a>
         </p>
       </div>
     </div>
@@ -135,6 +139,13 @@ import { logoSrc } from 'assets/imagesSrc'
   a {
     text-decoration: none;
     color: $brand_yellow
+  }
+}
+
+.mfz__footer__oferta {
+  a {
+    color: gray;
+    text-decoration: underline;
   }
 }
 </style>

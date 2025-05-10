@@ -1,6 +1,5 @@
 export interface IQuiz {
   questions: IQuestion[]
-
 }
 
 export interface IQuestion {

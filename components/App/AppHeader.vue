@@ -9,9 +9,6 @@
         <nuxt-link  class="mfz_wrapper__header_navbar--link" to="/test">
           проверка знаний
         </nuxt-link>
-        <nuxt-link class="mfz_wrapper__header_navbar--link" to="/exchanger">
-          обменник
-        </nuxt-link>
         <nuxt-link class="mfz_wrapper__header_navbar--link" to="/products">
           продукты
         </nuxt-link>

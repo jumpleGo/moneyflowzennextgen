@@ -1,5 +1,6 @@
 <template>
-  <nuxt-link  class="blog-card" :to="`blog/${item.key}`">
+  <nuxt-link  :class="['blog-card', {'blog-card--private': item.private}]" :to="`blog/${item.key}`">
+    <nuxt-img v-if="item.private" src="https://cdn.moneyflowzen.ru/ui/padlock.png" preload class="blog-card__private-image" />
     <span v-if="read" class="blog-card--read product__attention">прочитано</span>
     <nuxt-img :src="item.preview" preload class="blog-card__image" />
     <div class="blog-card__content">
@@ -66,7 +67,17 @@ const level = computed(() => {
   text-decoration: none;
   @include mobile-all {
     width: 100%;
+  }
 
+  &--private {
+    &::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      position: absolute;
+    }
   }
 
   &--read {
@@ -81,6 +92,14 @@ const level = computed(() => {
     padding: 20px;
     display: flex;
     flex-direction: column;
+  }
+
+  &__private-image {
+    position: absolute;
+    top: calc(50% - 36px/2);
+    left: calc(50% - 36px/2);
+    width: 36px;
+    height: 36px;
   }
 
   &__image {

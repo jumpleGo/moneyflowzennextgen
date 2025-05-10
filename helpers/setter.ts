@@ -2,8 +2,8 @@ import { child, get, push, set, ref, getDatabase, update, increment } from 'fire
 import type { DatabaseReference } from '@firebase/database'
 
 export class Setter {
-  static setToDb (databaseRef: DatabaseReference, url: string, data: any) {
-    return set(child(databaseRef, url), data)
+  static setToDb (url: string, data: any) {
+    return set(child(ref(getDatabase()), url), data)
   }
 
   static async pushToDb (url: string, data: any) {
