@@ -17,6 +17,7 @@
       <ClientOnly>
         <AppLike :count="data?.likes" :liked="isArticleLiked" @like="incrementLike" />
       </ClientOnly>
+      <BonusBanner />
       <PrevNextArticle v-if="data.nextArticle || data.prevArticle" :next-article="data.nextArticle" :prev-article="data.prevArticle" />
     </div>
   </div>
@@ -31,6 +32,7 @@ import PrevNextArticle from '~/components/Blog/PrevNextArticle.vue'
 import HtmlWithComponents from '~/components/Blog/HtmlWithComponents.vue'
 import { useSchemaOrg } from '@unhead/schema-org/vue'
 import Countdown from '~/components/Blog/banners/Countdown.vue'
+import BonusBanner from '~/components/Blog/banners/BonusBanner.vue'
 
 
 
