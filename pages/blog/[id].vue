@@ -17,7 +17,6 @@
       <ClientOnly>
         <AppLike :count="data?.likes" :liked="isArticleLiked" @like="incrementLike" />
       </ClientOnly>
-      <BonusBanner />
       <PrevNextArticle v-if="data.nextArticle || data.prevArticle" :next-article="data.nextArticle" :prev-article="data.prevArticle" />
     </div>
   </div>

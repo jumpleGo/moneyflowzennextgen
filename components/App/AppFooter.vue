@@ -27,7 +27,7 @@
           для связи с автором <a href="https://t.me/mfz_owner">@mfz_owner</a>
         </p>
         <p class="mfz__footer__oferta">
-          <a href="https://t.me/mfz_owner">публичная оферта</a>
+          <nuxt-link target="_blank" href="https://cdn.moneyflowzen.ru/files/oferta_mfz.pdf">публичная оферта</nuxt-link>
         </p>
       </div>
     </div>
@@ -94,7 +94,6 @@ import { logoSrc } from 'assets/imagesSrc'
 }
 .mfz__footer_left_block {
   display: flex;
-  align-items: center;
 }
 .mfz__footer__logo {
   width: 50px;

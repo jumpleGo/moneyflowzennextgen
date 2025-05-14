@@ -6,9 +6,9 @@
     <AppInput v-model="form.description" placeholder="Описание" label="Описание" id="description" />
     <AppInput v-model="form.ogdescription" placeholder="OG Описание" label="OG Описание" id="ogdescription" />
     <AppInput v-model="form.key" placeholder="ключ" label="ключ"  id="key" />
-    <AppInput v-model="form.image" placeholder="Картинка" label="Картинка"  id="image" />
-    <AppInput v-model="form.level" placeholder="Уровень" label="Уровень"  id="level" />
-    <AppInput v-model="form.time" placeholder="Время" label="Время"  id="time" />
+    <AppInput v-model="form.image" placeholder="Картинка" label="Картинка" id="image" />
+    <AppInput v-model="form.level" placeholder="Уровень" label="Уровень" id="level" />
+    <AppInput v-model="form.time" placeholder="Время" label="Время" id="time" />
     <textarea v-model="form.text" />
     <hr>
     <AppButton title="сохранить" @click="saveBlog" />
